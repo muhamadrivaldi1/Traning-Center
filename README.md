@@ -33,34 +33,11 @@ Aplikasi ini dibuat untuk mendukung efisiensi administrasi dan pelaksanaan pelat
 
 - ⚙️ **Backend:** PHP (Laravel Framework)  
 - 💻 **Frontend:** JavaScript (React.js)  
-- 🗄️ **Database:** MySQL  
-- 🎨 **UI Framework:** Bootstrap 5  
-
 ---
-
-## 👥 Tim Pengembang
-
-| 👨 Nama | 💼 Peran |
-|---------|----------|
-| Rivaldi | Backend Developer |
-| Jiwa | Frontend Developer |
-
----
-
-## 🛡️ Status Proyek
-
-> 📢 Repository ini merupakan **dokumentasi publik** dari proyek Traning Center.  
-> 🔒 Kode sumber lengkap bersifat **private** dan hanya dapat diakses oleh tim pengembang internal.
-
----
-
-## 📄 Lisensi
-
-Hak cipta © 2025 **Tim Traning Center**  
-Proyek ini **tidak bersifat open source** dan tidak diperkenankan untuk digunakan tanpa izin resmi dari pengembang.
 
 ## Traning-Center
 Aplikasi Traning akan segera rilis soon
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
