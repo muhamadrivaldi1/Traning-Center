@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # \# 🏫 Traning Center Web Application
 
 # 
