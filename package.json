@@ -10,5 +10,11 @@
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
         "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "@vitejs/plugin-react": "^5.0.4",
+        "bootstrap": "^5.3.8",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0"
     }
 }
