@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import HomePage from "./HomePage";
 
 function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [showPassword, setshowPassword] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -15,9 +19,8 @@ function LoginPage() {
             return;
         }
 
-        console.log("Login data:", { email, password });
-        // TODO: Integrasi ke API Laravel (axios.post('/api/login', {...}))
-        alert("Login berhasil (simulasi)!");
+        // sementara: langsung arahkan ke halaman utama
+        navigate("/home");
     };
 
     return (
@@ -48,7 +51,7 @@ function LoginPage() {
                         <input
                             type="password"
                             className="form-control"
-                            placeholder="Masukkan password"
+                            placeholder="Masukan password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
@@ -67,4 +70,15 @@ function LoginPage() {
     );
 }
 
-ReactDOM.createRoot(document.getElementById("app")).render(<LoginPage />);
+function App() {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<LoginPage />} />
+                <Route path="/home" element={<HomePage />} />
+            </Routes>
+        </Router>
+    );
+}
+
+ReactDOM.createRoot(document.getElementById("app")).render(<App />);
