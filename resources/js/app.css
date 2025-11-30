@@ -1,0 +1,12 @@
+.login-bg {
+    background-color: #131D78;
+}
+
+.login-card {
+    width: 380px;
+    color: white;
+    background-color: #010742;    
+    border-radius: 16px;    
+    padding: 24px;
+    box-shadow: 0 4px 20px #010742;
+}

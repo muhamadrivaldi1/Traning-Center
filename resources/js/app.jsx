@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./app.css";
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 import HomePage from "./HomePage";
 
@@ -24,33 +25,32 @@ function LoginPage() {
     };
 
     return (
-        <div className="d-flex align-items-center justify-content-center vh-100 bg-light">
-            <div className="card shadow-lg p-4" style={{ width: "380px" }}>
-                <h3 className="text-center mb-3 text-primary fw-bold">
+        <div className="d-flex align-items-center justify-content-center vh-100 login-bg">
+            <div className="card shadow-lg p-4 login-card">
+                <h3 className="text-center mt-3 mb-1 text primary fw-bold">
+                    Selamat Datang
+                </h3>
+                <h3 className="text-center mb-5 text-primary fw-bold">
                     Training Center FILKOM
                 </h3>
-                <h5 className="text-center mb-4 text-secondary">Login</h5>
-
                 {error && (
                     <div className="alert alert-danger py-2">{error}</div>
                 )}
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label className="form-label">Email</label>
                         <input
                             type="email"
-                            className="form-control"
-                            placeholder="Masukkan email"
+                            className="form-control input-custom"
+                            placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Password</label>
                         <input
                             type="password"
-                            className="form-control"
+                            className="form-control input-custom"
                             placeholder="Masukan password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
