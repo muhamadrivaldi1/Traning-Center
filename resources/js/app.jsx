@@ -56,13 +56,28 @@ function LoginPage() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
+                    <div className="cloudflare-box mb-3">
+                    <div className="d-flex align-items-center gap-3">
+                        <input 
+                        type="checkbox" className="cloudflare-checkbox" 
+                        placeholder="a"
+                        />
+                        <div className="flex-grow-1"></div>
+                        <img 
+                            src="/images/cloudflare.png" 
+                            alt="cloudflare" 
+                            className="cloudflare-logo"
+                        />
+                    </div>
+                    </div>  
+
 
                     <button type="submit" className="btn btn-primary w-100">
                         Login
                     </button>
                 </form>
 
-                <p className="text-center mt-3 text-muted" style={{ fontSize: "0.9em" }}>
+                <p className="text-center mt-3 text-center" style={{ fontSize: "0.9em" }}>
                     Belum punya akun? <a href="#">Daftar di sini</a>
                 </p>
             </div>

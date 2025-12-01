@@ -10,3 +10,21 @@
     padding: 24px;
     box-shadow: 0 4px 20px #010742;
 }
+
+.cloudflare-box {
+    background: white;
+    border-radius: 12px;
+    padding: 14px 18px;
+    border: 1px solid #ced4da;
+}
+
+.cloudflare-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.cloudflare-logo {
+    height: 22px;
+    opacity: 0.9;
+}
