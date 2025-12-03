@@ -27,7 +27,14 @@ function LoginPage() {
     return (
         <div className="d-flex align-items-center justify-content-center vh-100 login-bg">
             <div className="card shadow-lg p-4 login-card">
-                <h3 className="text-center mt-3 mb-1 text primary fw-bold">
+                <div className="text-center mb-1">
+                    <img 
+                        src="/images/unpam (2).png" 
+                        className="logo-unpam"
+                    />
+                </div>
+
+                <h3 className="text-center mt-1 mb-1 text primary fw-bold">
                     Selamat Datang
                 </h3>
                 <h3 className="text-center mb-5 text-primary fw-bold">
@@ -56,24 +63,9 @@ function LoginPage() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    <div className="cloudflare-box mb-3">
-                    <div className="d-flex align-items-center gap-3">
-                        <input 
-                        type="checkbox" className="cloudflare-checkbox" 
-                        placeholder="a"
-                        />
-                        <div className="flex-grow-1"></div>
-                        <img 
-                            src="/images/cloudflare.png" 
-                            alt="cloudflare" 
-                            className="cloudflare-logo"
-                        />
-                    </div>
-                    </div>  
-
 
                     <button type="submit" className="btn btn-primary w-100">
-                        Login
+                        Masuk
                     </button>
                 </form>
 
