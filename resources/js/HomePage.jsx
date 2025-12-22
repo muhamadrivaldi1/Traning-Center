@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/app.css";
 
@@ -11,12 +11,14 @@ function HomePage() {
 
     return (
         <div>
+            {/* ================= NAVBAR ================= */}
             <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
                 <div className="container navbar-padding">
-                    <a className="navbar-brand d-flex align-items-center" href="/">
+                    <a className="navbar-brand d-flex align-items-center" href="#home">
                         <img
                             src="/images/unpam (2).png"
                             className="navbar-logo me-2"
+                            alt="UNPAM"
                         />
                         <span className="fw-bold">Training Center UNPAM</span>
                     </a>
@@ -32,32 +34,25 @@ function HomePage() {
 
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav ms-auto gap-4">
-                            <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#">
-                                    Profil
-                                </a>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#home">Home</a>
                             </li>
-                            <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#">
-                                    Jadwal
-                                </a>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#jadwal">Jadwal</a>
                             </li>
-                            <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#">
-                                    Berita
-                                </a>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#berita">Berita</a>
                             </li>
-                            <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#">
-                                    Galeri
-                                </a>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#galeri">Galeri</a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
 
-            <section className="hero-section">
+            {/* ================= HERO ================= */}
+            <section id="home" className="hero-section">
                 <div className="hero-content">
                     <h1 className="hero-title">
                         Sistem Training Center Fakultas Ilmu Komputer
@@ -74,10 +69,10 @@ function HomePage() {
                 </div>
             </section>
 
-                        <section className="schedule-section">
+            {/* ================= SCHEDULE ================= */}
+            <section id="jadwal" className="schedule-section">
                 <div className="schedule-header">
                     <h2>Jadwal Pelatihan</h2>
-
                     <div className="schedule-tabs">
                         <span className="active">Jadwal</span>
                         <span>Event</span>
@@ -87,101 +82,52 @@ function HomePage() {
                 </div>
 
                 <div className="schedule-grid">
-                    <div className="schedule-card">
-                        <img src="/images/jadwal1.jpg" alt="" />
-                        <h4>Web Development</h4>
-                        <p>Belajar membangun website modern.</p>
-                        <button>Detail</button>
-                    </div>
-
-                    <div className="schedule-card">
-                        <img src="/images/jadwal2.jpg" alt="" />
-                        <h4>UI / UX Design</h4>
-                        <p>Desain antarmuka yang efektif.</p>
-                        <button>Detail</button>
-                    </div>
-
-                    <div className="schedule-card">
-                        <img src="/images/jadwal3.jpg" alt="" />
-                        <h4>Cyber Security</h4>
-                        <p>Keamanan sistem & jaringan.</p>
-                        <button>Detail</button>
-                    </div>
-
-                    <div className="schedule-card">
-                        <img src="/images/jadwal4.jpg" alt="" />
-                        <h4>Data Science</h4>
-                        <p>Pengolahan data & analisis.</p>
-                        <button>Detail</button>
-                    </div>
-
-                    <div className="schedule-card">
-                        <img src="/images/jadwal5.jpg" alt="" />
-                        <h4>Mobile Development</h4>
-                        <p>Aplikasi Android & iOS.</p>
-                        <button>Detail</button>
-                    </div>
-
-                    <div className="schedule-card">
-                        <img src="/images/jadwal6.jpg" alt="" />
-                        <h4>Artificial Intelligence</h4>
-                        <p>Pengenalan AI dasar.</p>
-                        <button>Detail</button>
-                    </div>
+                    {[
+                        ["jadwal1.jpg", "Web Development", "Belajar membangun website modern."],
+                        ["jadwal2.jpg", "UI / UX Design", "Desain antarmuka yang efektif."],
+                        ["jadwal3.jpg", "Cyber Security", "Keamanan sistem & jaringan."],
+                        ["jadwal4.jpg", "Data Science", "Pengolahan data & analisis."],
+                        ["jadwal5.jpg", "Mobile Development", "Aplikasi Android & iOS."],
+                        ["jadwal6.jpg", "Artificial Intelligence", "Pengenalan AI dasar."]
+                    ].map((item, index) => (
+                        <div className="schedule-card" key={index}>
+                            <img src={`/images/${item[0]}`} alt={item[1]} />
+                            <h4>{item[1]}</h4>
+                            <p>{item[2]}</p>
+                            <button>Detail</button>
+                        </div>
+                    ))}
                 </div>
             </section>
-            <section className="news-section">
-    <div className="news-header">
-        <h2>Berita & Informasi</h2>
-        <p>Update terbaru seputar Training Center FIKOM UNPAM</p>
-    </div>
 
-    <div className="news-grid">
-        <div className="news-card">
-            <img src="/images/berita1.jpg" alt="Berita 1" />
-            <h4>Pembukaan Pelatihan Web Development</h4>
-            <p>
-                Training Center resmi membuka pelatihan Web Development
-                untuk mahasiswa Fakultas Ilmu Komputer.
-            </p>
-            <button>Detail</button>
-        </div>
+            {/* ================= NEWS ================= */}
+            <section id="berita" className="news-section">
+                <div className="news-header">
+                    <h2>Berita & Informasi</h2>
+                    <p>Update terbaru seputar Training Center FIKOM UNPAM</p>
+                </div>
 
-        <div className="news-card">
-            <img src="/images/berita2.jpg" alt="Berita 2" />
-            <h4>Workshop Cyber Security</h4>
-            <p>
-                Workshop keamanan sistem dan jaringan dengan mentor
-                profesional dari industri.
-            </p>
-            <button>Detail</button>
-        </div>
-
-        <div className="news-card">
-            <img src="/images/berita3.jpg" alt="Berita 3" />
-            <h4>Pelatihan UI/UX Design</h4>
-            <p>
-                Meningkatkan kemampuan desain antarmuka dan pengalaman
-                pengguna.
-            </p>
-            <button>Detail</button>
-        </div>
-
-        <div className="news-card">
-            <img src="/images/berita4.jpg" alt="Berita 4" />
-            <h4>Seminar Artificial Intelligence</h4>
-            <p>
-                Seminar pengenalan AI dan penerapannya di dunia industri
-                modern.
-            </p>
-            <button>Detail</button>
-        </div>
-    </div>
-</section>
+                <div className="news-grid">
+                    {[
+                        ["berita1.jpg", "Pembukaan Pelatihan Web Development"],
+                        ["berita2.jpg", "Workshop Cyber Security"],
+                        ["berita3.jpg", "Pelatihan UI / UX Design"],
+                        ["berita4.jpg", "Seminar Artificial Intelligence"]
+                    ].map((item, index) => (
+                        <div className="news-card" key={index}>
+                            <img src={`/images/${item[0]}`} alt={item[1]} />
+                            <h4>{item[1]}</h4>
+                            <p>
+                                Kegiatan resmi Training Center Fakultas Ilmu Komputer
+                                untuk meningkatkan kompetensi mahasiswa.
+                            </p>
+                            <button>Detail</button>
+                        </div>
+                    ))}
+                </div>
+            </section>
 
         </div>
-
-        
     );
 }
 
