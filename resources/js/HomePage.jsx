@@ -1,69 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; 
-
-const ProgramCard = ({ title, icon, description, link, theme }) => (
-    <div 
-        className={`card shadow-sm h-100 ${
-            theme === "dark" ? "bg-dark text-white border-secondary" : "bg-white"
-        }`}
-    >
-        <div className="card-body text-center">
-            <i className={`bi bi-${icon} display-5 mb-3 text-primary`}></i>
-            <h4 className="card-title fw-bold">{title}</h4>
-            <p className="card-text text-muted">{description}</p>
-            <button 
-                onClick={() => window.location.href = link}
-                className="btn btn-sm btn-outline-primary mt-2"
-            >
-                Lihat Detail
-            </button>
-        </div>
-    </div>
-);
+import { useNavigate } from "react-router-dom";
+import "../css/app.css";
 
 function HomePage() {
-    const [theme, setTheme] = useState("light"); 
     const navigate = useNavigate();
 
-    const featuredPrograms = [
-        { id: 1, title: 'Rekayasa Perangkat Lunak', icon: 'code-slash', desc: 'Fokus pada pengembangan aplikasi dan pemrograman modern.', link: '/program/ti' },
-        { id: 2, title: 'Analisis Bisnis & SI', icon: 'bar-chart-fill', desc: 'Membangun kemampuan analitis berbasis teknologi untuk bisnis modern.', link: '/program/si' },
-        { id: 3, title: 'Keamanan Siber', icon: 'shield-lock-fill', desc: 'Pelatihan spesifik untuk mengamankan jaringan dan sistem informasi.', link: '/program/keamanan' },
-    ];
-
     useEffect(() => {
-        if (theme === "dark") {
-            document.body.classList.add("bg-dark", "text-white");
-            document.body.classList.remove("bg-light", "text-dark");
-        } else {
-            document.body.classList.add("bg-light", "text-dark");
-            document.body.classList.remove("bg-dark", "text-white");
-        }
-    }, [theme]);
-
-    const toggleTheme = () => {
-        setTheme(theme === "light" ? "dark" : "light");
-    };
-
-    const handleLogout = () => {
-        navigate("/login"); 
-    };
+        document.body.classList.remove("bg-light", "bg-dark");
+    }, []);
 
     return (
-        <div>  
-            <nav
-                className={`navbar navbar-expand-lg ${
-                    theme === "dark" ? "navbar-dark bg-transparent" : "navbar-dark bg-primary"
-                } px-4 shadow-sm`}
-            >
-                <div className="container-fluid">
-                    <a className="navbar-brand fw-bold text-white" href="/">
+        <div>
+            <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
+                <div className="container navbar-padding">
+                    <a className="navbar-brand d-flex align-items-center" href="/">
                         <img
                             src="/images/unpam (2).png"
-                            className="me-3 navbar-logo"
-                            width="40"
+                            className="navbar-logo me-2"
                         />
-                        Training Center UNPAM
+                        <span className="fw-bold">Training Center UNPAM</span>
                     </a>
 
                     <button
@@ -76,93 +31,157 @@ function HomePage() {
                     </button>
 
                     <div className="collapse navbar-collapse" id="navbarNav">
-                        <ul className="navbar-nav ms-auto">
-                            <li className="nav-item mx-3">
-                                <a className="nav-link text-white fw-semibold" href="/profil">Profil</a>
+                        <ul className="navbar-nav ms-auto gap-4">
+                            <li className="nav-item dropdown">
+                                <a className="nav-link dropdown-toggle" href="#">
+                                    Profil
+                                </a>
                             </li>
-                            <li className="nav-item mx-3">
-                                <a className="nav-link text-white fw-semibold" href="/jadwal">Jadwal</a>
+                            <li className="nav-item dropdown">
+                                <a className="nav-link dropdown-toggle" href="#">
+                                    Jadwal
+                                </a>
                             </li>
-                            <li className="nav-item mx-3">
-                                <a className="nav-link text-white fw-semibold" href="/informasi">Informasi</a>
+                            <li className="nav-item dropdown">
+                                <a className="nav-link dropdown-toggle" href="#">
+                                    Berita
+                                </a>
                             </li>
-                            <li className="nav-item mx-3">
-                                <a className="nav-link text-white fw-semibold" href="/galeri">Galeri</a>
+                            <li className="nav-item dropdown">
+                                <a className="nav-link dropdown-toggle" href="#">
+                                    Galeri
+                                </a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
 
-
-            {/* ---------------- HERO SECTION ---------------- */}
-            <section className="text-center py-5 hero-bg">
-                <div className="container py-5">
-                    <h1 className={`display-4 fw-bolder mb-3 ${
-                        theme === "dark" ? "text-warning" : "text-white"
-                    }`}>
-                        Upgrade Kompetensimu. Dapatkan Sertifikasi Resmi.
+            <section className="hero-section">
+                <div className="hero-content">
+                    <h1 className="hero-title">
+                        Sistem Training Center Fakultas Ilmu Komputer
                     </h1>
-
-                    <p className={`lead mb-4 ${
-                        theme === "dark" ? "text-light" : "text-white"
-                    }`}>
-                        Platform pelatihan terpusat untuk mahasiswa Teknik Informatika & Sistem Informasi,
-                        siap bersaing di dunia profesional.
+                    <p className="hero-subtitle">
+                        Meningkatkan skill, membangun masa depan
                     </p>
-                    
-                    <button 
-                        onClick={() => navigate("/jadwal")} 
-                        className="btn btn-warning btn-lg me-3 fw-bold"
+                    <button
+                        className="hero-btn"
+                        onClick={() => navigate("/registrasi")}
                     >
-                        LIHAT JADWAL PELATIHAN 📅
-                    </button>
-                    
-                    <button 
-                        onClick={() => navigate("/registrasi")} 
-                        className={`btn btn-outline-${
-                            theme === 'dark' ? 'warning' : 'light'
-                        } btn-lg`}
-                    >
-                        Daftar Sekarang
+                        Belajar Sekarang
                     </button>
                 </div>
             </section>
 
+                        <section className="schedule-section">
+                <div className="schedule-header">
+                    <h2>Jadwal Pelatihan</h2>
 
-            {/* ---------------- PROGRAM SECTION ---------------- */}
-            <section className="py-5">
-                <div className="container">
-                    <h2 className={`text-center fw-bold mb-5 ${
-                        theme === "dark" ? "text-white" : "text-primary"
-                    }`}>
-                        Program Unggulan TI & SI
-                    </h2>
+                    <div className="schedule-tabs">
+                        <span className="active">Jadwal</span>
+                        <span>Event</span>
+                        <span>Kegiatan</span>
+                        <span>Lainnya</span>
+                    </div>
+                </div>
 
-                    <div className="row g-4">
-                        {featuredPrograms.map(program => (
-                            <div key={program.id} className="col-md-4">
-                                <ProgramCard {...program} theme={theme} />
-                            </div>
-                        ))}
+                <div className="schedule-grid">
+                    <div className="schedule-card">
+                        <img src="/images/jadwal1.jpg" alt="" />
+                        <h4>Web Development</h4>
+                        <p>Belajar membangun website modern.</p>
+                        <button>Detail</button>
+                    </div>
+
+                    <div className="schedule-card">
+                        <img src="/images/jadwal2.jpg" alt="" />
+                        <h4>UI / UX Design</h4>
+                        <p>Desain antarmuka yang efektif.</p>
+                        <button>Detail</button>
+                    </div>
+
+                    <div className="schedule-card">
+                        <img src="/images/jadwal3.jpg" alt="" />
+                        <h4>Cyber Security</h4>
+                        <p>Keamanan sistem & jaringan.</p>
+                        <button>Detail</button>
+                    </div>
+
+                    <div className="schedule-card">
+                        <img src="/images/jadwal4.jpg" alt="" />
+                        <h4>Data Science</h4>
+                        <p>Pengolahan data & analisis.</p>
+                        <button>Detail</button>
+                    </div>
+
+                    <div className="schedule-card">
+                        <img src="/images/jadwal5.jpg" alt="" />
+                        <h4>Mobile Development</h4>
+                        <p>Aplikasi Android & iOS.</p>
+                        <button>Detail</button>
+                    </div>
+
+                    <div className="schedule-card">
+                        <img src="/images/jadwal6.jpg" alt="" />
+                        <h4>Artificial Intelligence</h4>
+                        <p>Pengenalan AI dasar.</p>
+                        <button>Detail</button>
                     </div>
                 </div>
             </section>
+            <section className="news-section">
+    <div className="news-header">
+        <h2>Berita & Informasi</h2>
+        <p>Update terbaru seputar Training Center FIKOM UNPAM</p>
+    </div>
 
+    <div className="news-grid">
+        <div className="news-card">
+            <img src="/images/berita1.jpg" alt="Berita 1" />
+            <h4>Pembukaan Pelatihan Web Development</h4>
+            <p>
+                Training Center resmi membuka pelatihan Web Development
+                untuk mahasiswa Fakultas Ilmu Komputer.
+            </p>
+            <button>Detail</button>
+        </div>
 
-            {/* ---------------- FOOTER ---------------- */}
-            <footer className={`mt-5 py-3 ${
-                theme === "dark" ? "bg-dark text-light border-top border-secondary" 
-                                  : "bg-light text-dark border-top"
-            }`}>
-                <div className="container text-center">
-                    <p className="mb-1">
-                        © {new Date().getFullYear()} FILKOM Training Center UNPAM. All rights reserved.
-                    </p>
-                </div>
-            </footer>
+        <div className="news-card">
+            <img src="/images/berita2.jpg" alt="Berita 2" />
+            <h4>Workshop Cyber Security</h4>
+            <p>
+                Workshop keamanan sistem dan jaringan dengan mentor
+                profesional dari industri.
+            </p>
+            <button>Detail</button>
+        </div>
+
+        <div className="news-card">
+            <img src="/images/berita3.jpg" alt="Berita 3" />
+            <h4>Pelatihan UI/UX Design</h4>
+            <p>
+                Meningkatkan kemampuan desain antarmuka dan pengalaman
+                pengguna.
+            </p>
+            <button>Detail</button>
+        </div>
+
+        <div className="news-card">
+            <img src="/images/berita4.jpg" alt="Berita 4" />
+            <h4>Seminar Artificial Intelligence</h4>
+            <p>
+                Seminar pengenalan AI dan penerapannya di dunia industri
+                modern.
+            </p>
+            <button>Detail</button>
+        </div>
+    </div>
+</section>
 
         </div>
+
+        
     );
 }
 

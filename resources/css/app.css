@@ -1,14 +1,279 @@
-.input-custom {
-    background-color: blueviolet !important;
-     border: 2px solid #0d6efd;  
-    color: #000;   
+/* ================= RESET ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
 }
 
-.input-custom::placeholder {
-    background-color: purple;
-    color: aqua;
+body {
+    margin: 0;
 }
 
-.login-bg {
-    background-color: bisque;
+/* ================= COLOR ================= */
+:root {
+    --primary-purple: #131D78;
 }
+
+/* ================= NAVBAR ================= */
+.navbar-custom {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background: transparent;
+    z-index: 10;
+}
+
+.navbar-padding {
+    padding: 20px 60px;
+}
+
+.navbar-logo {
+    height: 40px;
+}
+
+.nav-link {
+    color: white !important;
+    font-weight: 500;
+}
+
+.nav-link .arrow {
+    font-size: 12px;
+    margin-left: 6px;
+}
+
+/* ================= HERO SECTION ================= */
+.hero-section {
+    min-height: 100vh;
+    background-image:
+        linear-gradient(
+            rgba(19, 29, 120, 0.75),
+            rgba(19, 29, 120, 0.75)
+        ),
+        url("/images/background HP.jpg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 900px;
+    padding: 0 20px;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: #e0e0e0;
+    margin-bottom: 30px;
+}
+
+.hero-btn {
+    background-color: var(--primary-purple);
+    color: white;
+    padding: 14px 36px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.hero-btn:hover {
+    background-color: #0f165f;
+}
+
+/* ================= SCHEDULE SECTION ================= */
+/* ================= SCHEDULE SECTION ================= */
+.schedule-section {
+    padding: 80px 60px;
+    background: var(--primary-purple);
+}
+
+.schedule-header {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.schedule-header h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: white;
+}
+
+.schedule-tabs {
+    display: flex;
+    gap: 24px;
+    font-weight: 500;
+}
+
+.schedule-tabs span {
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.schedule-tabs .active {
+    color: white;
+    font-weight: 700;
+}
+
+/* ================= GRID ================= */
+.schedule-grid {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.schedule-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.schedule-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.schedule-card h4 {
+    padding: 16px;
+    font-weight: 700;
+    color: var(--primary-purple);
+}
+
+.schedule-card p {
+    padding: 0 16px 16px;
+    font-size: 14px;
+    color: #555;
+}
+
+.schedule-card button {
+    margin: 0 16px 20px;
+    background: var(--primary-purple);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* ================= SCHEDULE CARD HOVER ================= */
+.schedule-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.schedule-card:hover {
+    transform: scale(1.06);
+    box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+}
+
+
+/* ================= NEWS SECTION ================= */
+.news-section {
+    padding: 80px 60px;
+    background: var(--primary-purple);
+}
+
+.news-header {
+    max-width: 1200px;
+    margin: auto;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.news-header h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.news-header p {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* GRID 2 KOLOM */
+.news-grid {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+/* CARD */
+.news-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* EFEK NGEMBANG */
+.news-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+}
+
+.news-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.news-card h4 {
+    padding: 16px 16px 6px;
+    font-weight: 700;
+    color: var(--primary-purple);
+}
+
+.news-card p {
+    padding: 0 16px 16px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* BUTTON */
+.news-card button {
+    margin: 0 16px 20px;
+    background: var(--primary-purple);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.news-card button:hover {
+    background: #0f165f;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .news-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
