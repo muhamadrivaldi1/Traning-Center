@@ -11,7 +11,7 @@ function HomePage() {
 
     return (
         <div>
-            {/* ================= NAVBAR ================= */}
+
             <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
                 <div className="container navbar-padding">
                     <a className="navbar-brand d-flex align-items-center" href="#home">
@@ -51,7 +51,7 @@ function HomePage() {
                 </div>
             </nav>
 
-            {/* ================= HERO ================= */}
+
             <section id="home" className="hero-section">
                 <div className="hero-content">
                     <h1 className="hero-title">
@@ -69,7 +69,7 @@ function HomePage() {
                 </div>
             </section>
 
-            {/* ================= SCHEDULE ================= */}
+
             <section id="jadwal" className="schedule-section">
                 <div className="schedule-header">
                     <h2>Jadwal Pelatihan</h2>
@@ -100,7 +100,7 @@ function HomePage() {
                 </div>
             </section>
 
-            {/* ================= NEWS ================= */}
+
             <section id="berita" className="news-section">
                 <div className="news-header">
                     <h2>Berita & Informasi</h2>
@@ -126,6 +126,84 @@ function HomePage() {
                     ))}
                 </div>
             </section>
+
+           <section id="galeri" className="gallery-section">
+    <div className="news-header">
+        <h2>Galeri</h2>
+        <p>Update dokumentasi kegiatan Training Center FIKOM UNPAM</p>
+    </div>
+
+    <div className="gallery-scroll">
+        {[
+            "berita1.jpg",
+            "berita2.jpg",
+            "berita3.jpg",
+            "berita4.jpg",
+            "berita1.jpg",
+            "berita2.jpg"
+        ].map((img, index) => (
+            <div className="gallery-item" key={index}>
+                <img src={`/images/${img}`} alt="Galeri" />
+            </div>
+        ))}
+    </div>
+</section>
+
+{/* ================= FOOTER ================= */}
+<footer className="footer">
+    <div className="footer-container">
+        <div className="footer-header">
+            <img
+                src="/images/unpam (2).png"
+                alt="Logo UNPAM"
+                className="footer-logo"
+            />
+            <h4>Training Center Fakultas - Universitas Pamulang</h4>
+        </div>
+
+        <div className="footer-content">
+            <div className="footer-item">
+                <h5>Kampus Pusat</h5>
+                <p>
+                    Jl. Surya Kencana No.1, Pamulang Bar., Kec. Pamulang,<br />
+                    Kota Tangerang Selatan, Banten 15417
+                </p>
+            </div>
+
+            <div className="footer-item">
+                <h5>Kampus Viktor</h5>
+                <p>
+                    Jl. Raya Puspiptek, Buaran, Kec. Pamulang,<br />
+                    Kota Tangerang Selatan, Banten 15310
+                </p>
+            </div>
+
+            <div className="footer-item">
+                <h5>Kampus Witana Harja</h5>
+                <p>
+                    Jl. Witana Harja No.18b, Pamulang Bar., Kec. Pamulang,<br />
+                    Kota Tangerang Selatan, Banten 15417
+                </p>
+            </div>
+
+            <div className="footer-item">
+                <h5>Kampus Serang</h5>
+                <p>
+                    Jl. Lintas Serang - Jakarta Kampung Malandang Kel.<br />
+                    Kelodran Kec. Walantaka, Kota Serang - Banten 42183
+                </p>
+            </div>
+
+            <div className="footer-item">
+                <p><strong>E-mail:</strong> humas@unpam.ac.id</p>
+            </div>
+        </div>
+
+        <div className="footer-bottom">
+            © Training Center Fakultas Ilmu Komputer – All Rights Reserved.
+        </div>
+    </div>
+</footer>
 
         </div>
     );
