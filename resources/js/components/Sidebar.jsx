@@ -4,137 +4,88 @@ import { useNavigate } from "react-router-dom";
 export default function Sidebar() {
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+
+
+    navigate("/"); 
+  };
+
   return (
-    <div
+    <aside
       style={{
         position: "fixed",
-        top: "100px",
-        left: "0",
+        top: 0,
+        left: 0,
         width: "260px",
-        height: "calc(100vh - 100px)",
+        height: "100vh",
         background: "#010742",
         padding: "30px 20px",
-        zIndex: "99999",
-        overflowY: "auto",
         borderRadius: "0 16px 16px 0",
         boxShadow: "8px 0 30px rgba(0,0,0,0.35)",
+        zIndex: 1000,
+
+        display: "flex",
+        flexDirection: "column", 
       }}
     >
-      <a
-        onClick={() => navigate("/dashboard")}
-        style={{
-          display: "block",
-          padding: "12px 14px",
-          borderRadius: "10px",
-          color: "#ffffff",
-          textDecoration: "none",
-          marginBottom: "8px",
-          fontSize: "16px",
-          fontWeight: "500",
-          cursor: "pointer",
-          userSelect: "none",
-          transition: "all 0.3s ease",
-        }}
-        onMouseEnter={(e) => {
-          e.target.style.background = "linear-gradient(135deg, #1b2cc1, #6a5cff)";
-          e.target.style.transform = "translateX(6px)";
-          e.target.style.boxShadow = "0 6px 18px rgba(106, 92, 255, 0.35)";
-        }}
-        onMouseLeave={(e) => {
-          e.target.style.background = "transparent";
-          e.target.style.transform = "translateX(0)";
-          e.target.style.boxShadow = "none";
-        }}
-      >
-        Dashboard
-      </a>
+      <div>
+        {[
+          { label: "Dashboard", path: "/dashboard" },
+          { label: "Pelatihan", path: "/home" },
+          { label: "Pembayaran", path: "/pembayaran" },
+          { label: "Sertifikat", path: "/sertifikat" },
+        ].map((item) => (
+          <div
+            key={item.label}
+            onClick={() => navigate(item.path)}
+            style={{
+              padding: "12px 14px",
+              borderRadius: "10px",
+              color: "#ffffff",
+              marginBottom: "8px",
+              cursor: "pointer",
+              fontSize: "16px",
+              fontWeight: "500",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background =
+                "linear-gradient(135deg, #1b2cc1, #6a5cff)";
+              e.currentTarget.style.transform = "translateX(6px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.transform = "translateX(0)";
+            }}
+          >
+            {item.label}
+          </div>
+        ))}
+      </div>
 
-      <a
-        onClick={() => navigate("/home")}
+      <div
+        onClick={handleLogout}
         style={{
-          display: "block",
+          marginTop: "auto",
           padding: "12px 14px",
           borderRadius: "10px",
-          color: "#ffffff",
-          textDecoration: "none",
-          marginBottom: "8px",
-          fontSize: "16px",
-          fontWeight: "500",
+          color: "#ff6b6b",
           cursor: "pointer",
-          userSelect: "none",
+          fontSize: "16px",
+          fontWeight: "600",
           transition: "all 0.3s ease",
         }}
         onMouseEnter={(e) => {
-          e.target.style.background = "linear-gradient(135deg, #1b2cc1, #6a5cff)";
-          e.target.style.transform = "translateX(6px)";
-          e.target.style.boxShadow = "0 6px 18px rgba(106, 92, 255, 0.35)";
+          e.currentTarget.style.background = "rgba(255, 107, 107, 0.15)";
+          e.currentTarget.style.transform = "translateX(6px)";
         }}
         onMouseLeave={(e) => {
-          e.target.style.background = "transparent";
-          e.target.style.transform = "translateX(0)";
-          e.target.style.boxShadow = "none";
+          e.currentTarget.style.background = "transparent";
+          e.currentTarget.style.transform = "translateX(0)";
         }}
       >
-        Pelatihan
-      </a>
-
-      <a
-        onClick={() => navigate("/pembayaran")}
-        style={{
-          display: "block",
-          padding: "12px 14px",
-          borderRadius: "10px",
-          color: "#ffffff",
-          textDecoration: "none",
-          marginBottom: "8px",
-          fontSize: "16px",
-          fontWeight: "500",
-          cursor: "pointer",
-          userSelect: "none",
-          transition: "all 0.3s ease",
-        }}
-        onMouseEnter={(e) => {
-          e.target.style.background = "linear-gradient(135deg, #1b2cc1, #6a5cff)";
-          e.target.style.transform = "translateX(6px)";
-          e.target.style.boxShadow = "0 6px 18px rgba(106, 92, 255, 0.35)";
-        }}
-        onMouseLeave={(e) => {
-          e.target.style.background = "transparent";
-          e.target.style.transform = "translateX(0)";
-          e.target.style.boxShadow = "none";
-        }}
-      >
-        Pembayaran
-      </a>
-
-      <a
-        onClick={() => navigate("/sertifikat")}
-        style={{
-          display: "block",
-          padding: "12px 14px",
-          borderRadius: "10px",
-          color: "#ffffff",
-          textDecoration: "none",
-          marginBottom: "8px",
-          fontSize: "16px",
-          fontWeight: "500",
-          cursor: "pointer",
-          userSelect: "none",
-          transition: "all 0.3s ease",
-        }}
-        onMouseEnter={(e) => {
-          e.target.style.background = "linear-gradient(135deg, #1b2cc1, #6a5cff)";
-          e.target.style.transform = "translateX(6px)";
-          e.target.style.boxShadow = "0 6px 18px rgba(106, 92, 255, 0.35)";
-        }}
-        onMouseLeave={(e) => {
-          e.target.style.background = "transparent";
-          e.target.style.transform = "translateX(0)";
-          e.target.style.boxShadow = "none";
-        }}
-      >
-        Sertifikat
-      </a>
-    </div>
+        Logout
+      </div>
+    </aside>
   );
 }

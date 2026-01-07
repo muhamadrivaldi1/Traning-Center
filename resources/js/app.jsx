@@ -14,8 +14,9 @@ import HomePage from "./HomePage";
 import Dashboard from "./pages/dashboard";
 import Pembayaran from "./pages/pembayaran";
 import Sertifikat from "./pages/sertifikat";
+import Register from "./pages/Register";
 
-
+/* ================= LOGIN PAGE ================= */
 function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -29,7 +30,6 @@ function LoginPage() {
       setError("Email dan password wajib diisi!");
       return;
     }
-
 
     navigate("/home");
   };
@@ -71,18 +71,40 @@ function LoginPage() {
           <button type="submit" className="btn btn-primary w-100">
             Masuk
           </button>
+
+          {/* LINK REGISTER */}
+          <p
+            style={{
+              marginTop: "15px",
+              textAlign: "center",
+              fontSize: "14px",
+            }}
+          >
+            Belum punya akun?{" "}
+            <span
+              onClick={() => navigate("/register")}
+              style={{
+                color: "#0d6efd",
+                cursor: "pointer",
+                fontWeight: "600",
+              }}
+            >
+              Klik di sini
+            </span>
+          </p>
         </form>
       </div>
     </div>
   );
 }
 
-
+/* ================= APP ================= */
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/pembayaran" element={<Pembayaran />} />
@@ -91,6 +113,5 @@ function App() {
     </Router>
   );
 }
-
 
 ReactDOM.createRoot(document.getElementById("app")).render(<App />);
