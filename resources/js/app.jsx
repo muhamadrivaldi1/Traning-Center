@@ -2,90 +2,95 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./app.css";
-import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
+
 import HomePage from "./HomePage";
+import Dashboard from "./pages/dashboard";
+import Pembayaran from "./pages/pembayaran";
+import Sertifikat from "./pages/sertifikat";
+
 
 function LoginPage() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const [showPassword, setshowPassword] = useState(false);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-        if (!email || !password) {
-            setError("Email dan password wajib diisi!");
-            return;
-        }
+    if (!email || !password) {
+      setError("Email dan password wajib diisi!");
+      return;
+    }
 
-        // sementara: langsung arahkan ke halaman utama
-        navigate("/home");
-    };
 
-    return (
-        <div className="d-flex align-items-center justify-content-center vh-100 login-bg">
-            <div className="card shadow-lg p-4 login-card">
-                <div className="text-center mb-1">
-                    <img 
-                        src="/images/unpam (2).png" 
-                        className="logo-unpam"
-                    />
-                </div>
+    navigate("/home");
+  };
 
-                <h3 className="text-center mt-1 mb-1 text primary fw-bold">
-                    Selamat Datang
-                </h3>
-                <h3 className="text-center mb-5 text-primary fw-bold">
-                    Training Center FILKOM
-                </h3>
-                {error && (
-                    <div className="alert alert-danger py-2">{error}</div>
-                )}
-
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                        <input
-                            type="email"
-                            className="form-control input-custom"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <input
-                            type="password"
-                            className="form-control input-custom"
-                            placeholder="Masukan password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-
-                    <button type="submit" className="btn btn-primary w-100">
-                        Masuk
-                    </button>
-                </form>
-
-                <p className="text-center mt-3 text-center" style={{ fontSize: "0.9em" }}>
-                    Belum punya akun? <a href="#">Daftar di sini</a>
-                </p>
-            </div>
+  return (
+    <div className="d-flex align-items-center justify-content-center vh-100 login-bg">
+      <div className="card shadow-lg p-4 login-card">
+        <div className="text-center mb-2">
+          <img
+            src="/images/unpam (2).png"
+            className="logo-unpam"
+            alt="UNPAM"
+          />
         </div>
-    );
+
+        <h3 className="text-center mb-4 text-primary fw-bold">
+          Training Center FILKOM
+        </h3>
+
+        {error && <div className="alert alert-danger">{error}</div>}
+
+        <form onSubmit={handleSubmit}>
+          <input
+            className="form-control mb-3"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <input
+            className="form-control mb-3"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <button type="submit" className="btn btn-primary w-100">
+            Masuk
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }
+
 
 function App() {
-    return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<LoginPage />} />
-                <Route path="/home" element={<HomePage />} />
-            </Routes>
-        </Router>
-    );
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/pembayaran" element={<Pembayaran />} />
+        <Route path="/sertifikat" element={<Sertifikat />} />
+      </Routes>
+    </Router>
+  );
 }
+
 
 ReactDOM.createRoot(document.getElementById("app")).render(<App />);

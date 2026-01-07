@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/app.css";
 
 function HomePage() {
     const navigate = useNavigate();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     useEffect(() => {
         document.body.classList.remove("bg-light", "bg-dark");
@@ -14,14 +15,21 @@ function HomePage() {
 
             <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
                 <div className="container navbar-padding">
-                    <a className="navbar-brand d-flex align-items-center" href="#home">
+                    <div className="navbar-brand d-flex align-items-center gap-3">
+                        <span
+                            className="menu-icon"
+                            onClick={() => setSidebarOpen(!sidebarOpen)}
+                        >
+                            &#9776;
+                        </span>
+
                         <img
                             src="/images/unpam (2).png"
-                            className="navbar-logo me-2"
+                            className="navbar-logo"
                             alt="UNPAM"
                         />
                         <span className="fw-bold">Training Center UNPAM</span>
-                    </a>
+                    </div>
 
                     <button
                         className="navbar-toggler"
@@ -51,6 +59,23 @@ function HomePage() {
                 </div>
             </nav>
 
+            <div className={`sidebar ${sidebarOpen ? "active" : ""}`}>
+                <a onClick={() => navigate("/dashboard")}>
+                    Dashboard
+                </a>
+
+                <a onClick={() => navigate("/home")}>
+                    Pelatihan
+                </a>
+
+                <a onClick={() => navigate("/pembayaran")}>
+                    Pembayaran
+                </a>
+
+                <a onClick={() => navigate("/sertifikat")}>
+                    Sertifikat
+                </a>
+            </div>
 
             <section id="home" className="hero-section">
                 <div className="hero-content">
@@ -62,13 +87,14 @@ function HomePage() {
                     </p>
                     <button
                         className="hero-btn"
-                        onClick={() => navigate("/registrasi")}
+                        onClick={() => navigate("/home")}
                     >
                         Belajar Sekarang
                     </button>
                 </div>
             </section>
 
+            <div className="section-rectangle"></div>
 
             <section id="jadwal" className="schedule-section">
                 <div className="schedule-header">
@@ -100,6 +126,7 @@ function HomePage() {
                 </div>
             </section>
 
+          <div className="section-rectangle"></div>
 
             <section id="berita" className="news-section">
                 <div className="news-header">
@@ -127,82 +154,77 @@ function HomePage() {
                 </div>
             </section>
 
-           <section id="galeri" className="gallery-section">
-    <div className="news-header">
-        <h2>Galeri</h2>
-        <p>Update dokumentasi kegiatan Training Center FIKOM UNPAM</p>
+          <div className="section-rectangle"></div>
+
+            <section id="galeri" className="gallery-section">
+                <div className="news-header">
+                    <h2>Galeri</h2>
+                    <p>Update dokumentasi kegiatan Training Center FIKOM UNPAM</p>
+                </div>
+
+                <div className="gallery-scroll">
+                    {[
+                        "berita1.jpg",
+                        "berita2.jpg",
+                        "berita3.jpg",
+                        "berita4.jpg",
+                        "berita1.jpg",
+                        "berita2.jpg"
+                    ].map((img, index) => (
+                        <div className="gallery-item" key={index}>
+                            <img src={`/images/${img}`} alt="Galeri" />
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            <footer className="footer">
+  <div className="footer-top">
+    <div className="footer-header">
+      <img src="/images/unpam (2).png" alt="Logo UNPAM" className="footer-logo" />
+      <h3>Training Center Fakultas - Universitas Pamulang</h3>
     </div>
 
-    <div className="gallery-scroll">
-        {[
-            "berita1.jpg",
-            "berita2.jpg",
-            "berita3.jpg",
-            "berita4.jpg",
-            "berita1.jpg",
-            "berita2.jpg"
-        ].map((img, index) => (
-            <div className="gallery-item" key={index}>
-                <img src={`/images/${img}`} alt="Galeri" />
-            </div>
-        ))}
+    <div className="footer-content">
+      <div className="footer-item">
+        <h4>Kampus Pusat</h4>
+        <p>
+          Jl. Surya Kencana No.1, Pamulang Bar., Kec. Pamulang,<br />
+          Kota Tangerang Selatan, Banten 15417
+        </p>
+      </div>
+
+      <div className="footer-item">
+        <h4>Kampus Viktor</h4>
+        <p>
+          Jl. Raya Puspiptek, Buaran, Kec. Pamulang,<br />
+          Kota Tangerang Selatan, Banten 15310
+        </p>
+      </div>
+
+      <div className="footer-item">
+        <h4>Kampus Witana Harja</h4>
+        <p>
+          Jl. Witana Harja No.18b, Pamulang Bar., Kec. Pamulang,<br />
+          Kota Tangerang Selatan, Banten 15417
+        </p>
+      </div>
+
+      <div className="footer-item">
+        <h4>Kampus Serang</h4>
+        <p>
+          Jl. Lintas Serang – Jakarta Kampung Malandang Kel.<br />
+          Kelodran Kec. Walantaka, Kota Serang – Banten 42183
+        </p>
+      </div>
+
+      <p className="footer-email">E-mail: humas@unpam.ac.id</p>
     </div>
-</section>
+  </div>
 
-{/* ================= FOOTER ================= */}
-<footer className="footer">
-    <div className="footer-container">
-        <div className="footer-header">
-            <img
-                src="/images/unpam (2).png"
-                alt="Logo UNPAM"
-                className="footer-logo"
-            />
-            <h4>Training Center Fakultas - Universitas Pamulang</h4>
-        </div>
-
-        <div className="footer-content">
-            <div className="footer-item">
-                <h5>Kampus Pusat</h5>
-                <p>
-                    Jl. Surya Kencana No.1, Pamulang Bar., Kec. Pamulang,<br />
-                    Kota Tangerang Selatan, Banten 15417
-                </p>
-            </div>
-
-            <div className="footer-item">
-                <h5>Kampus Viktor</h5>
-                <p>
-                    Jl. Raya Puspiptek, Buaran, Kec. Pamulang,<br />
-                    Kota Tangerang Selatan, Banten 15310
-                </p>
-            </div>
-
-            <div className="footer-item">
-                <h5>Kampus Witana Harja</h5>
-                <p>
-                    Jl. Witana Harja No.18b, Pamulang Bar., Kec. Pamulang,<br />
-                    Kota Tangerang Selatan, Banten 15417
-                </p>
-            </div>
-
-            <div className="footer-item">
-                <h5>Kampus Serang</h5>
-                <p>
-                    Jl. Lintas Serang - Jakarta Kampung Malandang Kel.<br />
-                    Kelodran Kec. Walantaka, Kota Serang - Banten 42183
-                </p>
-            </div>
-
-            <div className="footer-item">
-                <p><strong>E-mail:</strong> humas@unpam.ac.id</p>
-            </div>
-        </div>
-
-        <div className="footer-bottom">
-            © Training Center Fakultas Ilmu Komputer – All Rights Reserved.
-        </div>
-    </div>
+  <div className="footer-bottom">
+    © Training Center Fakultas Ilmu Komputer – All Rights Reserved.
+  </div>
 </footer>
 
         </div>
