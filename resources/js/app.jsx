@@ -10,6 +10,8 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+import api from "./api"; // ⬅️ TAMBAHKAN INI
+
 import HomePage from "./HomePage";
 import Dashboard from "./pages/dashboard";
 import Pembayaran from "./pages/pembayaran";
@@ -23,7 +25,8 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  //UBAH HANDLE SUBMIT
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
@@ -31,7 +34,19 @@ function LoginPage() {
       return;
     }
 
-    navigate("/home");
+    try {
+      const response = await api.post("/login", {
+        email,
+        password,
+      });
+
+      // simpan user ke localStorage
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+
+      navigate("/home");
+    } catch (err) {
+      setError(err.response?.data?.message || "Login gagal");
+    }
   };
 
   return (
@@ -72,14 +87,7 @@ function LoginPage() {
             Masuk
           </button>
 
-          {/* LINK REGISTER */}
-          <p
-            style={{
-              marginTop: "15px",
-              textAlign: "center",
-              fontSize: "14px",
-            }}
-          >
+          <p style={{ marginTop: "15px", textAlign: "center", fontSize: "14px" }}>
             Belum punya akun?{" "}
             <span
               onClick={() => navigate("/register")}

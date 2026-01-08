@@ -1,8 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api"; // pastikan path benar
 
 export default function Register() {
   const navigate = useNavigate();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    if (!name || !email || !password) {
+      setError("Semua field wajib diisi");
+      return;
+    }
+
+    try {
+      await api.post("/register", {
+        name,
+        email,
+        password,
+      });
+
+      setSuccess("Registrasi berhasil, silakan login");
+      setError("");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
+    } catch (err) {
+      setError(err.response?.data?.message || "Registrasi gagal");
+    }
+  };
 
   return (
     <div className="d-flex align-items-center justify-content-center vh-100 login-bg">
@@ -11,26 +44,37 @@ export default function Register() {
           Daftar Akun
         </h3>
 
-        <input
-          className="form-control mb-3"
-          placeholder="Nama Lengkap"
-        />
+        {error && <div className="alert alert-danger">{error}</div>}
+        {success && <div className="alert alert-success">{success}</div>}
 
-        <input
-          className="form-control mb-3"
-          type="email"
-          placeholder="Email"
-        />
+        <form onSubmit={handleRegister}>
+          <input
+            className="form-control mb-3"
+            placeholder="Nama Lengkap"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
-        <input
-          className="form-control mb-3"
-          type="password"
-          placeholder="Password"
-        />
+          <input
+            className="form-control mb-3"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <button className="btn btn-primary w-100 mb-3">
-          Daftar
-        </button>
+          <input
+            className="form-control mb-3"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <button type="submit" className="btn btn-primary w-100 mb-3">
+            Daftar
+          </button>
+        </form>
 
         <p style={{ textAlign: "center", fontSize: "14px" }}>
           Sudah punya akun?{" "}
