@@ -11,6 +11,8 @@ html {
 
 body {
     margin: 0;
+    overscroll-behavior-x: none;
+    touch-action: pan-y pinch-zoom;
 }
 
 :root {
@@ -19,11 +21,16 @@ body {
 
 .navbar-custom {
     position: fixed;
-    top: 20px;                 
+    top: 20px;
     left: 0;
     width: 100%;
     background: transparent;
-    z-index: 9999;
+    z-index: 1000;
+    transition: left 0.3s ease;
+}
+
+.navbar-custom.sidebar-open {
+    width: calc(100% - 260px);
 }
 
 .navbar-custom .container {
@@ -31,7 +38,6 @@ body {
     backdrop-filter: blur(8px);
     border-radius: 16px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-
     max-width: 1550px;     
     padding: 14px 32px;
 }
@@ -50,15 +56,9 @@ body {
     cursor: pointer;
 }
 
-
 .hero-section {
     min-height: 100vh;
-    background-image:
-        linear-gradient(
-            rgba(19, 29, 120, 0.75),
-            rgba(19, 29, 120, 0.75)
-        ),
-        url("/images/background HP.jpg");
+    background-image: linear-gradient(rgba(19, 29, 120, 0.75), rgba(19, 29, 120, 0.75)), url("/images/background-hp.jpg");
     background-size: cover;
     background-position: center;
     display: flex;
@@ -186,7 +186,6 @@ body {
     cursor: pointer;
 }
 
-
 .news-section {
     padding: 80px 60px;
     background: var(--primary-purple);
@@ -263,7 +262,6 @@ body {
     background: #0f165f;
 }
 
-
 @media (max-width: 1024px) {
     .schedule-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -271,15 +269,10 @@ body {
 }
 
 @media (max-width: 768px) {
-    .schedule-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .news-grid {
+    .schedule-grid, .news-grid {
         grid-template-columns: 1fr;
     }
 }
-
 
 .gallery-section {
     padding: 80px 60px;
@@ -291,7 +284,6 @@ body {
     gap: 20px;
     overflow-x: auto;
     padding-bottom: 10px;
-
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
 }
@@ -324,154 +316,150 @@ body {
     transform: scale(1.08);
 }
 
-
 .footer {
-  background-color: #fff200; /* kuning */
-  color: #000;
-  font-family: Arial, sans-serif;
+    background-color: #fff200;
+    color: #000;
+    font-family: Arial, sans-serif;
 }
 
 .footer-top {
-  padding: 40px 60px;
+    padding: 40px 60px;
 }
 
 .footer-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
 }
 
 .footer-logo {
-  width: 50px;
-  height: auto;
+    width: 50px;
+    height: auto;
 }
 
 .footer-header h3 {
-  font-size: 20px;
-  font-weight: bold;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .footer-content {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
 }
 
 .footer-item h4 {
-  font-weight: bold;
-  margin-bottom: 6px;
+    font-weight: bold;
+    margin-bottom: 6px;
 }
 
 .footer-item p {
-  font-size: 14px;
-  line-height: 1.6;
+    font-size: 14px;
+    line-height: 1.6;
 }
 
 .footer-email {
-  margin-top: 20px;
-  font-size: 14px;
+    margin-top: 20px;
+    font-size: 14px;
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(0, 0, 0, 0.4);
-  text-align: center;
-  padding: 15px;
-  font-size: 14px;
-}
-
-
-
-@media (max-width: 768px) {
-    .footer-content {
-        grid-template-columns: 1fr;
-    }
-
-    .footer-container {
-        padding: 0 20px;
-    }
+    border-top: 1px solid rgba(0, 0, 0, 0.4);
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
 }
 
 .menu-icon {
     font-size: 26px;
     color: white;
     cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
 }
 
+.toggle-btn {
+    font-size: 26px;
+    color: white;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 10px;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10000;
+}
 
 .sidebar {
     position: fixed;
-    top: 100px;                
+    top: 0;
     left: -260px;
     width: 260px;
-
-    height: calc(100vh - 100px);
-    
-    background: #010742;
-    padding: 30px 20px;
-
-    transition: left 0.3s ease;
-    z-index: 99999;
-
-    overflow-y: auto;            
-    border-radius: 0 16px 16px 0;
+    height: 100vh;
+    background: #010742 !important;
+    padding: 100px 20px 20px;
+    border-radius: 0;
     box-shadow: 8px 0 30px rgba(0,0,0,0.35);
+    transition: left 0.3s ease;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    pointer-events: auto;
 }
 
 .sidebar.active {
     left: 0;
 }
 
-.sidebar a {
-    display: block;
-    padding: 12px 14px;
-    border-radius: 10px;
-
-    color: #ffffff !important;  
-    text-decoration: none;
-
-    margin-bottom: 8px;
-    font-size: 16px;
-    font-weight: 500;
-
-    cursor: pointer;
-    user-select: none;
-
-    transition:
-        background 0.3s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.sidebar a:hover {
-    background: linear-gradient(
-        135deg,
-        #1b2cc1,
-        #6a5cff
-    );
+.sidebar-item {
+    padding: 12px 14px;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.sidebar-item:hover {
+    background: linear-gradient(135deg, #1b2cc1, #6a5cff);
     transform: translateX(6px);
     box-shadow: 0 6px 18px rgba(106, 92, 255, 0.35);
 }
 
-.sidebar a:active {
-    background: linear-gradient(
-        135deg,
-        #131d78,
-        #4f46e5
-    );
+.sidebar-logout {
+    margin-top: auto;
+    padding: 12px 14px;
+    border-radius: 10px;
+    color: #ff6b6b;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sidebar-logout:hover {
+    background: linear-gradient(135deg, #ff6b6b, #ff8787);
     transform: translateX(2px);
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
 }
 
 .section-rectangle {
     width: 100%;
-    height: 25px;       
-        background: linear-gradient(
-        to right,
-        #131D78,
-        #2f3dbf,
-        #131D78
-    );  
+    height: 25px;
+    background: linear-gradient(to right, #131D78, #2f3dbf, #131D78);
     margin: 0;
 }
 
+.sidebar-open {
+    margin-left: 260px;
+    transition: margin-left 0.3s ease;
+}
