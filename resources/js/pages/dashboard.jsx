@@ -10,7 +10,7 @@ export default function Dashboard() {
     <>
       {/* TOGGLE BUTTON */}
       <button
-        className="toggle-btn"
+        className={`toggle-btn ${isOpen ? 'sidebar-open' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         &#9776;
@@ -51,7 +51,6 @@ export default function Dashboard() {
             </p>
           </div>
 
-          {/* Progress Chart Section */}
           <div
             style={{
               background: "white",

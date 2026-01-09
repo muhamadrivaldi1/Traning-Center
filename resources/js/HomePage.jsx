@@ -15,7 +15,6 @@ function HomePage() {
   return (
     <div>
 
-      {/* NAVBAR ATAS */}
       <nav className={`navbar navbar-expand-lg navbar-dark navbar-custom ${isOpen ? "sidebar-open" : ""}`}>
         <div className="container navbar-padding">
           <div className="navbar-brand d-flex align-items-center gap-3">
@@ -52,18 +51,15 @@ function HomePage() {
               <li className="nav-item">
                 <a className="nav-link" href="#galeri">Galeri</a>
               </li>
+              <li className="nav-item">
+                <button className="btn btn-primary" onClick={() => navigate("/login")}>Masuk</button>
+              </li>
             </ul>
           </div>
         </div>
       </nav>
-
-      {/* SIDEBAR */}
       <Sidebar isOpen={isOpen} />
-
-      {/* MAIN CONTENT */}
       <div className={isOpen ? "sidebar-open" : ""}>
-
-      {/* HERO */}
       <section id="home" className="hero-section">
         <div className="hero-content">
           <h1 className="hero-title">
@@ -90,36 +86,32 @@ function HomePage() {
       </section>
 
       <div className="section-rectangle"></div>
-
-      {/* JADWAL */}
       <section id="jadwal" className="schedule-section">
         <div className="schedule-header">
-          <h2>Jadwal Pelatihan</h2>
-
+          <h2>Pelatihan</h2>
+          <p>Detail Pelatihan Training Center FILKOM yang tersedia</p>
         </div>
 
         <div className="schedule-grid">
           {[
-            ["jadwal1.jpg", "Web Development", "Belajar membangun website modern."],
-            ["jadwal2.jpg", "UI / UX Design", "Desain antarmuka yang efektif."],
-            ["jadwal3.jpg", "Cyber Security", "Keamanan sistem & jaringan."],
-            ["jadwal4.jpg", "Data Science", "Pengolahan data & analisis."],
-            ["jadwal5.jpg", "Mobile Development", "Aplikasi Android & iOS."],
-            ["jadwal6.jpg", "Artificial Intelligence", "Pengenalan AI dasar."]
-          ].map((item, index) => (
+            { image: "jadwal1.jpg", title: "Web Development", description: "Belajar membangun website modern dengan teknologi terkini seperti HTML, CSS, JavaScript, dan framework populer." },
+            { image: "jadwal2.jpg", title: "UI / UX Design", description: "Desain antarmuka yang efektif dan pengalaman pengguna yang menarik menggunakan tools desain profesional." },
+            { image: "jadwal3.jpg", title: "Cyber Security", description: "Pelajari teknik keamanan sistem dan jaringan untuk melindungi data dan infrastruktur digital." },
+            { image: "jadwal4.jpg", title: "Data Science", description: "Teknik pengolahan data dan analisis menggunakan Python, R, dan machine learning algorithms." },
+            { image: "jadwal5.jpg", title: "Mobile Development", description: "Pengembangan aplikasi mobile untuk platform Android dan iOS dengan React Native dan Flutter." },
+            { image: "jadwal6.jpg", title: "Artificial Intelligence", description: "Pengenalan konsep AI, machine learning, dan deep learning untuk aplikasi praktis." }
+          ].map((training, index) => (
             <div className="schedule-card" key={index}>
-              <img src={`/images/${item[0]}`} alt={item[1]} />
-              <h4>{item[1]}</h4>
-              <p>{item[2]}</p>
-              <button>Detail</button>
+              <img src={`/images/${training.image}`} alt={training.title} />
+              <h4>{training.title}</h4>
+              <p>{training.description}</p>
+              <button onClick={() => navigate("/training-detail", { state: { training } })}>Detail</button>
             </div>
           ))}
         </div>
       </section>
 
       <div className="section-rectangle"></div>
-
-      {/* BERITA */}
       <section id="berita" className="news-section">
         <div className="news-header">
           <h2>Berita & Informasi</h2>
@@ -148,7 +140,6 @@ function HomePage() {
 
       <div className="section-rectangle"></div>
 
-      {/* GALERI */}
       <section id="galeri" className="gallery-section">
         <div className="news-header">
           <h2>Galeri</h2>
@@ -171,7 +162,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="footer">
         <div className="footer-top">
           <div className="footer-header">
@@ -225,7 +215,7 @@ function HomePage() {
         </div>
       </footer>
 
-      </div> {/* END MAIN CONTENT */}
+      </div>
 
     </div>
   );
