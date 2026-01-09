@@ -15,8 +15,8 @@ import Dashboard from "./pages/dashboard";
 import Pembayaran from "./pages/pembayaran";
 import Sertifikat from "./pages/sertifikat";
 import Register from "./pages/Register";
+import TrainingDetail from "./pages/TrainingDetail";
 
-/* ================= LOGIN PAGE ================= */
 function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -27,7 +27,7 @@ function LoginPage() {
     e.preventDefault();
 
     if (!email || !password) {
-      setError("Email dan password wajib diisi!");
+      setError("Username dan password wajib diisi!");
       return;
     }
 
@@ -54,8 +54,7 @@ function LoginPage() {
         <form onSubmit={handleSubmit}>
           <input
             className="form-control mb-3"
-            type="email"
-            placeholder="Email"
+            placeholder="Username"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -103,7 +102,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/dashboard" element={<Dashboard />} />

@@ -7,19 +7,20 @@ export default function Register() {
   return (
     <div className="d-flex align-items-center justify-content-center vh-100 login-bg">
       <div className="card shadow-lg p-4 login-card">
+        <div className="text-center mb-2">
+          <img
+            src="/images/unpam (2).png"
+            className="logo-unpam"
+            alt="UNPAM"
+          />
+        </div>
         <h3 className="text-center mb-4 text-primary fw-bold">
-          Daftar Akun
+          Register
         </h3>
 
         <input
           className="form-control mb-3"
-          placeholder="Nama Lengkap"
-        />
-
-        <input
-          className="form-control mb-3"
-          type="email"
-          placeholder="Email"
+          placeholder="Username"
         />
 
         <input

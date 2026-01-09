@@ -109,9 +109,7 @@ body {
 .schedule-header {
     max-width: 1200px;
     margin: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    text-align: center;
     margin-bottom: 40px;
 }
 
@@ -119,6 +117,11 @@ body {
     font-size: 28px;
     font-weight: 800;
     color: white;
+    margin-bottom: 10px;
+}
+
+.schedule-header p {
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .schedule-tabs {
@@ -177,7 +180,8 @@ body {
 }
 
 .schedule-card button {
-    margin: 0 16px 20px;
+    display: block;
+    margin: 0 auto 20px;
     background: var(--primary-purple);
     color: white;
     border: none;
@@ -223,6 +227,7 @@ body {
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
 }
 
 .news-card:hover {
@@ -249,7 +254,8 @@ body {
 }
 
 .news-card button {
-    margin: 0 16px 20px;
+    display: block;
+    margin: 0 auto 20px;
     background: var(--primary-purple);
     color: white;
     border: none;
@@ -390,7 +396,8 @@ body {
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 10000;
+    z-index: 9998;
+    transition: left 0.3s ease;
 }
 
 .sidebar {
@@ -449,6 +456,7 @@ body {
 
 .sidebar-logout:hover {
     background: linear-gradient(135deg, #ff6b6b, #ff8787);
+    color: white;
     transform: translateX(2px);
 }
 
