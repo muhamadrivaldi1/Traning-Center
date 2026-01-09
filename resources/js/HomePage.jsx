@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
+import { useAuth } from "./contexts/AuthContext";
 import "../css/app.css";
 
 
 function HomePage() {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -52,7 +54,11 @@ function HomePage() {
                 <a className="nav-link" href="#galeri">Galeri</a>
               </li>
               <li className="nav-item">
-                <button className="btn btn-primary" onClick={() => navigate("/login")}>Masuk</button>
+                {isLoggedIn ? (
+                  <span className="user-icon" style={{ fontSize: '24px', color: '#fff' }}>&#128100;</span>
+                ) : (
+                  <button className="btn btn-primary" onClick={() => navigate("/login")}>Masuk</button>
+                )}
               </li>
             </ul>
           </div>

@@ -10,6 +10,8 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+import { AuthProvider } from "./contexts/AuthContext";
+
 import HomePage from "./HomePage";
 import Dashboard from "./pages/dashboard";
 import Pembayaran from "./pages/pembayaran";
@@ -19,6 +21,7 @@ import TrainingDetail from "./pages/TrainingDetail";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -31,6 +34,8 @@ function LoginPage() {
       return;
     }
 
+    // Simulate login
+    login();
     navigate("/home");
   };
 
@@ -97,20 +102,21 @@ function LoginPage() {
   );
 }
 
-/* ================= APP ================= */
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/pembayaran" element={<Pembayaran />} />
-        <Route path="/sertifikat" element={<Sertifikat />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/pembayaran" element={<Pembayaran />} />
+          <Route path="/sertifikat" element={<Sertifikat />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
