@@ -18,7 +18,7 @@ import Register from "./pages/Register";
 import TrainingDetail from "./pages/TrainingDetail";
 
 
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import api from "./api";
 
 

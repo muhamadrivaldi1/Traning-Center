@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api"; // pastikan path benar
+import api from "../api";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export default function Register() {
       setError("");
 
       setTimeout(() => {
-        navigate("/");
+        navigate("/login");
       }, 1500);
     } catch (err) {
       setError(err.response?.data?.message || "Registrasi gagal");
@@ -47,43 +47,58 @@ export default function Register() {
             alt="UNPAM"
           />
         </div>
+
         <h3 className="text-center mb-4 text-primary fw-bold">
           Register
         </h3>
 
-        <input
-          className="form-control mb-3"
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        {error && <div className="alert alert-danger">{error}</div>}
+        {success && <div className="alert alert-success">{success}</div>}
 
-        <input
-          className="form-control mb-3"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <form onSubmit={handleRegister}>
+          <input
+            className="form-control mb-3"
+            type="text"
+            placeholder="Nama"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
-        <button type="submit" className="btn btn-primary w-100 mb-3">
-          Daftar
-        </button>
+          <input
+            className="form-control mb-3"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-      <p style={{ textAlign: "center", fontSize: "14px" }}>
-        Sudah punya akun?{" "}
-        <span
-          onClick={() => navigate("/")}
-          style={{
-            color: "#0d6efd",
-            cursor: "pointer",
-            fontWeight: "600",
-          }}
-        >
-          Login
-        </span>
-      </p>
+          <input
+            className="form-control mb-3"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <button type="submit" className="btn btn-primary w-100 mb-3">
+            Daftar
+          </button>
+        </form>
+
+        <p style={{ textAlign: "center", fontSize: "14px" }}>
+          Sudah punya akun?{" "}
+          <span
+            onClick={() => navigate("/login")}
+            style={{
+              color: "#0d6efd",
+              cursor: "pointer",
+              fontWeight: "600",
+            }}
+          >
+            Login
+          </span>
+        </p>
+      </div>
     </div>
   );
 }
