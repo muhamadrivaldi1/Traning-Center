@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import "../css/app.css";
 
-
 function HomePage() {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+
+  // Sidebar DIMATIKAN
+  const isOpen = false;
 
   useEffect(() => {
     document.body.classList.remove("bg-light", "bg-dark");
@@ -18,7 +19,7 @@ function HomePage() {
       <nav className={`navbar navbar-expand-lg navbar-dark navbar-custom ${isOpen ? "sidebar-open" : ""}`}>
         <div className="container navbar-padding">
           <div className="navbar-brand d-flex align-items-center gap-3">
-            <span className="menu-icon" onClick={() => setIsOpen(!isOpen)}>&#9776;</span>
+            {/* <span className="menu-icon" onClick={() => setIsOpen(!isOpen)}>&#9776;</span> */}
 
             <img
               src="/images/unpam (2).png"
@@ -58,7 +59,7 @@ function HomePage() {
           </div>
         </div>
       </nav>
-      <Sidebar isOpen={isOpen} />
+      {/* <Sidebar isOpen={isOpen} /> */}
       <div className={isOpen ? "sidebar-open" : ""}>
       <section id="home" className="hero-section">
         <div className="hero-content">
@@ -68,7 +69,7 @@ function HomePage() {
           <p className="hero-subtitle">
             Meningkatkan skill, membangun masa depan
           </p>
-          <button
+          {/* <button
             className="hero-btn"
             onClick={() => {
               const jadwalSection = document.getElementById('jadwal');
@@ -81,7 +82,7 @@ function HomePage() {
             }}
           >
             Belajar Sekarang
-          </button>
+          </button> */}
         </div>
       </section>
 
