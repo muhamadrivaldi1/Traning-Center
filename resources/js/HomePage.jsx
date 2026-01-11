@@ -95,12 +95,12 @@ function HomePage() {
 
         <div className="schedule-grid">
           {[
-            { image: "jadwal1.jpg", title: "Web Development", description: "Belajar membangun website modern dengan teknologi terkini seperti HTML, CSS, JavaScript, dan framework populer." },
-            { image: "jadwal2.jpg", title: "UI / UX Design", description: "Desain antarmuka yang efektif dan pengalaman pengguna yang menarik menggunakan tools desain profesional." },
-            { image: "jadwal3.jpg", title: "Cyber Security", description: "Pelajari teknik keamanan sistem dan jaringan untuk melindungi data dan infrastruktur digital." },
-            { image: "jadwal4.jpg", title: "Data Science", description: "Teknik pengolahan data dan analisis menggunakan Python, R, dan machine learning algorithms." },
-            { image: "jadwal5.jpg", title: "Mobile Development", description: "Pengembangan aplikasi mobile untuk platform Android dan iOS dengan React Native dan Flutter." },
-            { image: "jadwal6.jpg", title: "Artificial Intelligence", description: "Pengenalan konsep AI, machine learning, dan deep learning untuk aplikasi praktis." }
+            { image: "Web Development.jpeg", title: "Web Development", description: "Belajar membangun website modern dengan teknologi terkini seperti HTML, CSS, JavaScript, dan framework populer." },
+            { image: "UI UX.jpeg", title: "UI / UX Design", description: "Desain antarmuka yang efektif dan pengalaman pengguna yang menarik menggunakan tools desain profesional." },
+            { image: "Cyber.jpeg", title: "Cyber Security", description: "Pelajari teknik keamanan sistem dan jaringan untuk melindungi data dan infrastruktur digital." },
+            { image: "Data.jpeg", title: "Data Science", description: "Teknik pengolahan data dan analisis menggunakan Python, R, dan machine learning algorithms." },
+            { image: "Mobile App.jpeg", title: "Mobile Development", description: "Pengembangan aplikasi mobile untuk platform Android dan iOS dengan React Native dan Flutter." },
+            { image: "AI.jpeg", title: "Artificial Intelligence", description: "Pengenalan konsep AI, machine learning, dan deep learning untuk aplikasi praktis." }
           ].map((training, index) => (
             <div className="schedule-card" key={index}>
               <img src={`/images/${training.image}`} alt={training.title} />

@@ -43,7 +43,7 @@ function LoginPage() {
       // simpan user ke localStorage
       localStorage.setItem("user", JSON.stringify(response.data.user));
 
-      navigate("/home");
+      navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Login gagal");
     }
@@ -54,7 +54,7 @@ function LoginPage() {
       <div className="card shadow-lg p-4 login-card">
         <div className="text-center mb-2">
           <img
-            src="/images/unpam (2).png"
+            src="/images/TCF_Logo.png"
             className="logo-unpam"
             alt="UNPAM"
           />
