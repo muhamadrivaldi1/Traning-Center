@@ -84,6 +84,7 @@ export default function Register() {
           Login
         </span>
       </p>
+      </div>
     </div>
   );
 }
