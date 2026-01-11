@@ -1,203 +1,219 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import { FiSun, FiMoon, FiUser } from "react-icons/fi";
 import "../../css/app.css";
 
 export default function Sertifikat() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [user] = useState(JSON.parse(localStorage.getItem("user")));
+
+  useEffect(() => {
+    if (!user) navigate("/login");
+
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setIsDarkMode(true);
+      document.body.classList.add("dark-theme");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = !isDarkMode;
+    setIsDarkMode(newTheme);
+
+    if (newTheme) {
+      document.body.classList.add("dark-theme");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.body.classList.remove("dark-theme");
+      localStorage.setItem("theme", "light");
+    }
+  };
 
   const certificates = [
     {
       id: 1,
-      title: "(nama Pelatihan)",
-      course: "...",
-      completionDate: "tanggal",
+      title: "Web Development",
+      course: "Frontend",
+      completionDate: "-",
       status: "belum selesai",
-      certificateUrl: "#"
     },
     {
       id: 2,
-      title: "(nama pelatihan)",
-      course: "...",
-      completionDate: "tanggal",
+      title: "UI UX Design",
+      course: "Design",
+      completionDate: "2025-01-10",
       status: "selesai",
-      certificateUrl: "#"
     },
-    {
-      id: 3,
-      title: "(nama pelatihan)",
-      course: "...",
-      completionDate: "tanggal",
-      status: "selesai",
-      certificateUrl: "#"
-    }
   ];
 
-  const handleDownload = (certificate) => {
-
-    alert(`Downloading certificate: ${certificate.title}`);
-  };
-
-  const handleSave = (certificate) => {
-
-    alert(`Certificate saved: ${certificate.title}`);
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/");
   };
 
   return (
     <>
-
-      <button
-        className={`toggle-btn ${isOpen ? 'sidebar-open' : ''}`}
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        &#9776;
-      </button>
-
       <Sidebar isOpen={isOpen} />
 
-      <div
-        className={isOpen ? "sidebar-open" : ""}
-        style={{
-          minHeight: "100vh",
-          backgroundColor: "#131D78",
-          padding: "40px",
-          transition: "margin-left 0.3s ease",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1200px",
-            margin: "0 auto",
-          }}
-        >
-
-          <div
-            style={{
-              background: "linear-gradient(135deg, #010742, #2336DE)",
-              borderRadius: "16px",
-              padding: "40px",
-              marginBottom: "30px",
-              color: "white",
-              textAlign: "center",
-            }}
-          >
-            <h1 style={{ margin: 0, fontWeight: "800" }}>
-              Sertifikat Saya
-            </h1>
-            <p style={{ marginTop: "10px", opacity: 0.9 }}>
-              Kelola dan unduh sertifikat pelatihan Anda
-            </p>
+      <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
+        {/* TOPBAR */}
+        <div className="topbar">
+          <div className="topbar-left">
+            <button
+              className="sidebar-toggle"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
           </div>
 
-          <div className="table-responsive">
-            <table className="table table-striped table-dark">
-              <thead>
-                <tr>
-                  <th>Nama Pelatihan</th>
-                  <th>Kursus</th>
-                  <th>Tanggal Selesai</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {certificates.map((cert) => (
-                  <tr key={cert.id}>
-                    <td>{cert.title}</td>
-                    <td>{cert.course}</td>
-                    <td>{cert.completionDate}</td>
-                    <td>
-                      <span
-                        style={{
-                          color: cert.status === "selesai" ? "#28a745" : "#ffc107",
-                          fontWeight: "600",
-                        }}
-                      >
-                        {cert.status === "selesai" ? "✓ Selesai" : "Belum Selesai"}
-                      </span>
-                    </td>
-                    <td>
-                      <button
-                        onClick={() => handleDownload(cert)}
-                        style={{
-                          background: "linear-gradient(135deg, #131D78, #2f3dbf)",
-                          color: "white",
-                          border: "none",
-                          padding: "8px 12px",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                          fontWeight: "600",
-                          marginRight: "8px",
-                        }}
-                      >
-                        📥 Unduh
-                      </button>
-                      <button
-                        onClick={() => handleSave(cert)}
-                        style={{
-                          background: "linear-gradient(135deg, #131D78, #2f3dbf)",
-                          color: "white",
-                          border: "none",
-                          padding: "8px 12px",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                          fontWeight: "600",
-                        }}
-                      >
-                        💾 Simpan
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {certificates.length === 0 && (
-            <div
+          <div className="topbar-right">
+            {/* Theme Toggle Button */}
+            <button
+              className="theme-toggle-btn"
+              onClick={toggleTheme}
               style={{
-                background: "white",
-                borderRadius: "16px",
-                padding: "60px 30px",
-                textAlign: "center",
-                boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+                background: "transparent",
+                border: "none",
+                color: "white",
+                fontSize: "20px",
+                cursor: "pointer",
+                padding: "8px",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
               }}
             >
-              <div
+              {isDarkMode ? <FiSun /> : <FiMoon />}
+            </button>
+
+            {/* USER MENU */}
+            <div className="user-menu-container">
+              <button
+                onClick={() => setShowUserMenu(!showUserMenu)}
                 style={{
-                  fontSize: "64px",
-                  marginBottom: "20px",
-                  opacity: 0.5,
+                  background: "transparent",
+                  border: "none",
+                  color: "white",
+                  fontSize: "20px",
+                  cursor: "pointer",
+                  padding: "8px",
+                  borderRadius: "50%",
                 }}
               >
-                📜
-              </div>
-              <h3 style={{ color: "#131D78", marginBottom: "10px" }}>
-                Belum Ada Sertifikat
-              </h3>
-              <p style={{ color: "#666" }}>
-                Selesaikan pelatihan untuk mendapatkan sertifikat Anda
-              </p>
-            </div>
-          )}
+                <FiUser />
+              </button>
 
-   
-          <div
-            style={{
-              background: "white",
-              borderRadius: "16px",
-              padding: "30px",
-              boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
-            }}
-          >
-            <h3 style={{ color: "#131D78", marginBottom: "15px" }}>
-              📋 Informasi Sertifikat
-            </h3>
-            <ul style={{ color: "#666", lineHeight: "1.6" }}>
-              <li>Sertifikat akan tersedia setelah menyelesaikan pelatihan 100%</li>
-              <li>Unduh sertifikat dalam format PDF untuk penyimpanan</li>
-              <li>Sertifikat dapat dibagikan ke LinkedIn atau platform lainnya</li>
-              <li>Simpan sertifikat untuk akses cepat di masa depan</li>
-            </ul>
+              {showUserMenu && (
+                <div className="user-dropdown">
+                  <div className="user-info">
+                    <p className="user-name">{user?.name || "User"}</p>
+                    <p className="user-email">{user?.email || "-"}</p>
+                  </div>
+                  <hr />
+                  <button
+                    className="profile-btn"
+                    onClick={() => {
+                      navigate("/profil");
+                      setShowUserMenu(false);
+                    }}
+                  >
+                    Profil
+                  </button>
+                  <button className="logout-btn" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* CONTENT */}
+        <div
+          style={{
+            minHeight: "100vh",
+            background: isDarkMode
+              ? "linear-gradient(135deg, #1a1a2e, #16213e)"
+              : "linear-gradient(135deg, #667eea, #764ba2)",
+            padding: "40px",
+            color: isDarkMode ? "white" : "#333",
+          }}
+        >
+          <div className="container py-4">
+            <h1
+              style={{
+                textAlign: "center",
+                marginBottom: "30px",
+                fontFamily: "Arial, sans-serif",
+              }}
+            >
+              Sertifikat Peserta
+            </h1>
+
+            <div
+              className="table-responsive mt-4"
+              style={{
+                background: "white",
+                borderRadius: "10px",
+                padding: "20px",
+                boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+              }}
+            >
+              <table className="table table-light table-striped">
+                <thead>
+                  <tr>
+                    <th>Pelatihan</th>
+                    <th>Kursus</th>
+                    <th>Tanggal Selesai</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {certificates.map((c) => (
+                    <tr key={c.id}>
+                      <td>{c.title}</td>
+                      <td>{c.course}</td>
+                      <td>{c.completionDate}</td>
+                      <td>
+                        {c.status === "selesai" ? (
+                          <span style={{ color: "green" }}>✓ Selesai</span>
+                        ) : (
+                          <span style={{ color: "orange" }}>Belum Selesai</span>
+                        )}
+                      </td>
+                      <td>
+                        {c.status === "selesai" ? (
+                          <button
+                            style={{
+                              background: "#007bff",
+                              color: "white",
+                              border: "none",
+                              padding: "5px 10px",
+                              borderRadius: "5px",
+                              cursor: "pointer",
+                            }}
+                          >
+                            Unduh Sertifikat
+                          </button>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

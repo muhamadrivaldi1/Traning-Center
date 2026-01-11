@@ -13,22 +13,46 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
             return response()->json([
-                'message' => 'Email atau password salah'
-            ], 401);
+                'message' => 'User tidak ditemukan'
+            ], 404);
         }
 
-        $user = Auth::user();
+        // ❌ JANGAN Auth::login()
+        // Auth::login($user);
 
         return response()->json([
             'message' => 'Login berhasil',
             'user' => $user
         ]);
     }
+
+    //  ini kode untuk login dengan password
+    // public function login(Request $request)
+    // {
+    //     $request->validate([
+    //         'email' => 'required|email',
+    //         'password' => 'required'
+    //     ]);
+
+    //     if (!Auth::attempt($request->only('email', 'password'))) {
+    //         return response()->json([
+    //             'message' => 'Email atau password salah'
+    //         ], 401);
+    //     }
+
+    //     $user = Auth::user();
+
+    //     return response()->json([
+    //         'message' => 'Login berhasil',
+    //         'user' => $user
+    //     ]);
+    // }
 
     public function register(Request $request)
     {

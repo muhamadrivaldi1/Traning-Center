@@ -82,6 +82,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/pembayaran" element={<Pembayaran />} />
           <Route path="/sertifikat" element={<Sertifikat />} />
+          <Route path="/profil" element={<Profil />} />
         </Routes>
       </Router>
     </AuthProvider>

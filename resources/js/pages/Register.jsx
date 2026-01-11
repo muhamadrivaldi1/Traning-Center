@@ -42,14 +42,14 @@ export default function Register() {
       <div className="card shadow-lg p-4 login-card">
         <div className="text-center mb-3">
           <img
-            src="/images/unpam (2).png"
+            src="/images/TCF_Logo.png"
             className="logo-unpam"
             alt="UNPAM"
           />
         </div>
 
         <h3 className="text-center mb-4 text-primary fw-bold">
-          Register
+          Regis Traning Center UNPAM
         </h3>
 
         {error && <div className="alert alert-danger">{error}</div>}
