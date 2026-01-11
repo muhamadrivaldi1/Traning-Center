@@ -10,8 +10,6 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-import { AuthProvider } from "./contexts/AuthContext";
-
 import HomePage from "./HomePage";
 import Dashboard from "./pages/dashboard";
 import Pembayaran from "./pages/pembayaran";
@@ -19,14 +17,19 @@ import Sertifikat from "./pages/sertifikat";
 import Register from "./pages/Register";
 import TrainingDetail from "./pages/TrainingDetail";
 
+
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import api from "./api";
+
+
 function LoginPage() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login } = useAuth(); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
@@ -34,9 +37,22 @@ function LoginPage() {
       return;
     }
 
-    // Simulate login
-    login();
-    navigate("/home");
+    try {
+      const response = await api.post("/login", {
+        email,
+        password,
+      });
+
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+
+      if (login) {
+        login(response.data.user);
+      }
+
+      navigate("/home");
+    } catch (err) {
+      setError("Login gagal, email atau password salah");
+    }
   };
 
   return (
@@ -76,7 +92,6 @@ function LoginPage() {
             Masuk
           </button>
 
-          {/* LINK REGISTER */}
           <p
             style={{
               marginTop: "15px",
@@ -107,13 +122,14 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<LoginPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/pembayaran" element={<Pembayaran />} />
           <Route path="/sertifikat" element={<Sertifikat />} />
+          <Route path="/training/:id" element={<TrainingDetail />} />
         </Routes>
       </Router>
     </AuthProvider>
