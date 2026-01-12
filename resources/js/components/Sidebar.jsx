@@ -34,7 +34,7 @@ export default function Sidebar({ isOpen }) {
 
   return (
     <aside className={`sidebar ${isOpen ? "active" : ""}`}>
-      {/* Logo Section */}
+
       <div className="sidebar-logo">
         <div className="logo-container">
           <img
@@ -45,8 +45,6 @@ export default function Sidebar({ isOpen }) {
         </div>
       </div>
 
-      {/* Menu Section */}
-      {/* DASHBOARD (TOP MENU) */}
       <div className="sidebar-top-menu">
         <div
           className={`sidebar-item ${isActive("/dashboard") ? "active" : ""}`}

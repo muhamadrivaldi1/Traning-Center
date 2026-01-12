@@ -9,7 +9,7 @@ export default function Sertifikat() {
   const [isOpen, setIsOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [user] = useState(JSON.parse(localStorage.getItem("user")));
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     if (!user) navigate("/login");
@@ -22,10 +22,10 @@ export default function Sertifikat() {
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = !isDarkMode;
-    setIsDarkMode(newTheme);
+    const next = !isDarkMode;
+    setIsDarkMode(next);
 
-    if (newTheme) {
+    if (next) {
       document.body.classList.add("dark-theme");
       localStorage.setItem("theme", "dark");
     } else {
@@ -34,13 +34,18 @@ export default function Sertifikat() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/");
+  };
+
   const certificates = [
     {
       id: 1,
       title: "Web Development",
       course: "Frontend",
       completionDate: "-",
-      status: "belum selesai",
+      status: "belum",
     },
     {
       id: 2,
@@ -51,124 +56,68 @@ export default function Sertifikat() {
     },
   ];
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/");
-  };
-
   return (
     <>
       <Sidebar isOpen={isOpen} />
 
       <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
-        {/* TOPBAR */}
-        <div className="topbar">
-          <div className="topbar-left">
-            <button
-              className="sidebar-toggle"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-          </div>
+        {/* PAGE WRAPPER (TOPBAR + CONTENT SATU BACKGROUND) */}
+        <div className="page-wrapper">
 
-          <div className="topbar-right">
-            {/* Theme Toggle Button */}
-            <button
-              className="theme-toggle-btn"
-              onClick={toggleTheme}
-              style={{
-                background: "transparent",
-                border: "none",
-                color: "white",
-                fontSize: "20px",
-                cursor: "pointer",
-                padding: "8px",
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
-              {isDarkMode ? <FiSun /> : <FiMoon />}
-            </button>
-
-            {/* USER MENU */}
-            <div className="user-menu-container">
+          {/* TOPBAR */}
+          <div className="topbar">
+            <div className="topbar-left">
               <button
-                onClick={() => setShowUserMenu(!showUserMenu)}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  color: "white",
-                  fontSize: "20px",
-                  cursor: "pointer",
-                  padding: "8px",
-                  borderRadius: "50%",
-                }}
+                className="sidebar-toggle"
+                onClick={() => setIsOpen(!isOpen)}
               >
-                <FiUser />
+                <span></span>
+                <span></span>
+                <span></span>
+              </button>
+            </div>
+
+            <div className="topbar-right">
+              <button className="theme-toggle-btn" onClick={toggleTheme}>
+                {isDarkMode ? <FiSun /> : <FiMoon />}
               </button>
 
-              {showUserMenu && (
-                <div className="user-dropdown">
-                  <div className="user-info">
-                    <p className="user-name">{user?.name || "User"}</p>
-                    <p className="user-email">{user?.email || "-"}</p>
+              <div className="user-menu-container">
+                <button
+                  className="user-menu-btn"
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                >
+                  <FiUser />
+                </button>
+
+                {showUserMenu && (
+                  <div className="user-dropdown">
+                    <div className="user-info">
+                      <p className="user-name">{user?.name}</p>
+                      <p className="user-email">{user?.email}</p>
+                    </div>
+                    <hr />
+                    <button
+                      className="profile-btn"
+                      onClick={() => navigate("/profil")}
+                    >
+                      Profil
+                    </button>
+                    <button className="logout-btn" onClick={handleLogout}>
+                      Logout
+                    </button>
                   </div>
-                  <hr />
-                  <button
-                    className="profile-btn"
-                    onClick={() => {
-                      navigate("/profil");
-                      setShowUserMenu(false);
-                    }}
-                  >
-                    Profil
-                  </button>
-                  <button className="logout-btn" onClick={handleLogout}>
-                    Logout
-                  </button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* CONTENT */}
-        <div
-          style={{
-            minHeight: "100vh",
-            background: isDarkMode
-              ? "linear-gradient(135deg, #1a1a2e, #16213e)"
-              : "linear-gradient(135deg, #667eea, #764ba2)",
-            padding: "40px",
-            color: isDarkMode ? "white" : "#333",
-          }}
-        >
+          {/* CONTENT */}
           <div className="container py-4">
-            <h1
-              style={{
-                textAlign: "center",
-                marginBottom: "30px",
-                fontFamily: "Arial, sans-serif",
-              }}
-            >
-              Sertifikat Peserta
-            </h1>
+            <h1 className="page-title">Sertifikat Peserta</h1>
 
-            <div
-              className="table-responsive mt-4"
-              style={{
-                background: "white",
-                borderRadius: "10px",
-                padding: "20px",
-                boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-              }}
-            >
-              <table className="table table-light table-striped">
+            <div className="certificate-card">
+              <table className="table table-striped">
                 <thead>
                   <tr>
                     <th>Pelatihan</th>
@@ -186,23 +135,14 @@ export default function Sertifikat() {
                       <td>{c.completionDate}</td>
                       <td>
                         {c.status === "selesai" ? (
-                          <span style={{ color: "green" }}>✓ Selesai</span>
+                          <span className="status-success">✓ Selesai</span>
                         ) : (
-                          <span style={{ color: "orange" }}>Belum Selesai</span>
+                          <span className="status-pending">Belum Selesai</span>
                         )}
                       </td>
                       <td>
                         {c.status === "selesai" ? (
-                          <button
-                            style={{
-                              background: "#007bff",
-                              color: "white",
-                              border: "none",
-                              padding: "5px 10px",
-                              borderRadius: "5px",
-                              cursor: "pointer",
-                            }}
-                          >
+                          <button className="download-btn">
                             Unduh Sertifikat
                           </button>
                         ) : (
@@ -214,6 +154,7 @@ export default function Sertifikat() {
                 </tbody>
               </table>
             </div>
+
           </div>
         </div>
       </div>

@@ -153,9 +153,30 @@ export default function Dashboard() {
                 <div className="user-dropdown">
                   <div className="user-info">
                     <p className="user-name">{user?.name || "User"}</p>
-                    <p className="user-email">{user?.email || ""}</p>
+                    <p className="user-email">{user?.email || "-"}</p>
                   </div>
-                  <hr style={{ margin: "8px 0", borderColor: "#ddd" }} />
+
+                  <hr />
+
+                  <button
+                    className="profile-btn"
+                    onClick={() => {
+                      navigate("/profil");
+                      setShowUserMenu(false);
+                    }}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "#333",
+                      cursor: "pointer",
+                      padding: "8px",
+                      width: "100%",
+                      textAlign: "left"
+                    }}
+                  >
+                    Profil
+                  </button>
+
                   <button
                     className="logout-btn"
                     onClick={handleLogout}
@@ -164,6 +185,7 @@ export default function Dashboard() {
                   </button>
                 </div>
               )}
+
             </div>
           </div>
         </div>

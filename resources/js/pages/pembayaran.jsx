@@ -9,12 +9,11 @@ export default function Pembayaran() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showProfileCard, setShowProfileCard] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [user, setUser] = useState(null);
 
   /* ======================
-     INIT DATA
+     INIT
   ====================== */
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -55,47 +54,38 @@ export default function Pembayaran() {
   ====================== */
   return (
     <>
-
-
       {/* SIDEBAR */}
       <Sidebar isOpen={isOpen} />
 
-      {/* MAIN CONTENT */}
+      {/* MAIN */}
       <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
-        {/* TOPBAR */}
-        <div className="topbar">
-          <div className="topbar-left">
-            <button
-              className="sidebar-toggle"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-          </div>
-
-          <div className="topbar-right">
-            {/* THEME TOGGLE */}
-            <button
-              onClick={toggleTheme}
-              style={{
-                background: "transparent",
-                border: "none",
-                color: "white",
-                fontSize: "20px",
-                cursor: "pointer",
-                padding: "8px",
-                borderRadius: "50%",
-              }}
-            >
-              {isDarkMode ? <FiSun /> : <FiMoon />}
-            </button>
-
-            {/* USER MENU */}
-            <div className="user-menu-container">
+        {/* BACKGROUND WRAPPER */}
+        <div
+          style={{
+            minHeight: "100vh",
+            background: isDarkMode
+              ? "linear-gradient(135deg, #1a1a2e, #16213e)"
+              : "linear-gradient(135deg, white)",
+            padding: "30px",
+          }}
+        >
+          {/* TOPBAR */}
+          <div className="topbar">
+            <div className="topbar-left">
               <button
-                onClick={() => setShowUserMenu(!showUserMenu)}
+                className="sidebar-toggle"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                <span></span>
+                <span></span>
+                <span></span>
+              </button>
+            </div>
+
+            <div className="topbar-right">
+              {/* THEME */}
+              <button
+                onClick={toggleTheme}
                 style={{
                   background: "transparent",
                   border: "none",
@@ -106,79 +96,96 @@ export default function Pembayaran() {
                   borderRadius: "50%",
                 }}
               >
-                <FiUser />
+                {isDarkMode ? <FiSun /> : <FiMoon />}
               </button>
 
-              {showUserMenu && (
-                <div className="user-dropdown">
-                  <div className="user-info">
-                    <p className="user-name">{user?.name || "User"}</p>
-                    <p className="user-email">{user?.email || "-"}</p>
-                  </div>
-                  <hr />
-                  <button
-                    className="profile-btn"
-                    onClick={() => {
-                      navigate("/profil");
-                      setShowUserMenu(false);
-                    }}
+              {/* USER */}
+              <div className="user-menu-container">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    color: "white",
+                    fontSize: "20px",
+                    cursor: "pointer",
+                    padding: "8px",
+                    borderRadius: "50%",
+                  }}
+                >
+                  <FiUser />
+                </button>
+
+                {showUserMenu && (
+                  <div
+                    className="user-dropdown"
                     style={{
-                      background: "transparent",
-                      border: "none",
-                      color: "#333",
-                      cursor: "pointer",
-                      padding: "8px",
-                      width: "100%",
-                      textAlign: "left"
+                      background: "white",
+                      borderRadius: "8px",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                     }}
                   >
-                    Profil
-                  </button>
-                  <button className="logout-btn" onClick={handleLogout}>
-                    Logout
-                  </button>
-                </div>
-              )}
+                    <div className="user-info">
+                      <p className="user-name" style={{ color: "#333" }}>
+                        {user?.name || "User"}
+                      </p>
+                      <p className="user-email" style={{ color: "#666" }}>
+                        {user?.email || "-"}
+                      </p>
+                    </div>
+                    <hr />
+
+                    <button
+                      className="profile-btn"
+                      onClick={() => {
+                        navigate("/profil");
+                        setShowUserMenu(false);
+                      }}
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        color: "#333",
+                        padding: "10px",
+                        width: "100%",
+                        textAlign: "left",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Profil
+                    </button>
+
+                    <button
+                      className="logout-btn"
+                      onClick={handleLogout}
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        color: "red",
+                        padding: "10px",
+                        width: "100%",
+                        textAlign: "left",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* CONTENT */}
-        <div
-          style={{
-            minHeight: "100vh",
-            background: isDarkMode
-              ? "linear-gradient(135deg, #1a1a2e, #16213e)"
-              : "linear-gradient(135deg, #667eea, #764ba2)",
-            padding: "40px",
-            color: isDarkMode ? "white" : "#333",
-          }}
-        >
+          {/* CONTENT */}
           <div className="container py-4">
-            <h1
-              style={{
-                color: isDarkMode ? "white" : "#333",
-                textAlign: "center",
-                marginBottom: "30px",
-                fontFamily: "Arial, sans-serif",
-              }}
+            <h1 classname="page-title pembayaran-title"
             >
               Pembayaran Peserta
             </h1>
 
             <div
-              className="table-responsive mt-4"
-              style={{
-                background: isDarkMode ? "#2c2c54" : "white",
-                borderRadius: "10px",
-                padding: "20px",
-                boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-              }}
+              className="table-responsive payment-card"
             >
-              <table
-                className={`table ${isDarkMode ? "table-dark" : "table-light"} table-striped`}
-                style={{ borderRadius: "10px" }}
-              >
+              <table className="table table-striped">
                 <thead>
                   <tr>
                     <th>Nama Pelatihan</th>
@@ -195,9 +202,7 @@ export default function Pembayaran() {
                     <td>Transfer Bank</td>
                     <td>123456789</td>
                     <td>Rp 500.000</td>
-                    <td>
-                      <span style={{ color: "green" }}>Lunas</span>
-                    </td>
+                    <td style={{ color: "green" }}>Lunas</td>
                     <td>-</td>
                   </tr>
                   <tr>
@@ -205,9 +210,7 @@ export default function Pembayaran() {
                     <td>E-Wallet</td>
                     <td>987654321</td>
                     <td>Rp 350.000</td>
-                    <td>
-                      <span style={{ color: "orange" }}>Pending</span>
-                    </td>
+                    <td style={{ color: "orange" }}>Pending</td>
                     <td>-</td>
                   </tr>
                   <tr>
@@ -215,9 +218,7 @@ export default function Pembayaran() {
                     <td>Transfer Bank</td>
                     <td>456789123</td>
                     <td>Rp 700.000</td>
-                    <td>
-                      <span style={{ color: "green" }}>Lunas</span>
-                    </td>
+                    <td style={{ color: "green" }}>Lunas</td>
                     <td>-</td>
                   </tr>
                 </tbody>

@@ -13,6 +13,7 @@ body {
     margin: 0;
     overscroll-behavior-x: none;
     touch-action: pan-y pinch-zoom;
+    background: transparent;
 }
 
 :root {
@@ -28,10 +29,18 @@ body {
     --border-color: #404040;
 }
 
-.dark-theme body {
+body.dark-theme {
     background-color: var(--bg-color);
     color: var(--text-color);
 }
+
+
+.theme-toggle-btn,
+.theme-toggle-btn svg {
+    color: white !important;
+    fill: white !important;
+}
+
 
 .dark-theme .main-content {
     background-color: var(--bg-color);
@@ -47,6 +56,11 @@ body {
     color: var(--text-color);
 }
 
+body.dark-theme .training-card h5 {
+    color: white;
+}
+
+
 .dark-theme .navbar-custom .container {
     background: rgba(45, 45, 45, 0.9);
 }
@@ -58,6 +72,32 @@ body {
 .dark-theme .table-striped tbody tr:nth-of-type(odd) {
     background-color: rgba(255, 255, 255, 0.05);
 }
+
+body.dark-theme .event-card {
+    background-color: #ffffff;
+    color: #333333;
+}
+
+/* Judul pelatihan tetap hitam */
+body.dark-theme .event-card h5 {
+    color: #000000;
+}
+
+/* =========================
+   TITLE PEMBAYARAN
+========================= */
+
+.pembayaran-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--primary-purple); /* UNGU SAAT TERANG */
+}
+
+/* Saat dark mode */
+body.dark-theme .pembayaran-title {
+    color: #ffffff; /* PUTIH SAAT GELAP */
+}
+
 
 .navbar-custom {
     position: fixed;
@@ -548,7 +588,10 @@ body {
 .main-content {
     position: relative;
     overflow: visible;
+    min-height: 100vh;
+    background: transparent !important;
 }
+
 
 /* Training Cards Styles */
 .training-grid {
@@ -720,10 +763,18 @@ body {
     color: #333;
 }
 
-
-.dark-theme .profile-btn {
-    color: white !important;
+.payment-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  color: #333;
 }
+
+body.dark-theme .payment-card {
+  background: #1e1e2f;
+  color: #eaeaea;
+}
+
 
 .profile-btn:hover {
     background: rgba(0,0,0,0.05);
@@ -817,12 +868,77 @@ body {
 }
 
 /* Theme Toggle Button Styles */
-.theme-toggle-btn:hover {
-    background: rgba(255, 255, 255, 0.1) !important;
-}
+
 
 .user-menu-btn:hover {
     background: rgba(255, 255, 255, 0.1) !important;
 }
 
+/* =========================
+   PAGE WRAPPER
+========================= */
+.page-wrapper {
+    min-height: 100vh;
+    padding: 40px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+body.dark-theme .page-wrapper {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+}
+
+/* =========================
+   PAGE TITLE
+========================= */
+.page-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--primary-purple);
+}
+
+
+
+/* =========================
+   CERTIFICATE CARD
+========================= */
+.certificate-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+body.dark-theme .certificate-card {
+    background: #1e1e2f;
+    color: #ffffff;
+}
+
+/* =========================
+   STATUS
+========================= */
+.status-success {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.status-pending {
+    color: #fd7e14;
+    font-weight: 600;
+}
+
+/* =========================
+   BUTTON
+========================= */
+.download-btn {
+    background: var(--primary-purple);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.download-btn:hover {
+    background: #0f165f;
+}
 
