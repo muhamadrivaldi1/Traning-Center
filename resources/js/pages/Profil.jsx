@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import { FiUser, FiSun, FiMoon } from "react-icons/fi";
-import "../../css/app.css";
+import { FiUser, FiSun, FiMoon, FiLogOut, FiStar } from "react-icons/fi";
 
 export default function Profil() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,11 +18,7 @@ export default function Profil() {
     }
 
     const savedUser = localStorage.getItem("user");
-    if (!savedUser) {
-      navigate("/login");
-    } else {
-      setUser(JSON.parse(savedUser));
-    }
+    if (savedUser) setUser(JSON.parse(savedUser));
   }, []);
 
  
@@ -48,28 +43,50 @@ export default function Profil() {
     <>
       <Sidebar isOpen={isOpen} />
 
-      <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
+      <div
+        className={`main-content ${isOpen ? "sidebar-open" : ""}`}
+        style={{
+          minHeight: "100vh",
+          padding: "30px",
+          background: isDarkMode
+            ? "linear-gradient(135deg, #1F2937, #111827)"
+            : "linear-gradient(135deg, #E0F2FE, #BAE6FD)", // lebih cerah di light mode
+          transition: "0.5s",
+        }}
+      >
         {/* TOPBAR */}
-        <div className="topbar">
-          <div className="topbar-left">
-            <button
-              className="sidebar-toggle"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-          </div>
+        <div
+          className="topbar"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "50px",
+          }}
+        >
+          <button
+            className="sidebar-toggle"
+            onClick={() => setIsOpen(!isOpen)}
+            style={{
+              color: isDarkMode ? "#fff" : "#1F2937",
+              fontSize: "24px",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            ☰
+          </button>
 
-          <div className="topbar-right">
+          <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+            {/* Toggle Theme */}
             <button
               onClick={toggleTheme}
               style={{
                 background: "transparent",
                 border: "none",
-                color: "white",
-                fontSize: "20px",
+                color: isDarkMode ? "#fff" : "#1F2937",
+                fontSize: "22px",
                 cursor: "pointer",
                 padding: "8px",
                 borderRadius: "50%",
@@ -78,14 +95,15 @@ export default function Profil() {
               {isDarkMode ? <FiSun /> : <FiMoon />}
             </button>
 
-            <div className="user-menu-container">
+            {/* User Menu */}
+            <div style={{ position: "relative" }}>
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
                 style={{
                   background: "transparent",
                   border: "none",
-                  color: "white",
-                  fontSize: "20px",
+                  color: isDarkMode ? "#fff" : "#1F2937",
+                  fontSize: "22px",
                   cursor: "pointer",
                   padding: "8px",
                   borderRadius: "50%",
@@ -96,20 +114,40 @@ export default function Profil() {
 
               {showUserMenu && (
                 <div
-                  className="user-dropdown"
                   style={{
-                    background: "white",
-                    borderRadius: "8px",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                    position: "absolute",
+                    right: 0,
+                    top: "35px",
+                    background: isDarkMode ? "#1F2937" : "#fff",
+                    color: isDarkMode ? "#fff" : "#111",
+                    borderRadius: "12px",
+                    minWidth: "200px",
+                    boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
+                    zIndex: 999,
+                    overflow: "hidden",
                   }}
                 >
-                  <div className="user-info">
-                    <p className="user-name" style={{ color: "#333" }}>
-                      {user?.name}
-                    </p>
-                    <p className="user-email" style={{ color: "#666" }}>
-                      {user?.email}
-                    </p>
+                  <div style={{ padding: "15px", textAlign: "center" }}>
+                    <div
+                      style={{
+                        width: "60px",
+                        height: "60px",
+                        borderRadius: "50%",
+                        background: "linear-gradient(135deg, #6366F1, #A78BFA)",
+                        margin: "0 auto 10px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "24px",
+                        color: "#fff",
+                        boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+                        transition: "0.3s",
+                      }}
+                    >
+                      {user?.name?.[0] || "U"}
+                    </div>
+                    <b>{user?.name || "User"}</b>
+                    <p style={{ fontSize: "12px", margin: "5px 0 0" }}>{user?.email || "-"}</p>
                   </div>
                   <hr />
                   <button
@@ -117,15 +155,18 @@ export default function Profil() {
                     onClick={handleLogout}
                     style={{
                       background: "transparent",
-                      border: "none",
-                      color: "red",
-                      padding: "10px",
-                      width: "100%",
-                      textAlign: "left",
+                      padding: "12px",
                       cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      justifyContent: "center",
+                      transition: "0.3s",
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "#FECACA")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                   >
-                    Logout
+                    <FiLogOut /> Logout
                   </button>
                 </div>
               )}
@@ -133,104 +174,135 @@ export default function Profil() {
           </div>
         </div>
 
-
+        {/* PROFILE CARD */}
         <div
           style={{
-            minHeight: "80vh",
-            padding: "30px",
-            background: isDarkMode
-              ? "linear-gradient(135deg, #1a1a2e, #16213e)"
-              : "#f9fafb",
-            borderRadius: "16px",
+            display: "flex",
+            justifyContent: "center",
           }}
         >
-
-
-        <div
-          style={{
-            background: isDarkMode ? "#1f2937" : "#ffffff",
-            borderRadius: "16px",
-            padding: "30px",
-            marginBottom: "30px",
-            boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-            textAlign: "center",          // 🔥 INI KUNCINYA
-          }}
-        >
-          <h2 style={{ margin: 0 }}>
-            👋 Hallo, {user?.name || "Mahasiswa"}
-          </h2>
-          <p
-            style={{
-              marginTop: "10px",
-              color: isDarkMode ? "#cbd5f5" : "#555",
-            }}
-          >
-            Mau belajar apa hari ini?
-          </p>
-        </div>
-
-
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: "20px",
+              position: "relative",
+              backdropFilter: "blur(15px)",
+              background: isDarkMode
+                ? "rgba(31,41,55,0.85)"
+                : "rgba(255,255,255,0.85)",
+              borderRadius: "25px",
+              padding: "50px 30px",
+              maxWidth: "600px",
+              width: "100%",
+              textAlign: "center",
+              boxShadow: isDarkMode
+                ? "0 20px 60px rgba(0,0,0,0.3)"
+                : "0 20px 60px rgba(0,0,0,0.1)",
+              color: isDarkMode ? "#fff" : "#111",
+              transition: "0.5s",
             }}
           >
+            {/* Avatar */}
             <div
               style={{
-                background: isDarkMode ? "#1f2937" : "#ffffff",
-                borderRadius: "14px",
-                padding: "20px",
-                textAlign: "center",
-                boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+                width: "140px",
+                height: "140px",
+                borderRadius: "50%",
+                background: isDarkMode
+                  ? "linear-gradient(135deg,#6366F1,#A78BFA)"
+                  : "linear-gradient(135deg,#4F46E5,#3B82F6)",
+                margin: "0 auto 25px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "48px",
+                fontWeight: "bold",
+                boxShadow: isDarkMode
+                  ? "0 10px 30px rgba(0,0,0,0.5)"
+                  : "0 10px 30px rgba(0,0,0,0.2)",
+                transition: "0.3s",
+                color: "#fff",
               }}
             >
-              <h1 style={{ margin: 0, fontSize: "40px" }}>
-                {totalPelatihan}
-              </h1>
-              <p style={{ marginTop: "10px", color: "#6b7280" }}>
-                Total Pelatihan
-              </p>
+              {user?.name?.[0] || "U"}
             </div>
 
+            <h1 style={{ margin: "0 0 10px", fontSize: "30px" }}>{user?.name || "Mahasiswa"}</h1>
+            <p style={{ margin: "0 0 25px", fontSize: "14px", opacity: 0.8 }}>
+              {user?.email || "email@example.com"}
+            </p>
+
+            {/* INFO & BADGES */}
             <div
               style={{
-                background: isDarkMode ? "#1f2937" : "#ffffff",
-                borderRadius: "14px",
-                padding: "20px",
-                textAlign: "center",
-                boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+                display: "flex",
+                gap: "15px",
+                justifyContent: "center",
+                flexWrap: "wrap",
+                marginBottom: "25px",
               }}
             >
-              <h1
-                style={{ margin: 0, fontSize: "40px", color: "#f59e0b" }}
-              >
-                {pelatihanBerjalan}
-              </h1>
-              <p style={{ marginTop: "10px", color: "#6b7280" }}>
-                Pelatihan Berjalan
-              </p>
+              {[
+                { label: "Status", value: "Aktif", icon: <FiUser /> },
+                { label: "Role", value: "Peserta Training", icon: <FiStar /> },
+                { label: "Kursus Selesai", value: "3/5", icon: <FiStar /> },
+                { label: "Progress", value: "60%", icon: <FiStar /> },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  style={{
+                    flex: "1 1 120px",
+                    padding: "20px",
+                    borderRadius: "20px",
+                    background: isDarkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)",
+                    backdropFilter: "blur(8px)",
+                    transition: "0.3s",
+                    cursor: "pointer",
+                    color: isDarkMode ? "#fff" : "#111",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.background = isDarkMode
+                      ? "rgba(255,255,255,0.25)"
+                      : "rgba(0,0,0,0.1)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.background = isDarkMode
+                      ? "rgba(255,255,255,0.1)"
+                      : "rgba(0,0,0,0.05)")
+                  }
+                >
+                  {item.icon}
+                  <p style={{ margin: 0, fontWeight: "600", opacity: 0.9 }}>{item.label}</p>
+                  <p style={{ margin: 0, fontSize: "18px", fontWeight: "bold" }}>{item.value}</p>
+                </div>
+              ))}
             </div>
 
- 
-            <div
-              style={{
-                background: isDarkMode ? "#1f2937" : "#ffffff",
-                borderRadius: "14px",
-                padding: "20px",
-                textAlign: "center",
-                boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
-              }}
-            >
-              <h1
-                style={{ margin: 0, fontSize: "40px", color: "#10b981" }}
+            {/* PROGRESS BAR */}
+            <div>
+              <p style={{ marginBottom: "10px", fontWeight: "600", opacity: 0.9 }}>Progress Learning</p>
+              <div
+                style={{
+                  height: "14px",
+                  borderRadius: "10px",
+                  background: isDarkMode ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)",
+                  overflow: "hidden",
+                }}
               >
-                {pelatihanSelesai}
-              </h1>
-              <p style={{ marginTop: "10px", color: "#6b7280" }}>
-                Pelatihan Selesai
-              </p>
+                <div
+                  style={{
+                    width: "60%",
+                    height: "100%",
+                    background: isDarkMode
+                      ? "linear-gradient(135deg,#6366F1,#A78BFA)"
+                      : "linear-gradient(135deg,#4F46E5,#3B82F6)",
+                    borderRadius: "10px",
+                    transition: "width 1s ease-in-out",
+                  }}
+                ></div>
+              </div>
             </div>
           </div>
         </div>
