@@ -248,7 +248,6 @@ body {
   flex-shrink: 0;
 }
 
-/* Mobile responsive */
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
@@ -287,12 +286,12 @@ body {
 .filter-label {
   font-weight: 600;
   font-size: 14px;
-  color: #1e40af; /* biru */
+  color: #1e40af; 
 }
 
 /* DARK MODE */
 .dark-theme .filter-label {
-  color: #60a5fa; /* biru terang (aman di background gelap) */
+  color: #60a5fa; 
 }
 
 .filter input {

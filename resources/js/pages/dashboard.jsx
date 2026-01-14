@@ -5,27 +5,24 @@ import { FiSun, FiMoon, FiUser } from "react-icons/fi";
 import "../../css/app.css";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
-  const [search, setSearch] = useState("card");
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
-
   useEffect(() => {
-    // Get user data from localStorage
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
-
-    // Check for saved theme preference
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
       setIsDarkMode(true);
       document.body.classList.add("dark-theme");
+    }
+
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
     }
   }, []);
 
@@ -47,104 +44,39 @@ export default function Dashboard() {
     navigate("/");
   };
 
-
   const events = [
-    {
-      title: "Pelatihan Web Development",
-      image: "/images/WEb Development.jpeg",
-    },
-    {
-      title: "UI / UX Design",
-      image: "/images/UI UX.jpeg",
-    },
-    {
-      title: "Cyber Security",
-      image: "/images/Cyber.jpeg",
-    },
-    {
-      title: "Data Science",
-      image: "/images/Data.jpeg",
-    },
-    {
-      title: "Mobile Development",
-      image: "/images/Mobile App.jpeg",
-    },
-    {
-      title: "Artificial Intelligence",
-      image: "/images/AI.jpeg",
-    },
+    { id: 1, title: "Pelatihan Web Development", image: "/images/WEb Development.jpeg" },
+    { id: 2, title: "UI / UX Design", image: "/images/UI UX.jpeg" },
+    { id: 3, title: "Cyber Security", image: "/images/Cyber.jpeg" },
+    { id: 4, title: "Data Science", image: "/images/Data.jpeg" },
+    { id: 5, title: "Mobile Development", image: "/images/Mobile App.jpeg" },
+    { id: 6, title: "Artificial Intelligence", image: "/images/AI.jpeg" }
   ];
 
-  const filteredEvents = events.filter((event) =>
+  const filteredEvents = events.filter(event =>
     event.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
 
   return (
     <>
       <Sidebar isOpen={isOpen} />
 
       <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
-        {/* HEADER */}
+        {/* TOPBAR */}
         <div className="topbar">
-          <div className="topbar-left">
-            <button
-              className="sidebar-toggle"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-          </div>
+          <button className="sidebar-toggle" onClick={() => setIsOpen(!isOpen)}>
+            <span></span><span></span><span></span>
+          </button>
 
           <div className="topbar-right">
-            {/* Theme Toggle Button */}
-            <button
-              className="theme-toggle-btn"
-              onClick={toggleTheme}
-              style={{
-                background: "transparent",
-                border: "none",
-                color: "white",
-                fontSize: "20px",
-                cursor: "pointer",
-                padding: "8px",
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
+            <button className="theme-toggle-btn" onClick={toggleTheme}>
               {isDarkMode ? <FiSun /> : <FiMoon />}
             </button>
 
-            {/* User Menu */}
             <div className="user-menu-container">
               <button
                 className="user-menu-btn"
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  color: "white",
-                  fontSize: "20px",
-                  cursor: "pointer",
-                  padding: "8px",
-                  borderRadius: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  transition: "background-color 0.3s ease, transform 0.2s ease"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
-                  e.currentTarget.style.transform = "scale(1.1)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "transparent";
-                  e.currentTarget.style.transform = "scale(1)";
-                }}
               >
                 <FiUser />
               </button>
@@ -155,37 +87,15 @@ export default function Dashboard() {
                     <p className="user-name">{user?.name || "User"}</p>
                     <p className="user-email">{user?.email || "-"}</p>
                   </div>
-
                   <hr />
-
-                  <button
-                    className="profile-btn"
-                    onClick={() => {
-                      navigate("/profil");
-                      setShowUserMenu(false);
-                    }}
-                    style={{
-                      background: "transparent",
-                      border: "none",
-                      color: "#333",
-                      cursor: "pointer",
-                      padding: "8px",
-                      width: "100%",
-                      textAlign: "left"
-                    }}
-                  >
-                    Profil
+                  <button className="profile-btn" onClick={() => navigate("/profil")}>
+                    Data Pribadi
                   </button>
-
-                  <button
-                    className="logout-btn"
-                    onClick={handleLogout}
-                  >
+                  <button className="logout-btn" onClick={handleLogout}>
                     Logout
                   </button>
                 </div>
               )}
-
             </div>
           </div>
         </div>
@@ -194,92 +104,36 @@ export default function Dashboard() {
         <h2 className="page-title">Daftar Pelatihan</h2>
         <hr />
 
-        {/* TABS */}
-        <div className="tabs">
-          <span
-            className={search === "card" ? "tab active" : "tab"}
-            onClick={() => setSearch("card")}
-          >
-            CARD VIEW
-          </span>
-          <span
-            className={search === "table" ? "tab active" : "tab"}
-            onClick={() => setSearch("table")}
-          >
-            TABLE VIEW
-          </span>
-        </div>
-
-        {/* SEARCH FILTER */}
+        {/* SEARCH */}
         <div className="filter">
           <label className="filter-label">Pencarian</label>
           <input
             type="text"
-            placeholder="Cari event..."
+            placeholder="Cari pelatihan..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
-        {/* EVENT CARD */}
-        <div className="event-grid">
-          {filteredEvents.map((item, index) => (
-            <div
-              className="event-card"
-              key={index}
-              style={{
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                cursor: "pointer",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                padding: "10px",
-                borderRadius: "10px",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-5px)";
-                e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
-              }}
-            >
-              <img
-                src={item.image}
-                alt={item.title}
-                style={{ width: "100%", borderRadius: "8px" }}
-              />
-              <h5 style={{ margin: "10px 0 5px 0" }}>{item.title}</h5>
+        {/* CARD GRID */}
+        <div className="training-grid">
+          {filteredEvents.map(event => (
+            <div className="training-card" key={event.id}>
+              <img src={event.image} alt={event.title} />
 
-              {/* Tombol Detail */}
-              <button
-                className="detail-btn"
-                style={{
-                  padding: "6px 12px",
-                  border: "none",
-                  borderRadius: "5px",
-                  backgroundColor: "#007bff",
-                  color: "#fff",
-                  cursor: "pointer",
-                  transition: "background-color 0.3s ease",
-                }}
-                onClick={() => alert(`Detail untuk ${item.title}`)}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#0056b3"}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#007bff"}
-              >
-                Detail
-              </button>
+              <div className="training-content">
+                <h5>{event.title}</h5>
+
+                <button
+                  className="training-btn"
+                  onClick={() => alert(`Detail ${event.title}`)}
+                >
+                  Lihat Detail
+                </button>
+              </div>
             </div>
           ))}
         </div>
-        <button
-          className="help-btn"
-          onClick={() => window.open("https://helpdesk.unpam.ac.id", "_blank")}
-        >
-          💬 PUSAT BANTUAN
-        </button>
-
       </div>
     </>
   );

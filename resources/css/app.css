@@ -73,31 +73,55 @@ body.dark-theme .training-card h5 {
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-body.dark-theme .event-card {
-    background-color: #ffffff;
-    color: #333333;
-}
-
-/* Judul pelatihan tetap hitam */
-body.dark-theme .event-card h5 {
-    color: #000000;
-}
-
 /* =========================
-   TITLE PEMBAYARAN
+   TOPBAR BUTTON FIX
 ========================= */
+.theme-toggle-btn,
+.user-menu-btn {
+    background: transparent !important;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.theme-toggle-btn:hover,
+.user-menu-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: scale(1.1);
+}
+
+.dark-theme .theme-toggle-btn,
+.dark-theme .user-menu-btn {
+    color: #ffffff;
+}
+
+
+body.dark-theme .event-card {
+    background-color: #1e1e2f;
+    color: #f1f1f1;
+}
+
+body.dark-theme .event-card h5 {
+    color: #ffffff;
+}
+
 
 .pembayaran-title {
     text-align: center;
     margin-bottom: 30px;
-    color: var(--primary-purple); /* UNGU SAAT TERANG */
+    color: var(--primary-purple); 
 }
 
-/* Saat dark mode */
 body.dark-theme .pembayaran-title {
-    color: #ffffff; /* PUTIH SAAT GELAP */
+    color: #ffffff; 
 }
-
 
 .navbar-custom {
     position: fixed;
@@ -115,7 +139,6 @@ body.dark-theme .pembayaran-title {
 
 .navbar-custom .container {
     background: rgba(19, 29, 120, 0.75);
-    /* backdrop-filter: blur(8px); */
     border-radius: 16px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
     max-width: 1550px;     
@@ -297,7 +320,7 @@ body.dark-theme .pembayaran-title {
     max-width: 1200px;
     margin: auto;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 24px;
 }
 
@@ -585,6 +608,14 @@ body.dark-theme .pembayaran-title {
     transition: all 0.3s ease;
 }
 
+.page-title {
+    color: #111;
+}
+
+body.dark-theme .page-title {
+    color: #fff;
+}
+
 .main-content {
     position: relative;
     overflow: visible;
@@ -734,7 +765,6 @@ body.dark-theme .pembayaran-title {
     border-color: #bbb;
 }
 
-/* User Dropdown Menu Styles */
 .user-menu-container {
     position: relative;
 }
@@ -942,3 +972,69 @@ body.dark-theme .certificate-card {
     background: #0f165f;
 }
 
+.gallery-wrapper {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.gallery-track {
+  display: flex;
+  width: max-content;
+  animation: scrollGallery 30s linear infinite;
+}
+
+.gallery-item {
+  min-width: 250px;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* ANIMASI */
+@keyframes scrollGallery {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.dark-theme .training-card {
+    background-color: #1e1e2f;
+    color: #f1f1f1;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.dark-theme .training-card h5 {
+    color: #ffffff;
+}
+
+.dark-theme .training-content {
+    color: #dddddd;
+}
+
+.dark-theme .training-dates small {
+    color: #aaaaaa;
+}
+
+.dark-theme .progress-bar {
+    background-color: #333;
+}
+
+.dark-theme .training-btn {
+    background-color: #6f42c1;
+    color: #ffffff;
+    border: none;
+}
+
+.dark-theme .training-btn:hover {
+    background-color: #59339d;
+}

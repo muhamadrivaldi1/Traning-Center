@@ -19,15 +19,17 @@ export default function Profil() {
     }
 
     const savedUser = localStorage.getItem("user");
-    if (savedUser) {
+    if (!savedUser) {
+      navigate("/login");
+    } else {
       setUser(JSON.parse(savedUser));
     }
   }, []);
 
+ 
   const toggleTheme = () => {
     const next = !isDarkMode;
     setIsDarkMode(next);
-
     document.body.classList.toggle("dark-theme", next);
     localStorage.setItem("theme", next ? "dark" : "light");
   };
@@ -37,6 +39,11 @@ export default function Profil() {
     navigate("/login");
   };
 
+
+  const totalPelatihan = 6;
+  const pelatihanBerjalan = 2;
+  const pelatihanSelesai = 4;
+
   return (
     <>
       <Sidebar isOpen={isOpen} />
@@ -44,39 +51,44 @@ export default function Profil() {
       <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
         {/* TOPBAR */}
         <div className="topbar">
-          <button
-            className="sidebar-toggle"
-            onClick={() => setIsOpen(!isOpen)}
-            style={{ color: "white" }}   // 🔒 warna dikunci
-          >
-            ☰
-          </button>
+          <div className="topbar-left">
+            <button
+              className="sidebar-toggle"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
 
           <div className="topbar-right">
-            {/* THEME */}
             <button
               onClick={toggleTheme}
               style={{
                 background: "transparent",
                 border: "none",
-                color: "white",           // 🔒
+                color: "white",
                 fontSize: "20px",
                 cursor: "pointer",
+                padding: "8px",
+                borderRadius: "50%",
               }}
             >
               {isDarkMode ? <FiSun /> : <FiMoon />}
             </button>
 
-            {/* USER MENU */}
-            <div style={{ position: "relative" }}>
+            <div className="user-menu-container">
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
                 style={{
                   background: "transparent",
                   border: "none",
-                  color: "white",        // 🔒
+                  color: "white",
                   fontSize: "20px",
                   cursor: "pointer",
+                  padding: "8px",
+                  borderRadius: "50%",
                 }}
               >
                 <FiUser />
@@ -86,34 +98,31 @@ export default function Profil() {
                 <div
                   className="user-dropdown"
                   style={{
-                    position: "absolute",
-                    right: 0,
-                    top: "40px",
                     background: "white",
-                    borderRadius: "6px",
-                    minWidth: "150px",
-                    boxShadow: "0 6px 20px rgba(0,0,0,.2)",
-                    zIndex: 999,
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                   }}
                 >
-                  <div style={{ padding: "10px" }}>
-                    <b>{user?.name || "User"}</b>
-                    <p style={{ fontSize: "12px", margin: 0 }}>
-                      {user?.email || "-"}
+                  <div className="user-info">
+                    <p className="user-name" style={{ color: "#333" }}>
+                      {user?.name}
+                    </p>
+                    <p className="user-email" style={{ color: "#666" }}>
+                      {user?.email}
                     </p>
                   </div>
-
-                  <hr style={{ margin: 0 }} />
-
+                  <hr />
                   <button
+                    className="logout-btn"
                     onClick={handleLogout}
                     style={{
-                      width: "100%",
-                      border: "none",
                       background: "transparent",
+                      border: "none",
+                      color: "red",
                       padding: "10px",
-                      cursor: "pointer",
+                      width: "100%",
                       textAlign: "left",
+                      cursor: "pointer",
                     }}
                   >
                     Logout
@@ -124,23 +133,105 @@ export default function Profil() {
           </div>
         </div>
 
-        {/* CONTENT */}
+
         <div
           style={{
-            background: "linear-gradient(135deg, #131D78, #2336DE)",
-            padding: "40px",
-            borderRadius: "16px",
-            color: "white",
             minHeight: "80vh",
+            padding: "30px",
+            background: isDarkMode
+              ? "linear-gradient(135deg, #1a1a2e, #16213e)"
+              : "#f9fafb",
+            borderRadius: "16px",
           }}
         >
-          <h1>Profil Pengguna</h1>
 
-          <div style={{ marginTop: "20px" }}>
-            <p><b>Nama:</b> {user?.name || "Mahasiswa"}</p>
-            <p><b>Email:</b> {user?.email || "email@example.com"}</p>
-            <p><b>Status:</b> Aktif</p>
-            <p><b>Role:</b> Peserta Training</p>
+
+        <div
+          style={{
+            background: isDarkMode ? "#1f2937" : "#ffffff",
+            borderRadius: "16px",
+            padding: "30px",
+            marginBottom: "30px",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+            textAlign: "center",          // 🔥 INI KUNCINYA
+          }}
+        >
+          <h2 style={{ margin: 0 }}>
+            👋 Hallo, {user?.name || "Mahasiswa"}
+          </h2>
+          <p
+            style={{
+              marginTop: "10px",
+              color: isDarkMode ? "#cbd5f5" : "#555",
+            }}
+          >
+            Mau belajar apa hari ini?
+          </p>
+        </div>
+
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+              gap: "20px",
+            }}
+          >
+            <div
+              style={{
+                background: isDarkMode ? "#1f2937" : "#ffffff",
+                borderRadius: "14px",
+                padding: "20px",
+                textAlign: "center",
+                boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+              }}
+            >
+              <h1 style={{ margin: 0, fontSize: "40px" }}>
+                {totalPelatihan}
+              </h1>
+              <p style={{ marginTop: "10px", color: "#6b7280" }}>
+                Total Pelatihan
+              </p>
+            </div>
+
+            <div
+              style={{
+                background: isDarkMode ? "#1f2937" : "#ffffff",
+                borderRadius: "14px",
+                padding: "20px",
+                textAlign: "center",
+                boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+              }}
+            >
+              <h1
+                style={{ margin: 0, fontSize: "40px", color: "#f59e0b" }}
+              >
+                {pelatihanBerjalan}
+              </h1>
+              <p style={{ marginTop: "10px", color: "#6b7280" }}>
+                Pelatihan Berjalan
+              </p>
+            </div>
+
+ 
+            <div
+              style={{
+                background: isDarkMode ? "#1f2937" : "#ffffff",
+                borderRadius: "14px",
+                padding: "20px",
+                textAlign: "center",
+                boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+              }}
+            >
+              <h1
+                style={{ margin: 0, fontSize: "40px", color: "#10b981" }}
+              >
+                {pelatihanSelesai}
+              </h1>
+              <p style={{ marginTop: "10px", color: "#6b7280" }}>
+                Pelatihan Selesai
+              </p>
+            </div>
           </div>
         </div>
       </div>

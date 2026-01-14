@@ -83,7 +83,6 @@ export default function Pembayaran() {
             </div>
 
             <div className="topbar-right">
-              {/* THEME */}
               <button
                 onClick={toggleTheme}
                 style={{
@@ -99,7 +98,6 @@ export default function Pembayaran() {
                 {isDarkMode ? <FiSun /> : <FiMoon />}
               </button>
 
-              {/* USER */}
               <div className="user-menu-container">
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
@@ -151,7 +149,7 @@ export default function Pembayaran() {
                         cursor: "pointer",
                       }}
                     >
-                      Profil
+                      Data Pribadi
                     </button>
 
                     <button

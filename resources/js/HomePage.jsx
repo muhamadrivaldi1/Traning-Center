@@ -59,7 +59,7 @@ function HomePage() {
           </div>
         </div>
       </nav>
-      {/* <Sidebar isOpen={isOpen} /> */}
+
       <div className={isOpen ? "sidebar-open" : ""}>
       <section id="home" className="hero-section">
         <div className="hero-content">
@@ -106,7 +106,7 @@ function HomePage() {
               <img src={`/images/${training.image}`} alt={training.title} />
               <h4>{training.title}</h4>
               <p>{training.description}</p>
-              <button onClick={() => navigate("/training-detail", { state: { training } })}>Detail</button>
+              <button onClick={() => navigate("/TrainingDetail", { state: { training } })}>Detail</button>
             </div>
           ))}
         </div>
@@ -121,10 +121,10 @@ function HomePage() {
 
         <div className="news-grid">
           {[
-            ["berita1.jpg", "Pembukaan Pelatihan Web Development"],
-            ["berita2.jpg", "Workshop Cyber Security"],
-            ["berita3.jpg", "Pelatihan UI / UX Design"],
-            ["berita4.jpg", "Seminar Artificial Intelligence"]
+            ["timage.jpg", "Pembukaan Pelatihan Web Development"],
+            ["timage.jpg", "Workshop Cyber Security"],
+            ["timage.jpg", "Pelatihan UI / UX Design"],
+            ["timage.jpg", "Seminar Artificial Intelligence"]
           ].map((item, index) => (
             <div className="news-card" key={index}>
               <img src={`/images/${item[0]}`} alt={item[1]} />
@@ -141,27 +141,44 @@ function HomePage() {
 
       <div className="section-rectangle"></div>
 
-      <section id="galeri" className="gallery-section">
-        <div className="news-header">
-          <h2>Galeri</h2>
-          <p>Update dokumentasi kegiatan Training Center FIKOM UNPAM</p>
-        </div>
+<section id="galeri" className="gallery-section">
+  <div className="news-header">
+    <h2>Galeri</h2>
+    <p>Update dokumentasi kegiatan Training Center FIKOM UNPAM</p>
+  </div>
 
-        <div className="gallery-scroll">
-          {[
-            "berita1.jpg",
-            "berita2.jpg",
-            "berita3.jpg",
-            "berita4.jpg",
-            "berita1.jpg",
-            "berita2.jpg"
-          ].map((img, index) => (
-            <div className="gallery-item" key={index}>
-              <img src={`/images/${img}`} alt="Galeri" />
-            </div>
-          ))}
+  <div className="gallery-wrapper">
+    <div className="gallery-track">
+      {[
+        "timage.jpg",
+        "timage.jpg",
+        "timage.jpg",
+        "timage.jpg",
+        "timage.jpg",
+        "timage.jpg",
+      ].map((img, index) => (
+        <div className="gallery-item" key={index}>
+          <img src={`/images/${img}`} alt="Galeri" />
         </div>
-      </section>
+      ))}
+
+      {/* DUPLIKAT biar looping halus */}
+      {[
+        "timage.jpg",
+        "timage.jpg",
+        "timage.jpg",
+        "timage.jpg",
+        "timage.jpg",
+        "timage.jpg",
+      ].map((img, index) => (
+        <div className="gallery-item" key={`dup-${index}`}>
+          <img src={`/images/${img}`} alt="Galeri" />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
 
       <footer className="footer">
         <div className="footer-top">

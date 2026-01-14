@@ -4,12 +4,11 @@ import { Users, BookOpen, CreditCard, BarChart3 } from "lucide-react";
 export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-6">
-      {/* Header */}
+
       <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">
         Admin Dashboard
       </h1>
 
-      {/* Statistik Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow">
           <div className="flex items-center gap-4">

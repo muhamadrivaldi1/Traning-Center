@@ -175,7 +175,7 @@ export default function PelatihanSaya() {
                                         textAlign: "left"
                                     }}
                                     >
-                                    Profil
+                                    Data Pribadi
                                     </button>
 
                                     <button
