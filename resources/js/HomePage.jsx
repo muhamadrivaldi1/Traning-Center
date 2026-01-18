@@ -44,7 +44,7 @@ function HomePage() {
                 <a className="nav-link" href="#home">Home</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#jadwal">Jadwal</a>
+                <a className="nav-link" href="#jadwal">Pelatihan</a>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#berita">Berita</a>

@@ -1,0 +1,260 @@
+/* ---------------- General Page ---------------- */
+.training-detail {
+    background: #f4f6f9;
+    min-height: 100vh;
+    padding-top: 120px;
+    padding-bottom: 80px;
+    font-family: Arial, sans-serif;
+}
+
+.training-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ---------------- Navbar ---------------- */
+.navbar-custom {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.navbar-brand img {
+    height: 40px;
+}
+
+/* Navbar links */
+.navbar-nav .nav-link {
+    font-weight: 500;
+    color: #333;
+    transition: color 0.2s;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--primary-purple);
+}
+
+/* ---------------- Hero Section ---------------- */
+.training-hero {
+    height: 320px;
+    border-radius: 18px;
+    overflow: hidden;
+    background-image: url("/images/timage.jpg");
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    margin-bottom: 35px;
+}
+
+.training-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.6));
+}
+
+.hero-content {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    padding: 0 20px;
+}
+
+.hero-content h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+}
+
+.hero-content p {
+    max-width: 700px;
+    margin-top: 10px;
+    font-size: 1.1rem;
+}
+
+/* ---------------- Card Section ---------------- */
+.training-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+    padding: 45px;
+}
+
+.training-card .grid-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 45px;
+}
+
+.training-card h3 {
+    color: var(--primary-purple);
+}
+
+.training-card p,
+.training-card ul {
+    line-height: 1.8;
+    color: #555;
+}
+
+.training-card ul {
+    padding-left: 20px;
+}
+
+.training-card .grid-three {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 45px;
+}
+
+.training-card .grid-three div {
+    background: #f4f6f9;
+    border-radius: 14px;
+    padding: 25px;
+    text-align: center;
+}
+
+.training-card .grid-three h4 {
+    color: var(--primary-purple);
+}
+
+.training-card .grid-three p {
+    font-weight: 600;
+}
+
+/* ---------------- Buttons ---------------- */
+.btn-purple,
+.btn-purple-large {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+}
+
+.btn-purple {
+    background: var(--primary-purple);
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 8px;
+}
+
+.btn-purple-large {
+    background: var(--primary-purple);
+    color: #fff;
+    padding: 16px 45px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+}
+
+.btn-purple:hover,
+.btn-purple-large:hover,
+.btn-back:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    transition: all 0.2s;
+}
+
+/* Tombol Back */
+.btn-back {
+    margin: 20px 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary-purple);
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 10px;
+}
+
+/* Tombol container */
+.btn-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* ---------------- Center Fallback ---------------- */
+.center-fallback {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* ---------------- Fallback Modern ---------------- */
+.enhanced-fallback {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ffffff, #022ca1);
+    font-family: Arial, sans-serif;
+}
+
+.fallback-card {
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+}
+
+.fallback-icon {
+    font-size: 3rem;
+    color: #ff9800;
+    margin-bottom: 20px;
+}
+
+.fallback-card h3 {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+/* ---------------- Responsive ---------------- */
+@media screen and (max-width: 991px) {
+    .training-card .grid-two {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .training-card .grid-three {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .fallback-card {
+        padding: 30px 20px;
+    }
+
+    .fallback-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .fallback-icon {
+        font-size: 2.5rem;
+    }
+}
