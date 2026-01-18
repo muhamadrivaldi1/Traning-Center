@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { LayoutDashboard, Calendar, CreditCard, FileText } from "lucide-react";
-import "./Sidebar.css"; // Import CSS file
+import "./Sidebar.css"; 
 
 export default function Sidebar({ isOpen }) {
   const navigate = useNavigate();

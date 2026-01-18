@@ -62,7 +62,7 @@ export default function Dashboard() {
       <Sidebar isOpen={isOpen} />
 
       <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
-        {/* TOPBAR */}
+
         <div className="topbar">
           <button className="sidebar-toggle" onClick={() => setIsOpen(!isOpen)}>
             <span></span><span></span><span></span>
@@ -124,12 +124,12 @@ export default function Dashboard() {
               <div className="training-content">
                 <h5>{event.title}</h5>
 
-                <button
-                  className="training-btn"
-                  onClick={() => alert(`Detail ${event.title}`)}
-                >
-                  Lihat Detail
-                </button>
+              <button
+              className="training-btn"
+              onClick={() => navigate("/TrainingDetail")}
+            >
+              Lihat Detail
+            </button>
               </div>
             </div>
           ))}

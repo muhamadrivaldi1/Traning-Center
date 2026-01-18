@@ -177,7 +177,7 @@ function App() {
                 <Route path="/pembayaran" element={<Pembayaran />} />
                 <Route path="/sertifikat" element={<Sertifikat />} />
                 <Route path="/profil" element={<Profil />} />
-                <Route path="/training-detail" element={<TrainingDetail />} />
+                <Route path="/TrainingDetail" element={<TrainingDetail />} />
             </Routes>
         </Router>
     );
