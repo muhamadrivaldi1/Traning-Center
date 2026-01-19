@@ -26,7 +26,7 @@ export default function PelatihanSaya() {
     }, []);
 
     useEffect(() => {
-
+        // MOCK DATA (FINAL)
         const mockTrainings = [
             {
                 id: 1,
@@ -35,7 +35,7 @@ export default function PelatihanSaya() {
                 status: "Aktif",
                 progress: 75,
                 startDate: "2024-01-15",
-                endDate: "2024-02-15"
+                endDate: "2024-02-15",
             },
             {
                 id: 2,
@@ -44,7 +44,7 @@ export default function PelatihanSaya() {
                 status: "Selesai",
                 progress: 100,
                 startDate: "2023-12-01",
-                endDate: "2024-01-01"
+                endDate: "2024-01-01",
             },
             {
                 id: 3,
@@ -53,9 +53,10 @@ export default function PelatihanSaya() {
                 status: "Aktif",
                 progress: 45,
                 startDate: "2024-01-20",
-                endDate: "2024-02-20"
-            }
+                endDate: "2024-02-20",
+            },
         ];
+
         setTrainings(mockTrainings);
     }, []);
 
@@ -95,57 +96,26 @@ export default function PelatihanSaya() {
             <Sidebar isOpen={isOpen} />
 
             <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
-                {/* HEADER */}
+                {/* TOPBAR */}
                 <div className="topbar">
-                    <div className="topbar-left">
-                        <button
-                            className="sidebar-toggle"
-                            onClick={() => setIsOpen(!isOpen)}
-                        >
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </button>
-                    </div>
+                    <button
+                        className="sidebar-toggle"
+                        onClick={() => setIsOpen(!isOpen)}
+                    >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
 
                     <div className="topbar-right">
-                        {/* Theme Toggle Button */}
-                        <button
-                            className="theme-toggle-btn"
-                            onClick={toggleTheme}
-                            style={{
-                                background: "transparent",
-                                border: "none",
-                                color: isDarkMode ? "white" : "#333",
-                                fontSize: "20px",
-                                cursor: "pointer",
-                                padding: "8px",
-                                borderRadius: "50%",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center"
-                            }}
-                        >
+                        <button className="theme-toggle-btn" onClick={toggleTheme}>
                             {isDarkMode ? <FiSun /> : <FiMoon />}
                         </button>
 
-                        {/* User Menu */}
                         <div className="user-menu-container">
                             <button
                                 className="user-menu-btn"
                                 onClick={() => setShowUserMenu(!showUserMenu)}
-                                style={{
-                                    background: "transparent",
-                                    border: "none",
-                                    color: "white",
-                                    fontSize: "20px",
-                                    cursor: "pointer",
-                                    padding: "8px",
-                                    borderRadius: "50%",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center"
-                                }}
                             >
                                 <FiUser />
                             </button>
@@ -153,100 +123,123 @@ export default function PelatihanSaya() {
                             {showUserMenu && (
                                 <div className="user-dropdown">
                                     <div className="user-info">
-                                    <p className="user-name">{user?.name || "User"}</p>
-                                    <p className="user-email">{user?.email || "-"}</p>
+                                        <p className="user-name">
+                                            {user?.name || "User"}
+                                        </p>
+                                        <p className="user-email">
+                                            {user?.email || "-"}
+                                        </p>
                                     </div>
 
                                     <hr />
 
                                     <button
-                                    className="profile-btn"
-                                    onClick={() => {
-                                        navigate("/profil");
-                                        setShowUserMenu(false);
-                                    }}
-                                    style={{
-                                        background: "transparent",
-                                        border: "none",
-                                        color: "#333",
-                                        cursor: "pointer",
-                                        padding: "8px",
-                                        width: "100%",
-                                        textAlign: "left"
-                                    }}
+                                        className="profile-btn"
+                                        onClick={() => {
+                                            navigate("/profil");
+                                            setShowUserMenu(false);
+                                        }}
                                     >
-                                    Data Pribadi
+                                        Data Pribadi
                                     </button>
 
                                     <button
-                                    className="logout-btn"
-                                    onClick={handleLogout}
+                                        className="logout-btn"
+                                        onClick={handleLogout}
                                     >
-                                    Logout
+                                        Logout
                                     </button>
                                 </div>
-                                )}
-
+                            )}
                         </div>
                     </div>
                 </div>
 
-            {/* TITLE */}
-            <h2 className="page-title">Pelatihan Saya</h2>
-            <hr />
+                {/* TITLE */}
+                <h2 className="page-title">Pelatihan Saya</h2>
+                <hr />
 
-            {/* TRAINING CARDS */}
-            <div className="training-grid">
-                {trainings.map((training) => (
-                    <div className="training-card" key={training.id}>
-                        <img src={training.image} alt={training.title} />
-                        <div className="training-content">
-                            <h5>{training.title}</h5>
-                            <div className="training-status">
+                {/* TRAINING GRID */}
+                <div className="training-grid">
+                    {trainings.map((training) => (
+                        <div className="training-card" key={training.id}>
+                            <img
+                                src={training.image}
+                                alt={training.title}
+                            />
+
+                            <div className="training-content">
+                                <h5>{training.title}</h5>
+
                                 <span
                                     className="status-badge"
-                                    style={{ backgroundColor: getStatusColor(training.status) }}
+                                    style={{
+                                        backgroundColor: getStatusColor(
+                                            training.status
+                                        ),
+                                    }}
                                 >
                                     {training.status}
                                 </span>
-                            </div>
-                            <div className="training-progress">
-                                <div className="progress-bar">
-                                    <div
-                                        className="progress-fill"
-                                        style={{ width: `${training.progress}%` }}
-                                    ></div>
+
+                                <div className="training-progress">
+                                    <div className="progress-bar">
+                                        <div
+                                            className="progress-fill"
+                                            style={{
+                                                width: `${training.progress}%`,
+                                            }}
+                                        />
+                                    </div>
+                                    <span className="progress-text">
+                                        {training.progress}%
+                                    </span>
                                 </div>
-                                <span className="progress-text">{training.progress}%</span>
-                            </div>
-                            <div className="training-dates">
+
                                 <small>
                                     {training.startDate} - {training.endDate}
                                 </small>
-                            </div>
-                            <button
-                                className="training-btn"
-                                onClick={() => navigate(`/training/${training.id}`)}
-                            >
-                                Lihat Detail
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div>
 
-            {trainings.length === 0 && (
-                <div className="no-trainings">
-                    <h3>Belum ada pelatihan yang didaftarkan</h3>
-                    <p>Daftar pelatihan untuk memulai perjalanan belajar Anda!</p>
-                    <button
-                        className="register-btn"
-                        onClick={() => navigate("/dashboard")}
-                    >
-                        Jelajahi Pelatihan
-                    </button>
+                                {/* TOMBOL DETAIL (FINAL) */}
+                                <button
+                                    className="training-btn"
+                                    onClick={() =>
+                                        navigate("/TrainingDetail", {
+                                            state: {
+                                                training: {
+                                                    name: training.title,
+                                                    description:
+                                                        "Detail pelatihan belum tersedia.",
+                                                    duration: "1 Bulan",
+                                                    schedule: "Menyesuaikan",
+                                                    cost: "Gratis",
+                                                },
+                                            },
+                                        })
+                                    }
+                                >
+                                    Lihat Detail
+                                </button>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-            )}
+
+                {trainings.length === 0 && (
+                    <div className="no-trainings">
+                        <h3>Belum ada pelatihan yang didaftarkan</h3>
+                        <p>
+                            Daftar pelatihan untuk memulai perjalanan belajar
+                            Anda!
+                        </p>
+                        <button
+                            className="register-btn"
+                            onClick={() => navigate("/dashboard")}
+                        >
+                            Jelajahi Pelatihan
+                        </button>
+                    </div>
+                )}
             </div>
         </>
     );

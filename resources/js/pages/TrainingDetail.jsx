@@ -47,7 +47,6 @@ export default function TrainingDetail() {
                         <span className="fw-bold">Training Center UNPAM</span>
                     </Link>
 
-                    {/* Hamburger Toggler */}
                     <button
                         className="navbar-toggler"
                         type="button"
@@ -60,7 +59,6 @@ export default function TrainingDetail() {
                         <span className="navbar-toggler-icon"></span>
                     </button>
 
-                    {/* Collapse Menu */}
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav ms-auto gap-4">
                             <li className="nav-item">
@@ -94,7 +92,6 @@ export default function TrainingDetail() {
             </nav>
 
             <div className="training-container">
-                {/* Hero Section */}
                 <div className="training-hero">
                     <div className="hero-content">
                         <h1>{training.name || "(Nama Pelatihan)"}</h1>
@@ -105,7 +102,6 @@ export default function TrainingDetail() {
                     </div>
                 </div>
 
-                {/* Card Section */}
                 <div className="training-card">
                     <div className="grid-two">
                         <div>

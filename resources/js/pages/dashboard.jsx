@@ -44,17 +44,66 @@ export default function Dashboard() {
     navigate("/");
   };
 
+  // DATA TRAINING (FINAL)
   const events = [
-    { id: 1, title: "Pelatihan Web Development", image: "/images/WEb Development.jpeg" },
-    { id: 2, title: "UI / UX Design", image: "/images/UI UX.jpeg" },
-    { id: 3, title: "Cyber Security", image: "/images/Cyber.jpeg" },
-    { id: 4, title: "Data Science", image: "/images/Data.jpeg" },
-    { id: 5, title: "Mobile Development", image: "/images/Mobile App.jpeg" },
-    { id: 6, title: "Artificial Intelligence", image: "/images/AI.jpeg" }
+    {
+      id: 1,
+      name: "Pelatihan Web Development",
+      description: "Belajar HTML, CSS, JavaScript, React sampai siap kerja",
+      duration: "3 Bulan",
+      schedule: "Setiap Sabtu",
+      cost: "Rp 2.500.000",
+      image: "/images/WEb Development.jpeg",
+    },
+    {
+      id: 2,
+      name: "UI / UX Design",
+      description: "Belajar desain antarmuka dan pengalaman pengguna",
+      duration: "2 Bulan",
+      schedule: "Setiap Minggu",
+      cost: "Rp 2.000.000",
+      image: "/images/UI UX.jpeg",
+    },
+    {
+      id: 3,
+      name: "Cyber Security",
+      description: "Fundamental keamanan sistem dan jaringan",
+      duration: "3 Bulan",
+      schedule: "Setiap Sabtu",
+      cost: "Rp 3.000.000",
+      image: "/images/Cyber.jpeg",
+    },
+    {
+      id: 4,
+      name: "Data Science",
+      description: "Pengolahan data, analisis, dan visualisasi",
+      duration: "3 Bulan",
+      schedule: "Setiap Minggu",
+      cost: "Rp 3.500.000",
+      image: "/images/Data.jpeg",
+    },
+    {
+      id: 5,
+      name: "Mobile Development",
+      description: "Membangun aplikasi Android & iOS",
+      duration: "3 Bulan",
+      schedule: "Setiap Sabtu",
+      cost: "Rp 3.000.000",
+      image: "/images/Mobile App.jpeg",
+    },
+    {
+      id: 6,
+      name: "Artificial Intelligence",
+      description: "Pengenalan AI dan Machine Learning",
+      duration: "4 Bulan",
+      schedule: "Setiap Minggu",
+      cost: "Rp 4.000.000",
+      image: "/images/AI.jpeg",
+    },
   ];
 
-  const filteredEvents = events.filter(event =>
-    event.title.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredEvents = events.filter((event) =>
+    event.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -62,10 +111,15 @@ export default function Dashboard() {
       <Sidebar isOpen={isOpen} />
 
       <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
-
+        {/* TOPBAR */}
         <div className="topbar">
-          <button className="sidebar-toggle" onClick={() => setIsOpen(!isOpen)}>
-            <span></span><span></span><span></span>
+          <button
+            className="sidebar-toggle"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
           </button>
 
           <div className="topbar-right">
@@ -88,7 +142,10 @@ export default function Dashboard() {
                     <p className="user-email">{user?.email || "-"}</p>
                   </div>
                   <hr />
-                  <button className="profile-btn" onClick={() => navigate("/profil")}>
+                  <button
+                    className="profile-btn"
+                    onClick={() => navigate("/profil")}
+                  >
                     Data Pribadi
                   </button>
                   <button className="logout-btn" onClick={handleLogout}>
@@ -117,19 +174,24 @@ export default function Dashboard() {
 
         {/* CARD GRID */}
         <div className="training-grid">
-          {filteredEvents.map(event => (
+          {filteredEvents.map((event) => (
             <div className="training-card" key={event.id}>
-              <img src={event.image} alt={event.title} />
+              <img src={event.image} alt={event.name} />
 
               <div className="training-content">
-                <h5>{event.title}</h5>
+                <h5>{event.name}</h5>
 
-              <button
-              className="training-btn"
-              onClick={() => navigate("/TrainingDetail")}
-            >
-              Lihat Detail
-            </button>
+                {/* TOMBOL DETAIL (FINAL & FIX) */}
+                <button
+                  className="training-btn"
+                  onClick={() =>
+                    navigate("/TrainingDetail", {
+                      state: { training: event },
+                    })
+                  }
+                >
+                  Lihat Detail
+                </button>
               </div>
             </div>
           ))}
