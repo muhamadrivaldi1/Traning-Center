@@ -26,7 +26,7 @@ export default function PelatihanSaya() {
     }, []);
 
     useEffect(() => {
-        // MOCK DATA (FINAL)
+
         const mockTrainings = [
             {
                 id: 1,
@@ -155,11 +155,9 @@ export default function PelatihanSaya() {
                     </div>
                 </div>
 
-                {/* TITLE */}
                 <h2 className="page-title">Pelatihan Saya</h2>
                 <hr />
 
-                {/* TRAINING GRID */}
                 <div className="training-grid">
                     {trainings.map((training) => (
                         <div className="training-card" key={training.id}>
@@ -200,7 +198,6 @@ export default function PelatihanSaya() {
                                     {training.startDate} - {training.endDate}
                                 </small>
 
-                                {/* TOMBOL DETAIL (FINAL) */}
                                 <button
                                     className="training-btn"
                                     onClick={() =>

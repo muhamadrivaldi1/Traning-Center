@@ -12,9 +12,6 @@ export default function Pembayaran() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [user, setUser] = useState(null);
 
-  /* ======================
-     INIT
-  ====================== */
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
@@ -28,9 +25,6 @@ export default function Pembayaran() {
     }
   }, []);
 
-  /* ======================
-     FUNCTIONS
-  ====================== */
   const toggleTheme = () => {
     const nextTheme = !isDarkMode;
     setIsDarkMode(nextTheme);
@@ -49,17 +43,12 @@ export default function Pembayaran() {
     navigate("/login");
   };
 
-  /* ======================
-     RENDER
-  ====================== */
   return (
     <>
-      {/* SIDEBAR */}
       <Sidebar isOpen={isOpen} />
 
-      {/* MAIN */}
       <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
-        {/* BACKGROUND WRAPPER */}
+
         <div
           style={{
             minHeight: "100vh",
@@ -69,7 +58,7 @@ export default function Pembayaran() {
             padding: "30px",
           }}
         >
-          {/* TOPBAR */}
+
           <div className="topbar">
             <div className="topbar-left">
               <button
@@ -173,7 +162,6 @@ export default function Pembayaran() {
             </div>
           </div>
 
-          {/* CONTENT */}
           <div className="container py-4">
             <h1 classname="page-title pembayaran-title"
             >

@@ -44,7 +44,6 @@ export default function Dashboard() {
     navigate("/");
   };
 
-  // DATA TRAINING (FINAL)
   const events = [
     {
       id: 1,
@@ -157,11 +156,9 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* TITLE */}
         <h2 className="page-title">Daftar Pelatihan</h2>
         <hr />
 
-        {/* SEARCH */}
         <div className="filter">
           <label className="filter-label">Pencarian</label>
           <input
@@ -172,7 +169,6 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* CARD GRID */}
         <div className="training-grid">
           {filteredEvents.map((event) => (
             <div className="training-card" key={event.id}>
@@ -181,7 +177,6 @@ export default function Dashboard() {
               <div className="training-content">
                 <h5>{event.name}</h5>
 
-                {/* TOMBOL DETAIL (FINAL & FIX) */}
                 <button
                   className="training-btn"
                   onClick={() =>

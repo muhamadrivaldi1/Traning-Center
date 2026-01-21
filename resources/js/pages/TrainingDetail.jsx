@@ -144,7 +144,6 @@ export default function TrainingDetail() {
                         ))}
                     </div>
 
-                    {/* Tombol Daftar */}
                     {user && (
                         <div className="btn-container">
                             <Link

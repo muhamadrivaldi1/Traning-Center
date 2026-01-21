@@ -55,7 +55,6 @@ export default function Sidebar({ isOpen }) {
         </div>
       </div>
 
-      {/* MENU APLIKASI */}
       <div className="sidebar-menu">
         <div className="menu-label">APLIKASI</div>
 

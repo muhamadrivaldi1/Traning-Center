@@ -90,7 +90,6 @@
   flex-shrink: 0;
 }
 
-/* Mobile responsive */
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
@@ -101,7 +100,6 @@
   }
 }
 
-/* Scrollbar styling */
 .sidebar::-webkit-scrollbar {
   width: 4px;
 }

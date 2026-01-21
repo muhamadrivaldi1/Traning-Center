@@ -50,11 +50,10 @@ export default function Profil() {
           padding: "30px",
           background: isDarkMode
             ? "linear-gradient(135deg, #1F2937, #111827)"
-            : "linear-gradient(135deg, #E0F2FE, #BAE6FD)", // lebih cerah di light mode
+            : "linear-gradient(135deg, #E0F2FE, #BAE6FD)", 
           transition: "0.5s",
         }}
       >
-        {/* TOPBAR */}
         <div
           className="topbar"
           style={{
@@ -79,7 +78,6 @@ export default function Profil() {
           </button>
 
           <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-            {/* Toggle Theme */}
             <button
               onClick={toggleTheme}
               style={{
@@ -95,7 +93,6 @@ export default function Profil() {
               {isDarkMode ? <FiSun /> : <FiMoon />}
             </button>
 
-            {/* User Menu */}
             <div style={{ position: "relative" }}>
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
@@ -174,7 +171,6 @@ export default function Profil() {
           </div>
         </div>
 
-        {/* PROFILE CARD */}
         <div
           style={{
             display: "flex",
@@ -200,7 +196,7 @@ export default function Profil() {
               transition: "0.5s",
             }}
           >
-            {/* Avatar */}
+
             <div
               style={{
                 width: "140px",
@@ -230,7 +226,6 @@ export default function Profil() {
               {user?.email || "email@example.com"}
             </p>
 
-            {/* INFO & BADGES */}
             <div
               style={{
                 display: "flex",

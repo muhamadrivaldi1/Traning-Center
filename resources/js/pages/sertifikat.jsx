@@ -12,9 +12,6 @@ export default function Sertifikat() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [user, setUser] = useState(null);
 
-  /* ======================
-     INIT
-  ====================== */
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
@@ -30,9 +27,6 @@ export default function Sertifikat() {
     }
   }, []);
 
-  /* ======================
-     FUNCTIONS
-  ====================== */
   const toggleTheme = () => {
     const nextTheme = !isDarkMode;
     setIsDarkMode(nextTheme);
@@ -68,15 +62,11 @@ export default function Sertifikat() {
     },
   ];
 
-  /* ======================
-     RENDER
-  ====================== */
   return (
     <>
       <Sidebar isOpen={isOpen} />
 
       <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
-        {/* BACKGROUND WRAPPER (SAMA PERSIS PEMBAYARAN) */}
         <div
           style={{
             minHeight: "100vh",
@@ -86,7 +76,6 @@ export default function Sertifikat() {
             padding: "30px",
           }}
         >
-          {/* TOPBAR */}
           <div className="topbar">
             <div className="topbar-left">
               <button
@@ -188,7 +177,6 @@ export default function Sertifikat() {
             </div>
           </div>
 
-          {/* CONTENT */}
           <div className="container py-4">
             <h1 className="page-title">Sertifikat Peserta</h1>
 
