@@ -1,11 +1,14 @@
 import React from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import "../../styles/TrainingDetail.css";
-import { FaArrowLeft, FaRegEdit, FaExclamationTriangle } from "react-icons/fa";
+import {
+    FaArrowLeft,
+    FaRegEdit,
+    FaExclamationTriangle,
+} from "react-icons/fa";
 
 export default function TrainingDetail() {
     const location = useLocation();
-    const navigate = useNavigate();
     const training = location.state?.training;
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -16,11 +19,13 @@ export default function TrainingDetail() {
                     <div className="fallback-icon">
                         <FaExclamationTriangle />
                     </div>
+
                     <h3>
                         Training tidak ditemukan,
                         <br />
-                        silahkan mendaftar pelatihan terlebih dahulu.
+                        silahkan pilih pelatihan terlebih dahulu.
                     </h3>
+
                     <Link className="btn-purple btn-back" to="/home">
                         <FaArrowLeft /> Back to Home
                     </Link>
@@ -31,10 +36,9 @@ export default function TrainingDetail() {
 
     return (
         <div className="training-detail">
-            {/* Navbar */}
+            {/* NAVBAR */}
             <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
                 <div className="container navbar-padding">
-                    {/* Brand */}
                     <Link
                         className="navbar-brand d-flex align-items-center gap-3"
                         to="/home"
@@ -44,60 +48,21 @@ export default function TrainingDetail() {
                             className="navbar-logo"
                             alt="UNPAM"
                         />
-                        <span className="fw-bold">Training Center UNPAM</span>
+                        <span className="fw-bold">
+                            Training Center UNPAM
+                        </span>
                     </Link>
-
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav"
-                        aria-controls="navbarNav"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                    >
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div className="collapse navbar-collapse" id="navbarNav">
-                        <ul className="navbar-nav ms-auto gap-4">
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/home">
-                                    Home
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="#Pelatihan">
-                                    Pelatihan
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/berita">
-                                    Berita
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/galeri">
-                                    Galeri
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="btn btn-primary" to="/login">
-                                    Masuk
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </nav>
 
+            {/* CONTENT */}
             <div className="training-container">
                 <div className="training-hero">
                     <div className="hero-content">
-                        <h1>{training.name || "(Nama Pelatihan)"}</h1>
+                        <h1>{training.name}</h1>
                         <p>
-                            Pelatihan intensif untuk meningkatkan kompetensi dan
-                            kesiapan karier Anda
+                            Pelatihan intensif untuk meningkatkan kompetensi
+                            dan kesiapan karier Anda
                         </p>
                     </div>
                 </div>
@@ -111,6 +76,7 @@ export default function TrainingDetail() {
                                     "Deskripsi belum tersedia."}
                             </p>
                         </div>
+
                         <div>
                             <h3>Manfaat</h3>
                             <ul>
@@ -123,37 +89,52 @@ export default function TrainingDetail() {
                     </div>
 
                     <div className="grid-three">
-                        {[
-                            {
-                                title: "Durasi",
-                                value: training.duration || "3 Bulan",
-                            },
-                            {
-                                title: "Jadwal",
-                                value: training.schedule || "Setiap Sabtu",
-                            },
-                            {
-                                title: "Biaya",
-                                value: training.cost || "Rp 2.500.000",
-                            },
-                        ].map((item, index) => (
-                            <div key={index}>
-                                <h4>{item.title}</h4>
-                                <p>{item.value}</p>
-                            </div>
-                        ))}
+                        <div>
+                            <h4>Durasi</h4>
+                            <p>{training.duration || "3 Bulan"}</p>
+                        </div>
+                        <div>
+                            <h4>Jadwal</h4>
+                            <p>{training.schedule || "Setiap Sabtu"}</p>
+                        </div>
+                        <div>
+                            <h4>Biaya</h4>
+                            <p>{training.cost || "Rp 2.500.000"}</p>
+                        </div>
                     </div>
 
-                    {user && (
-                        <div className="btn-container">
-                            <Link
-                                className="btn-purple-large"
-                                to="/pembayaran"
-                            >
-                                <FaRegEdit /> Daftar Sekarang
-                            </Link>
-                        </div>
-                    )}
+                    {/* ✅ TOMBOL SELALU MUNCUL */}
+                    <div className="d-flex flex-column align-items-center mt-4 gap-3">
+
+                        <Link
+                            to={
+                                user
+                                    ? "/pendaftaran-pelatihan"
+                                    : "/login"
+                            }
+                            state={
+                                user
+                                    ? { training }
+                                    : {
+                                          redirectTo:
+                                              "/pendaftaran-pelatihan",
+                                          training,
+                                      }
+                            }
+                            className="btn btn-primary px-5 py-2 d-flex align-items-center gap-2"
+                        >
+                            <FaRegEdit />
+                            Daftar Sekarang
+                        </Link>
+
+                        <Link
+                            to={user ? "/dashboard" : "/home"}
+                            className="btn btn-outline-secondary px-5 py-2 d-flex align-items-center gap-2"
+                        >
+                            <FaArrowLeft />
+                            {user ? "Kembali ke Dashboard" : "Kembali ke Home"}
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

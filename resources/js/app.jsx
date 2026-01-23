@@ -10,7 +10,7 @@ import {
     useNavigate,
 } from "react-router-dom";
 
-import api from "./api"; 
+import api from "./api";
 
 import HomePage from "./HomePage";
 import Dashboard from "./pages/dashboard";
@@ -20,6 +20,7 @@ import Profil from "./pages/Profil";
 import Register from "./pages/Register";
 import TrainingDetail from "./pages/TrainingDetail";
 import PelatihanSaya from "./pages/PelatihanSaya";
+import PendaftaranPelatihan from "./pages/PendaftaranPelatihan";
 
 // function LoginPage() {
 //   const navigate = useNavigate();
@@ -178,6 +179,7 @@ function App() {
                 <Route path="/sertifikat" element={<Sertifikat />} />
                 <Route path="/profil" element={<Profil />} />
                 <Route path="/TrainingDetail" element={<TrainingDetail />} />
+                <Route path="/pendaftaran-pelatihan"element={<PendaftaranPelatihan />}/> 
             </Routes>
         </Router>
     );
