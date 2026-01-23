@@ -12,6 +12,9 @@ export default function TrainingDetail() {
     const training = location.state?.training;
     const user = JSON.parse(localStorage.getItem("user"));
 
+    // ===============================
+    // JIKA DATA TRAINING TIDAK ADA
+    // ===============================
     if (!training) {
         return (
             <div className="center-fallback enhanced-fallback">
@@ -21,21 +24,25 @@ export default function TrainingDetail() {
                     </div>
 
                     <h3>
-                        Training tidak ditemukan,
+                        Training tidak ditemukan
                         <br />
                         silahkan pilih pelatihan terlebih dahulu.
                     </h3>
 
                     <Link className="btn-purple btn-back" to="/home">
-                        <FaArrowLeft /> Back to Home
+                        <FaArrowLeft /> Kembali ke Home
                     </Link>
                 </div>
             </div>
         );
     }
 
+    // ===============================
+    // HALAMAN UTAMA
+    // ===============================
     return (
         <div className="training-detail">
+
             {/* NAVBAR */}
             <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
                 <div className="container navbar-padding">
@@ -57,6 +64,8 @@ export default function TrainingDetail() {
 
             {/* CONTENT */}
             <div className="training-container">
+
+                {/* HERO */}
                 <div className="training-hero">
                     <div className="hero-content">
                         <h1>{training.name}</h1>
@@ -67,7 +76,10 @@ export default function TrainingDetail() {
                     </div>
                 </div>
 
+                {/* CARD */}
                 <div className="training-card">
+
+                    {/* DESKRIPSI */}
                     <div className="grid-two">
                         <div>
                             <h3>Deskripsi Program</h3>
@@ -88,6 +100,7 @@ export default function TrainingDetail() {
                         </div>
                     </div>
 
+                    {/* INFO */}
                     <div className="grid-three">
                         <div>
                             <h4>Durasi</h4>
@@ -103,9 +116,12 @@ export default function TrainingDetail() {
                         </div>
                     </div>
 
-                    {/* ✅ TOMBOL SELALU MUNCUL */}
+                    {/* ===============================
+                        TOMBOL AKSI
+                    =============================== */}
                     <div className="d-flex flex-column align-items-center mt-4 gap-3">
 
+                        {/* DAFTAR */}
                         <Link
                             to={
                                 user
@@ -127,14 +143,19 @@ export default function TrainingDetail() {
                             Daftar Sekarang
                         </Link>
 
+                        {/* BACK */}
                         <Link
                             to={user ? "/dashboard" : "/home"}
                             className="btn btn-outline-secondary px-5 py-2 d-flex align-items-center gap-2"
                         >
                             <FaArrowLeft />
-                            {user ? "Kembali ke Dashboard" : "Kembali ke Home"}
+                            {user
+                                ? "Kembali ke Dashboard"
+                                : "Kembali ke Home"}
                         </Link>
+
                     </div>
+
                 </div>
             </div>
         </div>
