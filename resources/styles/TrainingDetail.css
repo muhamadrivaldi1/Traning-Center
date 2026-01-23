@@ -1,4 +1,4 @@
-/* ---------------- General Page ---------------- */
+---------------- General Page ----------------
 .training-detail {
     background: #f4f6f9;
     min-height: 100vh;
@@ -257,4 +257,6 @@
     .fallback-icon {
         font-size: 2.5rem;
     }
+
+    
 }

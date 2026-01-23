@@ -67,7 +67,7 @@ function HomePage() {
             Sistem Training Center Fakultas Ilmu Komputer
           </h1>
           <p className="hero-subtitle">
-            Meningkatkan skill, membangun masa depan
+            Meningkatkan skill, membangun masa depan cerah bersama kami.
           </p>
           {/* <button
             className="hero-btn"
