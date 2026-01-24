@@ -904,9 +904,7 @@ body.dark-theme .payment-card {
     background: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* =========================
-   PAGE WRAPPER
-========================= */
+
 .page-wrapper {
     min-height: 100vh;
     padding: 40px;
@@ -917,9 +915,6 @@ body.dark-theme .page-wrapper {
     background: linear-gradient(135deg, #1a1a2e, #16213e);
 }
 
-/* =========================
-   PAGE TITLE
-========================= */
 .page-title {
     text-align: center;
     margin-bottom: 30px;
@@ -927,10 +922,6 @@ body.dark-theme .page-wrapper {
 }
 
 
-
-/* =========================
-   CERTIFICATE CARD
-========================= */
 .certificate-card {
     background: #ffffff;
     border-radius: 12px;
@@ -943,9 +934,6 @@ body.dark-theme .certificate-card {
     color: #ffffff;
 }
 
-/* =========================
-   STATUS
-========================= */
 .status-success {
     color: #28a745;
     font-weight: 600;
@@ -956,9 +944,6 @@ body.dark-theme .certificate-card {
     font-weight: 600;
 }
 
-/* =========================
-   BUTTON
-========================= */
 .download-btn {
     background: var(--primary-purple);
     color: white;
@@ -997,7 +982,6 @@ body.dark-theme .certificate-card {
   border-radius: 12px;
 }
 
-/* ANIMASI */
 @keyframes scrollGallery {
   0% {
     transform: translateX(0);
@@ -1037,4 +1021,55 @@ body.dark-theme .certificate-card {
 
 .dark-theme .training-btn:hover {
     background-color: #59339d;
+}
+
+.dark-theme .training-container {
+  color: #ffffff;
+}
+
+.dark-theme .training-card {
+  background-color: #1e1e2f;
+  color: #ffffff;
+}
+
+.dark-theme .training-card h1,
+.dark-theme .training-card h3,
+.dark-theme .training-card h4,
+.dark-theme .training-card h5 {
+  color: #ffffff;
+}
+
+.dark-theme .training-card p,
+.dark-theme .training-card li {
+  color: #e0e0e0;
+}
+
+.dark-theme .training-card ul {
+  padding-left: 18px;
+}
+
+.dark-theme .btn-outline-secondary {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+.dark-theme .btn-outline-secondary:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.dark-theme a {
+  color: #ffffff;
+}
+
+.dark-theme a:hover {
+  color: #d1d1ff;
+}
+
+.dark-theme .grid-three h4 {
+  color: #000000;
+}
+
+.dark-theme .grid-three p {
+  color: #000000;
 }

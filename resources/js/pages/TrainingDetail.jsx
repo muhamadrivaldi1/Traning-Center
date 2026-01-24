@@ -16,7 +16,6 @@ export default function TrainingDetail() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
-  // EFFECT: ambil user & theme
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {

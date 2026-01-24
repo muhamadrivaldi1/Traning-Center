@@ -177,6 +177,9 @@ export default function Dashboard() {
               <div className="training-content">
                 <h5>{event.name}</h5>
 
+                {/* DESKRIPSI MUNCUL DI CARD */}
+                <p className="training-desc">{event.description}</p>
+
                 <button
                   className="training-btn"
                   onClick={() =>
