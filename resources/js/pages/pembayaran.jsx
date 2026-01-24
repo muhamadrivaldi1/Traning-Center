@@ -204,11 +204,9 @@ export default function Pembayaran() {
           </div>
         </div>
 
-        {/* CONTENT */}
         <div className="container-fluid py-4">
           <h2 className="page-title mb-4">Riwayat Pembayaran</h2>
 
-          {/* STATISTICS CARDS */}
           <div className="row g-3 mb-4">
             <div className="col-md-3">
               <div
@@ -279,7 +277,6 @@ export default function Pembayaran() {
             </div>
           </div>
 
-          {/* FILTER & SEARCH */}
           <div className="row g-3 mb-4">
             <div className="col-md-6">
               <div style={{ position: "relative" }}>
@@ -331,7 +328,6 @@ export default function Pembayaran() {
             </div>
           </div>
 
-          {/* PAYMENT CARDS */}
           <div className="row g-4">
             {filteredPayments.map((payment) => (
               <div className="col-lg-6" key={payment.id}>
@@ -365,7 +361,6 @@ export default function Pembayaran() {
                       <StatusBadge status={payment.status} />
                     </div>
 
-                    {/* Details */}
                     <div className="row g-3">
                       <div className="col-6">
                         <div style={{ fontSize: "12px", color: "#666", marginBottom: "4px" }}>
@@ -415,7 +410,6 @@ export default function Pembayaran() {
                       </div>
                     </div>
 
-                    {/* Actions */}
                     <div className="mt-3 pt-3" style={{ borderTop: "1px solid #eee" }}>
                       <button
                         className="btn btn-sm btn-outline-primary me-2"
@@ -446,7 +440,6 @@ export default function Pembayaran() {
             ))}
           </div>
 
-          {/* Empty State */}
           {filteredPayments.length === 0 && (
             <div className="text-center py-5">
               <div style={{ fontSize: "48px", marginBottom: "16px", opacity: 0.3 }}>

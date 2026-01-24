@@ -275,7 +275,6 @@ export default function Profil() {
               ))}
             </div>
 
-            {/* PROGRESS BAR */}
             <div>
               <p style={{ marginBottom: "10px", fontWeight: "600", opacity: 0.9 }}>Progress Learning</p>
               <div

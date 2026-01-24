@@ -1141,3 +1141,16 @@ body.dark-theme .user-dropdown {
 body.dark-theme .user-dropdown button {
   color: #e5e7eb;
 }
+
+.profile-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
