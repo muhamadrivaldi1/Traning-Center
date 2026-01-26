@@ -16,6 +16,9 @@ export default function Sertifikat() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  /* ===============================
+      INIT
+  =============================== */
   useEffect(() => {
     const theme = localStorage.getItem("theme");
     if (theme === "dark") {
@@ -36,19 +39,17 @@ export default function Sertifikat() {
         id: 1,
         title: "Pelatihan Web Development",
         status: "selesai",
-        completedDate: "2024-01-15",
       },
       {
         id: 2,
         title: "Pelatihan Database Management",
         status: "selesai",
-        completedDate: "2024-01-20",
       },
     ]);
   }, [navigate]);
 
   /* ===============================
-     KONSTANTA
+      KONSTANTA
   =============================== */
   const PRODI = "Teknik Informatika";
   const KETUA_PRODI = "Dr. Andi Wijaya, M.Kom";
@@ -62,8 +63,8 @@ export default function Sertifikat() {
   };
 
   /* ===============================
-    GENERATE SERTIFIKAT
- =============================== */
+      GENERATE CANVAS
+  =============================== */
   const generateCertificate = async (training) => {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -71,9 +72,9 @@ export default function Sertifikat() {
     const bg = new Image();
     bg.src = "/images/Sertif1.jpeg";
 
-    await new Promise((res, rej) => {
-      bg.onload = res;
-      bg.onerror = rej;
+    await new Promise((r, e) => {
+      bg.onload = r;
+      bg.onerror = e;
     });
 
     const WIDTH = 3508;
@@ -88,69 +89,38 @@ export default function Sertifikat() {
 
     ctx.textAlign = "center";
 
-    /* ===============================
-       NAMA PESERTA
-    =============================== */
+    /* === NAMA === */
     ctx.font = "bold 90px Georgia";
     ctx.fillStyle = "#1a202c";
-    ctx.fillText(
-      user.name.toUpperCase(),
-      WIDTH / 2,
-      HEIGHT * 0.47
-    );
+    ctx.fillText(user.name.toUpperCase(), WIDTH / 2, HEIGHT * 0.47);
 
-    /* ===============================
-       JUDUL
-    =============================== */
+    /* === JUDUL === */
     ctx.font = "bold 60px Georgia";
-    ctx.fillText(
-      training.title,
-      WIDTH / 2,
-      HEIGHT * 0.57
-    );
+    ctx.fillText(training.title, WIDTH / 2, HEIGHT * 0.57);
 
-    /* ===============================
-       PROGRAM STUDI
-    =============================== */
+    /* === PRODI === */
     ctx.font = "48px Arial";
     ctx.fillStyle = "#2d3748";
-    ctx.fillText(
-      `Program Studi ${PRODI}`,
-      WIDTH / 2,
-      HEIGHT * 0.66
-    );
+    ctx.fillText(`Program Studi ${PRODI}`, WIDTH / 2, HEIGHT * 0.66);
 
-    /* ===============================
-   TANDA TANGAN (SESUIAI BACKGROUND)
-   GARIS SUDAH DARI GAMBAR
-=============================== */
+    /* === TTD === */
+    const nameY = HEIGHT * 0.755;
+    const titleY = HEIGHT * 0.795;
 
-    ctx.textAlign = "center";
-
-    /* === POSISI PRESISI === */
-    const nameY = HEIGHT * 0.755;   // tepat di atas garis
-    const titleY = HEIGHT * 0.795;  // tepat di bawah garis
-
-    /* === POSISI HORIZONTAL === */
     const LEFT = WIDTH * 0.32;
     const RIGHT = WIDTH * 0.68;
 
-    /* === NAMA PEJABAT === */
     ctx.font = "46px Arial";
     ctx.fillStyle = "#111";
     ctx.fillText(KETUA_PRODI, LEFT, nameY);
     ctx.fillText(KETUA_BAGIAN, RIGHT, nameY);
 
-    /* === JABATAN === */
     ctx.font = "34px Arial";
     ctx.fillStyle = "#444";
     ctx.fillText("Ketua Program Studi", LEFT, titleY);
     ctx.fillText("Ketua Bagian", RIGHT, titleY);
 
-    /* ===============================
-       QR CODE
-    =============================== */
-
+    /* === QR CODE === */
     const qrData = await QRCode.toDataURL(
       `https://tcf.unpam.ac.id/verify/${certNumber}`
     );
@@ -165,10 +135,7 @@ export default function Sertifikat() {
 
     ctx.drawImage(qr, qrX, qrY, qrSize, qrSize);
 
-    /* ===============================
-       NOMOR SERTIFIKAT
-    =============================== */
-
+    /* === NOMOR === */
     ctx.font = "30px Arial";
     ctx.fillStyle = "#444";
     ctx.fillText(
@@ -179,8 +146,9 @@ export default function Sertifikat() {
 
     return canvas;
   };
+
   /* ===============================
-     DOWNLOAD
+      ACTION
   =============================== */
   const download = async (training) => {
     const canvas = await generateCertificate(training);
@@ -190,9 +158,6 @@ export default function Sertifikat() {
     link.click();
   };
 
-  /* ===============================
-     PREVIEW
-  =============================== */
   const previewCert = async (training) => {
     const canvas = await generateCertificate(training);
     setPreview(canvas.toDataURL());
@@ -200,11 +165,75 @@ export default function Sertifikat() {
 
   if (!user) return null;
 
+  /* ===============================
+      RENDER
+  =============================== */
   return (
     <>
       <Sidebar isOpen={isOpen} />
 
       <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
+        {/* ================= TOPBAR ================= */}
+        <div className="topbar">
+          <button
+            className="sidebar-toggle"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+
+          <div className="topbar-right">
+            <button
+              className="theme-toggle-btn"
+              onClick={() => {
+                const next = !isDarkMode;
+                setIsDarkMode(next);
+                document.body.classList.toggle("dark-theme", next);
+                localStorage.setItem("theme", next ? "dark" : "light");
+              }}
+            >
+              {isDarkMode ? <FiSun /> : <FiMoon />}
+            </button>
+
+            <div className="user-menu-container">
+              <button
+                className="user-menu-btn"
+                onClick={() => setShowUserMenu(!showUserMenu)}
+              >
+                <FiUser />
+              </button>
+
+              {showUserMenu && (
+                <div className="user-dropdown">
+                  <div className="user-info">
+                    <p className="user-name">{user.name}</p>
+                    <p className="user-email">{user.email}</p>
+                  </div>
+                  <hr />
+                  <button
+                    className="profile-btn"
+                    onClick={() => navigate("/profil")}
+                  >
+                    Data Pribadi
+                  </button>
+                  <button
+                    className="logout-btn"
+                    onClick={() => {
+                      localStorage.removeItem("user");
+                      navigate("/login");
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* ================= CONTENT ================= */}
         <h2 className="page-title">
           <FaCertificate /> Sertifikat Saya
         </h2>
