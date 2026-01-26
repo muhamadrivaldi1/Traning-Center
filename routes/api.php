@@ -3,12 +3,20 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TrainingController;
 
-// 🔓 LOGIN & REGISTER (PUBLIC)
+// =======================
+// PUBLIC
+// =======================
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
-// 🔐 USER (PROTECTED - nanti pakai sanctum)
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/trainings', [TrainingController::class, 'index']);
+
+// =======================
+// PROTECTED
+// =======================
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/trainings/{id}/register', [TrainingController::class, 'register']);
+    Route::get('/my-trainings', [TrainingController::class, 'myTrainings']);
 });
