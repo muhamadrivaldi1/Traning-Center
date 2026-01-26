@@ -1141,3 +1141,89 @@ body.dark-theme .user-dropdown {
 body.dark-theme .user-dropdown button {
   color: #e5e7eb;
 }
+
+.profile-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.training-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.training-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.training-desc {
+  margin-bottom: 12px;
+}
+
+.training-btn {
+  margin-top: auto;
+  width: 100%;
+  text-align: center;
+}
+
+/* ================= USER DROPDOWN ================= */
+
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  min-width: 200px;
+  background: #fff;
+  color: #111;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  z-index: 999;
+  overflow: hidden;
+}
+
+.dark-theme .user-dropdown {
+  background: #1F2937;
+  color: #fff;
+}
+
+.user-info {
+  padding: 16px;
+  text-align: center;
+}
+
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366F1, #A78BFA);
+  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.user-name {
+  margin: 0;
+  font-weight: 600;
+}
+
+.user-email {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.8;
+}
+

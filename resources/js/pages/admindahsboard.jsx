@@ -51,7 +51,6 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Tabel User */}
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow p-6">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
           Data User Terbaru

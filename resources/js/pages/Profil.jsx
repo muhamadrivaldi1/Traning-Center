@@ -21,10 +21,10 @@ export default function Profil() {
     if (savedUser) setUser(JSON.parse(savedUser));
   }, []);
 
- 
   const toggleTheme = () => {
     const next = !isDarkMode;
     setIsDarkMode(next);
+    setShowUserMenu(false);
     document.body.classList.toggle("dark-theme", next);
     localStorage.setItem("theme", next ? "dark" : "light");
   };
@@ -33,11 +33,6 @@ export default function Profil() {
     localStorage.removeItem("user");
     navigate("/login");
   };
-
-
-  const totalPelatihan = 6;
-  const pelatihanBerjalan = 2;
-  const pelatihanSelesai = 4;
 
   return (
     <>
@@ -50,10 +45,11 @@ export default function Profil() {
           padding: "30px",
           background: isDarkMode
             ? "linear-gradient(135deg, #1F2937, #111827)"
-            : "linear-gradient(135deg, #E0F2FE, #BAE6FD)", 
+            : "linear-gradient(135deg, #E0F2FE, #BAE6FD)",
           transition: "0.5s",
         }}
       >
+        {/* ================= TOPBAR ================= */}
         <div
           className="topbar"
           style={{
@@ -64,46 +60,47 @@ export default function Profil() {
           }}
         >
           <button
-            className="sidebar-toggle"
             onClick={() => setIsOpen(!isOpen)}
             style={{
-              color: isDarkMode ? "#fff" : "#1F2937",
-              fontSize: "24px",
               background: "transparent",
               border: "none",
+              fontSize: "24px",
               cursor: "pointer",
+              color: isDarkMode ? "#fff" : "#1F2937",
             }}
           >
             ☰
           </button>
 
           <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+            {/* THEME */}
             <button
               onClick={toggleTheme}
               style={{
                 background: "transparent",
                 border: "none",
-                color: isDarkMode ? "#fff" : "#1F2937",
                 fontSize: "22px",
                 cursor: "pointer",
                 padding: "8px",
                 borderRadius: "50%",
+                color: isDarkMode ? "#fff" : "#1F2937",
               }}
             >
               {isDarkMode ? <FiSun /> : <FiMoon />}
             </button>
 
+            {/* USER */}
             <div style={{ position: "relative" }}>
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
                 style={{
                   background: "transparent",
                   border: "none",
-                  color: isDarkMode ? "#fff" : "#1F2937",
                   fontSize: "22px",
                   cursor: "pointer",
                   padding: "8px",
                   borderRadius: "50%",
+                  color: isDarkMode ? "#fff" : "#1F2937",
                 }}
               >
                 <FiUser />
@@ -130,38 +127,49 @@ export default function Profil() {
                         width: "60px",
                         height: "60px",
                         borderRadius: "50%",
-                        background: "linear-gradient(135deg, #6366F1, #A78BFA)",
+                        background:
+                          "linear-gradient(135deg, #6366F1, #A78BFA)",
                         margin: "0 auto 10px",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         fontSize: "24px",
                         color: "#fff",
-                        boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
-                        transition: "0.3s",
                       }}
                     >
                       {user?.name?.[0] || "U"}
                     </div>
                     <b>{user?.name || "User"}</b>
-                    <p style={{ fontSize: "12px", margin: "5px 0 0" }}>{user?.email || "-"}</p>
+                    <p style={{ fontSize: "12px", marginTop: "5px" }}>
+                      {user?.email || "-"}
+                    </p>
                   </div>
+
                   <hr />
+
                   <button
-                    className="logout-btn"
                     onClick={handleLogout}
                     style={{
-                      background: "transparent",
+                      width: "100%",
                       padding: "12px",
+                      border: "none",
+                      background: "transparent",
                       cursor: "pointer",
                       display: "flex",
+                      justifyContent: "center",
                       alignItems: "center",
                       gap: "8px",
-                      justifyContent: "center",
                       transition: "0.3s",
+                      color: "inherit",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = "#FECACA")}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.background = isDarkMode
+                        ? "#FEE2E2)"
+                        : "#FEE2E2")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.background = "transparent")
+                    }
                   >
                     <FiLogOut /> Logout
                   </button>
@@ -171,60 +179,44 @@ export default function Profil() {
           </div>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
+        {/* ================= PROFIL CARD ================= */}
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <div
             style={{
-              position: "relative",
+              maxWidth: "600px",
+              width: "100%",
+              padding: "50px 30px",
+              borderRadius: "25px",
+              textAlign: "center",
               backdropFilter: "blur(15px)",
               background: isDarkMode
                 ? "rgba(31,41,55,0.85)"
                 : "rgba(255,255,255,0.85)",
-              borderRadius: "25px",
-              padding: "50px 30px",
-              maxWidth: "600px",
-              width: "100%",
-              textAlign: "center",
+              color: isDarkMode ? "#fff" : "#111",
               boxShadow: isDarkMode
                 ? "0 20px 60px rgba(0,0,0,0.3)"
                 : "0 20px 60px rgba(0,0,0,0.1)",
-              color: isDarkMode ? "#fff" : "#111",
-              transition: "0.5s",
             }}
           >
-
             <div
               style={{
                 width: "140px",
                 height: "140px",
                 borderRadius: "50%",
-                background: isDarkMode
-                  ? "linear-gradient(135deg,#6366F1,#A78BFA)"
-                  : "linear-gradient(135deg,#4F46E5,#3B82F6)",
                 margin: "0 auto 25px",
+                background: "linear-gradient(135deg,#6366F1,#A78BFA)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: "48px",
-                fontWeight: "bold",
-                boxShadow: isDarkMode
-                  ? "0 10px 30px rgba(0,0,0,0.5)"
-                  : "0 10px 30px rgba(0,0,0,0.2)",
-                transition: "0.3s",
                 color: "#fff",
               }}
             >
               {user?.name?.[0] || "U"}
             </div>
 
-            <h1 style={{ margin: "0 0 10px", fontSize: "30px" }}>{user?.name || "Mahasiswa"}</h1>
-            <p style={{ margin: "0 0 25px", fontSize: "14px", opacity: 0.8 }}>
-              {user?.email || "email@example.com"}
-            </p>
+            <h1>{user?.name || "Mahasiswa"}</h1>
+            <p style={{ opacity: 0.8 }}>{user?.email || "email@example.com"}</p>
 
             <div
               style={{
@@ -232,13 +224,13 @@ export default function Profil() {
                 gap: "15px",
                 justifyContent: "center",
                 flexWrap: "wrap",
-                marginBottom: "25px",
+                marginTop: "25px",
               }}
             >
               {[
                 { label: "Status", value: "Aktif", icon: <FiUser /> },
                 { label: "Role", value: "Peserta Training", icon: <FiStar /> },
-                { label: "Kursus Selesai", value: "3/5", icon: <FiStar /> },
+                { label: "Kursus", value: "3/5", icon: <FiStar /> },
                 { label: "Progress", value: "60%", icon: <FiStar /> },
               ].map((item, i) => (
                 <div
@@ -247,57 +239,20 @@ export default function Profil() {
                     flex: "1 1 120px",
                     padding: "20px",
                     borderRadius: "20px",
-                    background: isDarkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)",
-                    backdropFilter: "blur(8px)",
-                    transition: "0.3s",
-                    cursor: "pointer",
-                    color: isDarkMode ? "#fff" : "#111",
+                    background: isDarkMode
+                      ? "rgba(255,255,255,0.1)"
+                      : "rgba(0,0,0,0.05)",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
                     gap: "8px",
                   }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.background = isDarkMode
-                      ? "rgba(255,255,255,0.25)"
-                      : "rgba(0,0,0,0.1)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.background = isDarkMode
-                      ? "rgba(255,255,255,0.1)"
-                      : "rgba(0,0,0,0.05)")
-                  }
                 >
                   {item.icon}
-                  <p style={{ margin: 0, fontWeight: "600", opacity: 0.9 }}>{item.label}</p>
-                  <p style={{ margin: 0, fontSize: "18px", fontWeight: "bold" }}>{item.value}</p>
+                  <b>{item.label}</b>
+                  <span>{item.value}</span>
                 </div>
               ))}
-            </div>
-
-            {/* PROGRESS BAR */}
-            <div>
-              <p style={{ marginBottom: "10px", fontWeight: "600", opacity: 0.9 }}>Progress Learning</p>
-              <div
-                style={{
-                  height: "14px",
-                  borderRadius: "10px",
-                  background: isDarkMode ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)",
-                  overflow: "hidden",
-                }}
-              >
-                <div
-                  style={{
-                    width: "60%",
-                    height: "100%",
-                    background: isDarkMode
-                      ? "linear-gradient(135deg,#6366F1,#A78BFA)"
-                      : "linear-gradient(135deg,#4F46E5,#3B82F6)",
-                    borderRadius: "10px",
-                    transition: "width 1s ease-in-out",
-                  }}
-                ></div>
-              </div>
             </div>
           </div>
         </div>

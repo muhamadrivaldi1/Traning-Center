@@ -8,9 +8,6 @@ export default function PendaftaranPelatihan() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // ===============================
-  // STATE
-  // ===============================
   const [user, setUser] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -95,7 +92,6 @@ export default function PendaftaranPelatihan() {
       <Sidebar isOpen={isSidebarOpen} />
 
       <div className={`main-content ${isSidebarOpen ? "sidebar-open" : ""}`}>
-        {/* TOPBAR */}
         <div className="topbar">
           <button className="sidebar-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             <span></span><span></span><span></span>
