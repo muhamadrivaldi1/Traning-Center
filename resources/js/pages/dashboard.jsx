@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import { FiSun, FiMoon, FiUser } from "react-icons/fi";
 import "../../css/app.css";
 
+
 export default function Dashboard() {
   const navigate = useNavigate();
 
