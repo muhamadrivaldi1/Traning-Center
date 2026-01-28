@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { FiSun, FiMoon, FiUser, FiCheckCircle } from "react-icons/fi";
 import { FaArrowLeft } from "react-icons/fa";
+import api from "../api";
 
 export default function PendaftaranPelatihan() {
   const location = useLocation();
@@ -77,12 +78,43 @@ export default function PendaftaranPelatihan() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     console.log({ ...formData, pelatihan: selectedTraining });
-    alert(`Pendaftaran berhasil untuk ${selectedTraining}`);
-    navigate("/dashboard");
+
+    try {
+      const res = await api.post("/register-training", {
+        training_name: selectedTraining,
+        ...formData
+      });
+      const snapToken = res.data.snap_token;
+
+      if (snapToken) {
+        window.snap.pay(snapToken, {
+          onSuccess: function (result) {
+            alert("Pembayaran Berhasil!");
+            navigate("/PelatihanSaya"); 
+          },
+          onPending: function (result) {
+            alert("Menunggu pembayaran Anda...");
+            navigate("/pembayaran");
+          },
+          onError: function (result) {
+            alert("Pembayaran Gagal!");
+          },
+          onClose: function () {
+            alert("Anda menutup popup sebelum menyelesaikan pembayaran.");
+          }
+        });
+      } else {
+        alert(`Pendaftaran berhasil untuk ${selectedTraining}`);
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || "Gagal melakukan pendaftaran");
+    }
   };
 
   if (!user) return null;

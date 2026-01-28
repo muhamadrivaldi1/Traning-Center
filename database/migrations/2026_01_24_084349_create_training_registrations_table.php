@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('training_registrations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('training_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('training_id')->references('id')->on('training')->cascadeOnDelete();
             $table->integer('progress')->default(0);
             $table->string('status')->default('Aktif');
             $table->date('start_date');
