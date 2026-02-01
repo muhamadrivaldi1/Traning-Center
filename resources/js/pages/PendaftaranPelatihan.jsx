@@ -1,232 +1,209 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import { FiSun, FiMoon, FiUser, FiCheckCircle } from "react-icons/fi";
-import { FaArrowLeft } from "react-icons/fa";
+import { FiSun, FiMoon, FiUser } from "react-icons/fi";
 import api from "../api";
+import "../../css/app.css";
 
 export default function PendaftaranPelatihan() {
-  const location = useLocation();
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [user, setUser] = useState(null);
+
+  const [trainings, setTrainings] = useState([]);
+  const [trainingId, setTrainingId] = useState("");
+
+  const [formData, setFormData] = useState({
+    nama: "",
+    nim: "",
+    email: "",
+    phone: "",
+    fakultas: "",
+    alamat: ""
+  });
 
   // ===============================
-  // USER & THEME
+  // LOAD USER & THEME
   // ===============================
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const parsed = JSON.parse(storedUser);
-      if (parsed?.id) setUser(parsed);
-      else navigate("/login");
-    } else navigate("/login");
-
     const theme = localStorage.getItem("theme");
     if (theme === "dark") {
       setIsDarkMode(true);
       document.body.classList.add("dark-theme");
     }
 
-    return () => document.body.classList.remove("dark-theme");
+    const savedUser = localStorage.getItem("user");
+    if (!savedUser) {
+      navigate("/login");
+      return;
+    }
+
+    setUser(JSON.parse(savedUser));
   }, [navigate]);
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    document.body.classList.toggle("dark-theme");
-    localStorage.setItem("theme", !isDarkMode ? "dark" : "light");
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/login");
-  };
+  // ===============================
+  // LOAD TRAININGS
+  // ===============================
+  useEffect(() => {
+    api.get("/training")
+      .then(res => setTrainings(res.data))
+      .catch(() => alert("Gagal mengambil data pelatihan"));
+  }, []);
 
   // ===============================
-  // TRAINING DATA
+  // FORM
   // ===============================
-  const [selectedTraining, setSelectedTraining] = useState(
-    location.state?.training?.name || ""
-  );
-
-  const trainingsList = [
-    "Pelatihan Web Development",
-    "UI / UX Design",
-    "Cyber Security",
-    "Data Science",
-    "Mobile Development",
-    "Artificial Intelligence",
-  ];
-
-  // ===============================
-  // FORM DATA
-  // ===============================
-  const [formData, setFormData] = useState({
-    nama: user?.name || "",
-    nim: "",
-    email: user?.email || "",
-    phone: "",
-    fakultas: "",
-    alamat: "",
-  });
-
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
+  // ===============================
+  // SUBMIT
+  // ===============================
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log({ ...formData, pelatihan: selectedTraining });
+    if (!trainingId) {
+      alert("Pilih pelatihan");
+      return;
+    }
 
     try {
-      const res = await api.post("/register-training", {
-        training_name: selectedTraining,
-        ...formData
-      });
-      const snapToken = res.data.snap_token;
+      await api.post(
+        `/training/${trainingId}/register`,
+        formData
+      );
 
-      if (snapToken) {
-        window.snap.pay(snapToken, {
-          onSuccess: function (result) {
-            alert("Pembayaran Berhasil!");
-            navigate("/PelatihanSaya"); 
-          },
-          onPending: function (result) {
-            alert("Menunggu pembayaran Anda...");
-            navigate("/pembayaran");
-          },
-          onError: function (result) {
-            alert("Pembayaran Gagal!");
-          },
-          onClose: function () {
-            alert("Anda menutup popup sebelum menyelesaikan pembayaran.");
-          }
-        });
-      } else {
-        alert(`Pendaftaran berhasil untuk ${selectedTraining}`);
-        navigate("/dashboard");
-      }
+      alert("✅ Pendaftaran berhasil");
+
+      navigate("/PelatihanSaya");
+
     } catch (err) {
-      console.error(err);
-      alert(err.response?.data?.message || "Gagal melakukan pendaftaran");
+      alert(err.response?.data?.message || "Gagal daftar");
     }
   };
 
-  if (!user) return null;
-
   return (
     <>
-      <Sidebar isOpen={isSidebarOpen} />
+      <Sidebar isOpen={isOpen} />
 
-      <div className={`main-content ${isSidebarOpen ? "sidebar-open" : ""}`}>
+      <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
+        {/* ================= TOPBAR ================= */}
         <div className="topbar">
-          <button className="sidebar-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-            <span></span><span></span><span></span>
+          <button
+            className="sidebar-toggle"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <span />
+            <span />
+            <span />
           </button>
 
           <div className="topbar-right">
-            <button className="theme-toggle-btn" onClick={toggleTheme}>
+            <button className="theme-toggle-btn" onClick={() => {
+              const mode = !isDarkMode;
+              setIsDarkMode(mode);
+              document.body.classList.toggle("dark-theme");
+              localStorage.setItem("theme", mode ? "dark" : "light");
+            }}>
               {isDarkMode ? <FiSun /> : <FiMoon />}
             </button>
 
             <div className="user-menu-container">
-              <button className="user-menu-btn" onClick={() => setShowUserMenu(!showUserMenu)}>
+              <button
+                className="user-menu-btn"
+                onClick={() => setShowUserMenu(!showUserMenu)}
+              >
                 <FiUser />
               </button>
 
               {showUserMenu && (
                 <div className="user-dropdown">
-                  <p className="fw-bold mb-0">{user.name}</p>
-                  <p className="text-muted small">{user.email}</p>
+                  <p className="fw-bold mb-0">{user?.name}</p>
+                  <p className="text-muted small">{user?.email}</p>
                   <hr />
-                  <button onClick={() => navigate("/profil")}>Data Pribadi</button>
-                  <button onClick={handleLogout}>Logout</button>
+                  <button onClick={() => navigate("/profil")}>
+                    Data Pribadi
+                  </button>
+                  <button
+                    onClick={() => {
+                      localStorage.removeItem("user");
+                      navigate("/login");
+                    }}
+                  >
+                    Logout
+                  </button>
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        <div className="container py-5">
-          <div className="row g-4 align-items-stretch">
+        {/* ================= CONTENT ================= */}
 
-            <div className="col-lg-5">
-              <div className="card h-100 border-0 shadow-sm rounded-4 bg-primary text-white">
-                <div className="card-body p-4">
-                  <h4 className="fw-bold mb-3">{selectedTraining || "Pilih Pelatihan"}</h4>
-                  <p className="opacity-75">
-                    Pelatihan intensif untuk meningkatkan skill dan kesiapan kariermu dengan benefit:
-                  </p>
+        <h2 className="page-title">Pendaftaran Pelatihan</h2>
+        <hr />
 
-                  <ul className="list-unstyled mt-4">
-                    {[
-                      "Sertifikat Resmi",
-                      "Mentor Profesional",
-                      "Project Nyata",
-                      "Networking",
-                    ].map((item, i) => (
-                      <li key={i} className="mb-2">
-                        <FiCheckCircle className="me-2" /> {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
+        <div className="container py-4" style={{ maxWidth: 600 }}>
+          <form onSubmit={handleSubmit}>
 
-            <div className="col-lg-7">
-              <div className="card border-0 shadow-lg rounded-4">
-                <div className="card-body p-4 p-md-5">
-                  <h3 className="fw-bold text-center mb-1">Pendaftaran Pelatihan</h3>
-                  <p className="text-muted text-center mb-4">
-                    Lengkapi data diri untuk mengikuti pelatihan pilihanmu
-                  </p>
+            <input
+              className="form-control mb-2"
+              name="nama"
+              placeholder="Nama Lengkap"
+              onChange={handleChange}
+              required
+            />
 
-                  <form onSubmit={handleSubmit}>
-                    <div className="row g-3">
-                      <div className="col-md-6">
-                        <input className="form-control" name="nama" value={formData.nama} onChange={handleChange} placeholder="Nama Lengkap" required />
-                      </div>
-                      <div className="col-md-6">
-                        <input className="form-control" name="nim" value={formData.nim} onChange={handleChange} placeholder="NIM" required />
-                      </div>
-                      <div className="col-md-6">
-                        <input className="form-control" name="email" value={formData.email} onChange={handleChange} placeholder="Email" required />
-                      </div>
-                      <div className="col-md-6">
-                        <input className="form-control" name="phone" value={formData.phone} onChange={handleChange} placeholder="No Handphone" required />
-                      </div>
-                      <div className="col-md-6">
-                        <input className="form-control" name="fakultas" value={formData.fakultas} onChange={handleChange} placeholder="Fakultas" />
-                      </div>
-                      <div className="col-md-6">
-                        <select className="form-select" value={selectedTraining} onChange={(e) => setSelectedTraining(e.target.value)} required>
-                          <option value="">Pilih Pelatihan</option>
-                          {trainingsList.map((t, i) => (
-                            <option key={i}>{t}</option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="col-12">
-                        <textarea className="form-control" rows="3" name="alamat" value={formData.alamat} onChange={handleChange} placeholder="Alamat Lengkap" />
-                      </div>
-                      <div className="col-12 mt-3">
-                        <button className="btn btn-primary w-100 py-3 fw-semibold">Daftar Sekarang</button>
-                        <button type="button" className="btn btn-link w-100 mt-2" onClick={() => navigate("/dashboard")}>
-                          <FaArrowLeft /> Kembali
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
+            <input
+              className="form-control mb-2"
+              name="nim"
+              placeholder="NIM"
+              onChange={handleChange}
+              required
+            />
+
+            <input
+              className="form-control mb-2"
+              name="email"
+              placeholder="Email"
+              onChange={handleChange}
+              required
+            />
+
+            <input
+              className="form-control mb-2"
+              name="phone"
+              placeholder="No HP"
+              onChange={handleChange}
+              required
+            />
+
+            <select
+              className="form-select mb-3"
+              value={trainingId}
+              onChange={(e) => setTrainingId(e.target.value)}
+              required
+            >
+              <option value="">Pilih Pelatihan</option>
+              {trainings.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
+                </option>
+              ))}
+            </select>
+
+            <button className="btn btn-primary w-100 py-2">
+              Daftar Pelatihan
+            </button>
+
+          </form>
         </div>
       </div>
     </>
