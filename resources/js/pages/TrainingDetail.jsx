@@ -113,7 +113,7 @@ export default function TrainingDetail() {
           </div>
           <div>
             <h4>Biaya</h4>
-            <p>{training.cost || "Rp 2.500.000"}</p>
+            <p>{training.price ? `Rp ${training.price.toLocaleString()}` : "Rp 2.500.000"}</p>
           </div>
         </div>
 

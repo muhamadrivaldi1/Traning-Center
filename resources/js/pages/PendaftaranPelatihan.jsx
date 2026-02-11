@@ -12,10 +12,8 @@ export default function PendaftaranPelatihan() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [user, setUser] = useState(null);
-
   const [trainings, setTrainings] = useState([]);
   const [trainingId, setTrainingId] = useState("");
-
   const [formData, setFormData] = useState({
     nama: "",
     nim: "",
@@ -82,7 +80,7 @@ export default function PendaftaranPelatihan() {
 
       alert("✅ Pendaftaran berhasil");
 
-      navigate("/PelatihanSaya");
+      navigate("/pelatihan-saya");
 
     } catch (err) {
       alert(err.response?.data?.message || "Gagal daftar");

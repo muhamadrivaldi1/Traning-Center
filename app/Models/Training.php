@@ -9,12 +9,16 @@ class Training extends Model
 {
     use HasFactory;
 
-    protected $table = 'training';
+    protected $table = 'trainings';
 
     protected $fillable = [
+        'id',
         'name',
         'description',
-        'image',
+        'duration',
+        'schedule',
+        'price',
+        'image'
     ];
 
     public function registrations()

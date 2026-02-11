@@ -34,9 +34,7 @@ function App() {
         <Route path="/sertifikat" element={<Sertifikat />} />
         <Route path="/profil" element={<Profil />} />
         <Route path="/TrainingDetail" element={<TrainingDetail />} />
-        <Route
-          path="/pendaftaran-pelatihan"
-          element={<PendaftaranPelatihan />}
+        <Route path="/pendaftaran-pelatihan"element={<PendaftaranPelatihan />}
         />
       </Routes>
     </Router>

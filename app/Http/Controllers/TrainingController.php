@@ -2,30 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Training;
-use App\Models\TrainingRegistration;
 use Illuminate\Http\Request;
-use Midtrans\Snap;
 use Midtrans\Config;
+use Midtrans\Snap;
+use Illuminate\Support\Facades\DB;
 
-class TrainingController extends Controller
+class TransactionController extends Controller
 {
-    // ======================
-    // GET ALL TRAININGS
-    // ======================
-    public function index()
+    // pastikan route ini pakai middleware auth:api atau auth:sanctum
+    public function create(Request $request)
     {
-        return Training::latest()->get();
-    }
+        // validasi input dari frontend
+        $request->validate([
+            'training_id' => 'required|integer|exists:trainings,id',
+            'order_id' => 'required|string',
+        ]);
 
-    // ======================
-    // REGISTER TRAINING
-    // ======================
-    public function register(Request $request, $id)
-    {
-        $user = $request->user();
+        $training_id = $request->input('training_id');
+        $order_id = $request->input('order_id');
 
-        $training = Training::find($id);
+        // ambil data kursus dari database
+        $training = DB::table('trainings')->where('id', $training_id)->first();
 
         if (!$training) {
             return response()->json([
@@ -33,85 +30,50 @@ class TrainingController extends Controller
             ], 404);
         }
 
-        $exists = TrainingRegistration::where('user_id', $user->id)
-            ->where('training_id', $id)
-            ->exists();
+        $amount = $training->price; // ambil harga dari database
 
-        if ($exists) {
-            return response()->json([
-                'message' => 'Anda sudah terdaftar'
-            ], 409);
-        }
-
-        TrainingRegistration::create([
-            'user_id'     => $user->id,
-            'training_id' => $id,
-            'progress'    => 0,
-            'status'      => 'Aktif',
-            'start_date'  => now(),
-            'end_date'    => now()->addMonths(3),
-        ]);
-
-        return response()->json([
-            'message' => 'Pendaftaran berhasil'
-        ]);
-    }
-
-    // ======================
-    // MY TRAININGS
-    // ======================
-    public function myTrainings(Request $request)
-    {
-        return TrainingRegistration::with('training')
-            ->where('user_id', $request->user()->id)
-            ->latest()
-            ->get();
-    }
-
-     public function pay($id)
-    {
-        $registration = TrainingRegistration::with('training')
-            ->where('id', $id)
-            ->where('user_id', auth()->id())
-            ->firstOrFail();
-
-        // kalau sudah lunas → stop
-        if ($registration->payment_status === 'success') {
-            return response()->json([
-                'message' => 'Sudah dibayar'
-            ], 400);
-        }
-
-        // MIDTRANS CONFIG
-        Config::$serverKey = config('midtrans.server_key');
-        Config::$isProduction = false;
+        // konfigurasi Midtrans
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY'); // server key sandbox
+        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION') === 'true';
         Config::$isSanitized = true;
         Config::$is3ds = true;
 
-        // jika token belum ada → buat
-        if (!$registration->snap_token) {
+        // siapkan parameter transaksi
+        $params = [
+            'transaction_details' => [
+                'order_id' => $order_id,
+                'gross_amount' => (int) $amount,
+            ],
+            'item_details' => [
+                [
+                    'id' => $training->id,
+                    'price' => (int) $amount,
+                    'quantity' => 1,
+                    'name' => $training->name
+                ]
+            ],
+            'customer_details' => [
+                'first_name' => $request->user()->name ?? 'User',
+                'email' => $request->user()->email ?? 'user@example.com',
+            ],
+        ];
 
-            $params = [
-                'transaction_details' => [
-                    'order_id' => 'ORDER-' . $registration->id . '-' . time(),
-                    'gross_amount' => $registration->training->cost,
-                ],
-                'customer_details' => [
-                    'first_name' => auth()->user()->name,
-                    'email' => auth()->user()->email,
-                ],
-            ];
-
+        try {
             $snapToken = Snap::getSnapToken($params);
 
-            $registration->update([
-                'snap_token' => $snapToken,
-                'payment_status' => 'pending'
+            return response()->json([
+                'snapToken' => $snapToken,
+                'training' => [
+                    'id' => $training->id,
+                    'name' => $training->name,
+                    'price' => $amount
+                ]
             ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Gagal membuat transaksi',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json([
-            'snap_token' => $registration->snap_token
-        ]);
     }
 }
