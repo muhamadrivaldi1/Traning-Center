@@ -22,6 +22,7 @@ export default function PendaftaranPelatihan() {
     fakultas: "",
     alamat: ""
   });
+  const [loadingTrainings, setLoadingTrainings] = useState(true);
 
   // ===============================
   // LOAD USER & THEME
@@ -46,9 +47,27 @@ export default function PendaftaranPelatihan() {
   // LOAD TRAININGS
   // ===============================
   useEffect(() => {
-    api.get("/training")
-      .then(res => setTrainings(res.data))
-      .catch(() => alert("Gagal mengambil data pelatihan"));
+    const fetchTrainings = async () => {
+      try {
+        const savedUser = JSON.parse(localStorage.getItem("user"));
+
+        const res = await api.get("/training", {
+          headers: {
+            Authorization: `Bearer ${savedUser?.token || ""}`,
+          },
+        });
+
+        console.log("Trainings fetched:", res.data);
+        setTrainings(res.data);
+      } catch (err) {
+        console.error("Error fetching trainings:", err);
+        alert("Gagal mengambil data pelatihan. Periksa koneksi atau token.");
+      } finally {
+        setLoadingTrainings(false);
+      }
+    };
+
+    fetchTrainings();
   }, []);
 
   // ===============================
@@ -73,17 +92,21 @@ export default function PendaftaranPelatihan() {
     }
 
     try {
+      const savedUser = JSON.parse(localStorage.getItem("user"));
+
       await api.post(
         `/training/${trainingId}/register`,
-        formData
+        formData,
+        {
+          headers: { Authorization: `Bearer ${savedUser?.token || ""}` }
+        }
       );
 
       alert("✅ Pendaftaran berhasil");
-
       navigate("/pelatihan-saya");
-
     } catch (err) {
-      alert(err.response?.data?.message || "Gagal daftar");
+      console.error("Error registering training:", err);
+      alert(err.response?.data?.message || "Gagal daftar pelatihan");
     }
   };
 
@@ -104,12 +127,15 @@ export default function PendaftaranPelatihan() {
           </button>
 
           <div className="topbar-right">
-            <button className="theme-toggle-btn" onClick={() => {
-              const mode = !isDarkMode;
-              setIsDarkMode(mode);
-              document.body.classList.toggle("dark-theme");
-              localStorage.setItem("theme", mode ? "dark" : "light");
-            }}>
+            <button
+              className="theme-toggle-btn"
+              onClick={() => {
+                const mode = !isDarkMode;
+                setIsDarkMode(mode);
+                document.body.classList.toggle("dark-theme");
+                localStorage.setItem("theme", mode ? "dark" : "light");
+              }}
+            >
               {isDarkMode ? <FiSun /> : <FiMoon />}
             </button>
 
@@ -144,64 +170,67 @@ export default function PendaftaranPelatihan() {
         </div>
 
         {/* ================= CONTENT ================= */}
-
         <h2 className="page-title">Pendaftaran Pelatihan</h2>
         <hr />
 
         <div className="container py-4" style={{ maxWidth: 600 }}>
-          <form onSubmit={handleSubmit}>
+          {loadingTrainings ? (
+            <p>Loading daftar pelatihan...</p>
+          ) : trainings.length === 0 ? (
+            <p>Tidak ada pelatihan tersedia</p>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <input
+                className="form-control mb-2"
+                name="nama"
+                placeholder="Nama Lengkap"
+                onChange={handleChange}
+                required
+              />
 
-            <input
-              className="form-control mb-2"
-              name="nama"
-              placeholder="Nama Lengkap"
-              onChange={handleChange}
-              required
-            />
+              <input
+                className="form-control mb-2"
+                name="nim"
+                placeholder="NIM"
+                onChange={handleChange}
+                required
+              />
 
-            <input
-              className="form-control mb-2"
-              name="nim"
-              placeholder="NIM"
-              onChange={handleChange}
-              required
-            />
+              <input
+                className="form-control mb-2"
+                name="email"
+                placeholder="Email"
+                onChange={handleChange}
+                required
+              />
 
-            <input
-              className="form-control mb-2"
-              name="email"
-              placeholder="Email"
-              onChange={handleChange}
-              required
-            />
+              <input
+                className="form-control mb-2"
+                name="phone"
+                placeholder="No HP"
+                onChange={handleChange}
+                required
+              />
 
-            <input
-              className="form-control mb-2"
-              name="phone"
-              placeholder="No HP"
-              onChange={handleChange}
-              required
-            />
+              <select
+                className="form-select mb-3"
+                value={trainingId}
+                onChange={(e) => setTrainingId(e.target.value)}
+                required
+              >
+                <option value="">Pilih Pelatihan</option>
+                {trainings.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.name}
+                  </option>
+                ))}
+              </select>
 
-            <select
-              className="form-select mb-3"
-              value={trainingId}
-              onChange={(e) => setTrainingId(e.target.value)}
-              required
-            >
-              <option value="">Pilih Pelatihan</option>
-              {trainings.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
-                </option>
-              ))}
-            </select>
-
-            <button className="btn btn-primary w-100 py-2">
-              Daftar Pelatihan
-            </button>
-
-          </form>
+              <button className="btn btn-primary w-100 py-2">
+                Daftar Pelatihan
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </>

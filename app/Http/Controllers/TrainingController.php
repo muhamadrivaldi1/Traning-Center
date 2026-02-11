@@ -3,76 +3,108 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Midtrans\Config;
-use Midtrans\Snap;
-use Illuminate\Support\Facades\DB;
+use App\Models\Training;
+use App\Models\TrainingRegistration;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log; // <--- Tambahkan ini
 
-class TransactionController extends Controller
+class TrainingController extends Controller
 {
-    // pastikan route ini pakai middleware auth:api atau auth:sanctum
-    public function create(Request $request)
+    /**
+     * Lihat semua pelatihan (untuk dropdown pendaftaran)
+     */
+    public function index()
     {
-        // validasi input dari frontend
-        $request->validate([
-            'training_id' => 'required|integer|exists:trainings,id',
-            'order_id' => 'required|string',
-        ]);
-
-        $training_id = $request->input('training_id');
-        $order_id = $request->input('order_id');
-
-        // ambil data kursus dari database
-        $training = DB::table('trainings')->where('id', $training_id)->first();
-
-        if (!$training) {
+        try {
+            $trainings = Training::all(); // Ambil semua pelatihan
+            return response()->json($trainings, 200);
+        } catch (\Exception $e) {
+            Log::error("Error fetching trainings: " . $e->getMessage());
             return response()->json([
-                'message' => 'Training tidak ditemukan'
-            ], 404);
+                'message' => 'Gagal mengambil data pelatihan'
+            ], 500);
         }
+    }
 
-        $amount = $training->price; // ambil harga dari database
-
-        // konfigurasi Midtrans
-        Config::$serverKey = env('MIDTRANS_SERVER_KEY'); // server key sandbox
-        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION') === 'true';
-        Config::$isSanitized = true;
-        Config::$is3ds = true;
-
-        // siapkan parameter transaksi
-        $params = [
-            'transaction_details' => [
-                'order_id' => $order_id,
-                'gross_amount' => (int) $amount,
-            ],
-            'item_details' => [
-                [
-                    'id' => $training->id,
-                    'price' => (int) $amount,
-                    'quantity' => 1,
-                    'name' => $training->name
-                ]
-            ],
-            'customer_details' => [
-                'first_name' => $request->user()->name ?? 'User',
-                'email' => $request->user()->email ?? 'user@example.com',
-            ],
-        ];
+    /**
+     * Lihat daftar pelatihan yang dimiliki user
+     */
+    public function myTrainings()
+    {
+        $user = Auth::user();
 
         try {
-            $snapToken = Snap::getSnapToken($params);
+            $registrations = TrainingRegistration::with('training')
+                ->where('user_id', $user->id)
+                ->get();
+
+            return response()->json($registrations, 200);
+        } catch (\Exception $e) {
+            Log::error("Error fetching user trainings: " . $e->getMessage());
+            return response()->json([
+                'message' => 'Gagal mengambil data pelatihan user'
+            ], 500);
+        }
+    }
+
+    /**
+     * Lihat detail pelatihan
+     */
+    public function show($id)
+    {
+        try {
+            $training = Training::find($id);
+
+            if (!$training) {
+                return response()->json([
+                    'message' => 'Training tidak ditemukan'
+                ], 404);
+            }
+
+            return response()->json($training, 200);
+        } catch (\Exception $e) {
+            Log::error("Error fetching training details: " . $e->getMessage());
+            return response()->json([
+                'message' => 'Gagal mengambil detail pelatihan'
+            ], 500);
+        }
+    }
+
+    /**
+     * Daftar training baru
+     */
+    public function register($id)
+    {
+        $user = Auth::user();
+
+        try {
+            // Cek apakah sudah terdaftar
+            $exists = TrainingRegistration::where('user_id', $user->id)
+                ->where('training_id', $id)
+                ->first();
+
+            if ($exists) {
+                return response()->json([
+                    'message' => 'Sudah terdaftar di training ini'
+                ], 400);
+            }
+
+            $registration = TrainingRegistration::create([
+                'user_id' => $user->id,
+                'training_id' => $id,
+                'status' => 'pending',
+                'start_date' => now(),
+                'end_date' => now()->addMonths(3),
+            ]);
 
             return response()->json([
-                'snapToken' => $snapToken,
-                'training' => [
-                    'id' => $training->id,
-                    'name' => $training->name,
-                    'price' => $amount
-                ]
-            ]);
+                'message' => 'Berhasil mendaftar training',
+                'registration' => $registration
+            ], 201);
         } catch (\Exception $e) {
+            Log::error("Error registering training: " . $e->getMessage());
             return response()->json([
-                'message' => 'Gagal membuat transaksi',
-                'error' => $e->getMessage()
+                'message' => 'Gagal mendaftar pelatihan'
             ], 500);
         }
     }

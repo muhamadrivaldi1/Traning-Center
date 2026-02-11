@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { FiSun, FiMoon, FiUser } from "react-icons/fi";
-import api from "../api";
 import "../../css/app.css";
+import api from "../api";
 
-// Pastikan Snap.js sudah include di public/index.html
-// <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="YOUR_CLIENT_KEY"></script>
+
 
 export default function Pembayaran() {
   const navigate = useNavigate();
@@ -17,9 +16,44 @@ export default function Pembayaran() {
   const [user, setUser] = useState(null);
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [snapReady, setSnapReady] = useState(false);
+  const [isPaying, setIsPaying] = useState(false); // 🔥 lock bayar
 
   // ===============================
-  // LOAD DATA
+  // LOAD SNAP.JS
+  // ===============================
+  useEffect(() => {
+    if (window.snap) {
+      setSnapReady(true);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
+    script.setAttribute(
+      "data-client-key",
+      import.meta.env.VITE_MIDTRANS_CLIENT_KEY
+    );
+    script.async = true;
+
+    script.onload = () => {
+      console.log("Snap.js loaded");
+      setSnapReady(true);
+    };
+
+    script.onerror = () => {
+      console.error("Gagal load Snap.js");
+    };
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  // ===============================
+  // LOAD USER
   // ===============================
   useEffect(() => {
     const theme = localStorage.getItem("theme");
@@ -33,6 +67,7 @@ export default function Pembayaran() {
       navigate("/login");
       return;
     }
+
     const parsedUser = JSON.parse(savedUser);
     setUser(parsedUser);
 
@@ -40,96 +75,114 @@ export default function Pembayaran() {
   }, [navigate]);
 
   // ===============================
-  // FETCH PAYMENTS FUNCTION
+  // FETCH PAYMENTS
   // ===============================
   const fetchPayments = async (currentUser) => {
     setLoading(true);
     try {
-      // Pastikan Authorization header dikirim
       const res = await api.get("/my-trainings", {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
+        headers: {
+          Authorization: `Bearer ${currentUser.token}`,
+        },
       });
 
-      // Sesuaikan struktur data dari backend
       const data = res.data.map((item) => ({
         id: item.id,
         training: item.training?.name || "Pelatihan",
         price: item.training?.price || 0,
-        status: item.status?.toLowerCase() || "pending",
+        status: item.payment_status?.toLowerCase() || "unpaid",
         date: item.created_at,
       }));
 
       setPayments(data);
     } catch (err) {
-      console.error("Error fetching payments:", err.response || err);
-      alert(
-        err.response?.data?.message ||
-          "Gagal memuat data pembayaran. Pastikan login dan backend tersedia."
-      );
+      console.error("Fetch error:", err.response || err);
+      alert("Gagal memuat data pembayaran.");
     } finally {
       setLoading(false);
     }
   };
 
   // ===============================
-  // MIDTRANS PAYMENT
+  // HANDLE PAYMENT
   // ===============================
-  const handlePayment = async (paymentId) => {
-    if (!user) {
-      alert("User tidak ditemukan. Silakan login ulang.");
-      return;
-    }
-
-    try {
-      // 1️⃣ Request snap token dari backend
-      const res = await api.get(`/snap-token/${paymentId}`, {
-        headers: { Authorization: `Bearer ${user.token}` },
-      });
-      const token = res.data.snap_token;
-
-      if (!token) {
-        alert("Token pembayaran tidak tersedia.");
+      const handlePayment = async (registrationId) => {
+      if (!snapReady || !window.snap) {
+        alert("Snap belum siap. Refresh halaman.");
         return;
       }
 
-      // 2️⃣ Panggil Midtrans Snap JS
-      if (!window.snap) {
-        alert("Snap.js belum dimuat!");
+      // 🔥 cek apakah popup sudah terbuka
+      if (window.snap.getSnapStatus && window.snap.getSnapStatus() === "PopupInView") {
+        alert("Popup pembayaran sudah terbuka, tunggu sebentar.");
         return;
       }
 
-      window.snap.pay(token, {
-        onSuccess: () => fetchPayments(user),
-        onPending: () => {
-          alert("Pembayaran pending");
-          fetchPayments(user);
-        },
-        onError: () => alert("Pembayaran gagal"),
-        onClose: () => alert("Pembayaran dibatalkan"),
-      });
-    } catch (err) {
-      console.error("Gagal memproses pembayaran:", err.response || err);
-      alert(
-        err.response?.data?.message ||
-          "Gagal memproses pembayaran. Pastikan token valid."
-      );
-    }
-  };
+      if (isPaying) {
+        alert("Transaksi sedang diproses. Tunggu sebentar.");
+        return;
+      }
+
+      setIsPaying(true);
+
+      try {
+        const res = await api.get(`/snap-token/${registrationId}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+
+        const token = res.data?.snap_token;
+        if (!token) {
+          alert("Token pembayaran tidak tersedia.");
+          setIsPaying(false);
+          return;
+        }
+
+        window.snap.pay(token, {
+          onSuccess: (result) => {
+            console.log("SUCCESS:", result);
+            alert("Pembayaran berhasil!");
+            fetchPayments(user);
+            setIsPaying(false);
+          },
+          onPending: (result) => {
+            console.log("PENDING:", result);
+            alert("Pembayaran pending.");
+            fetchPayments(user);
+            setIsPaying(false);
+          },
+          onError: (result) => {
+            console.log("ERROR:", result);
+            alert("Pembayaran gagal.");
+            setIsPaying(false);
+          },
+          onClose: () => {
+            console.log("Popup ditutup");
+            setIsPaying(false);
+          },
+        });
+      } catch (err) {
+        console.error("Midtrans error:", err.response || err);
+        alert(
+          err.response?.data?.message ||
+            "Terjadi kesalahan saat memproses pembayaran."
+        );
+        setIsPaying(false);
+      }
+    };
 
   // ===============================
-  // STATUS WARNA
+  // STATUS COLOR
   // ===============================
   const statusColor = (status) => {
-    if (status === "success" || status === "lunas") return "#22c55e";
+    if (status === "success") return "#22c55e";
     if (status === "pending") return "#f59e0b";
-    if (status === "cancel") return "#ef4444";
+    if (status === "unpaid") return "#ef4444";
     return "#6b7280";
   };
 
-  // ===============================
-  // RENDER
-  // ===============================
-  if (!user) return <p>Loading user...</p>;
+  if (!user) return <p>Loading...</p>;
 
   return (
     <>
@@ -173,7 +226,9 @@ export default function Pembayaran() {
                   <p className="fw-bold mb-0">{user?.name}</p>
                   <p className="text-muted small">{user?.email}</p>
                   <hr />
-                  <button onClick={() => navigate("/profil")}>Profil</button>
+                  <button onClick={() => navigate("/profil")}>
+                    Profil
+                  </button>
                   <button
                     onClick={() => {
                       localStorage.removeItem("user");
@@ -194,7 +249,9 @@ export default function Pembayaran() {
 
         {loading && <p>Loading...</p>}
 
-        {!loading && payments.length === 0 && <p>Tidak ada data pembayaran.</p>}
+        {!loading && payments.length === 0 && (
+          <p>Tidak ada data pembayaran.</p>
+        )}
 
         {!loading && payments.length > 0 && (
           <div className="table-responsive">
@@ -232,17 +289,23 @@ export default function Pembayaran() {
                         {item.status}
                       </span>
                     </td>
-                    <td>{new Date(item.date).toLocaleDateString("id-ID")}</td>
                     <td>
-                      {item.status === "pending" ? (
+                      {new Date(item.date).toLocaleDateString("id-ID")}
+                    </td>
+                    <td>
+                      {item.status === "unpaid" ||
+                      item.status === "pending" ? (
                         <button
                           className="btn btn-sm btn-warning text-white"
                           onClick={() => handlePayment(item.id)}
+                          disabled={isPaying} // 🔥 disable saat bayar
                         >
-                          Bayar
+                          {isPaying ? "Sedang Bayar..." : "Bayar"}
                         </button>
                       ) : (
-                        <span className="text-muted">—</span>
+                        <span className="text-success fw-bold">
+                          Lunas
+                        </span>
                       )}
                     </td>
                   </tr>

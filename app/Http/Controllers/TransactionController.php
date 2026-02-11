@@ -3,66 +3,94 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Transaction;
+use App\Models\Training;
+use Illuminate\Support\Facades\Auth;
 use Midtrans\Config;
 use Midtrans\Snap;
 
-
 class TransactionController extends Controller
 {
+    /**
+     * Buat transaksi baru dan generate Snap Token
+     * Request body:
+     * {
+     *   "training_id": 1
+     * }
+     */
     public function create(Request $request)
     {
-        // Pastikan user login
-        $user = $request->user();
+        $request->validate([
+            'training_id' => 'required|exists:trainings,id',
+        ]);
+
+        $user = Auth::user();
         if (!$user) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'User harus login'
-            ], 401);
+            return response()->json(['error' => 'User harus login'], 401);
         }
 
-        // Ambil data dari request
-        $order_id = $request->input('order_id');
-        $amount   = $request->input('amount'); // pastikan frontend kirim "amount"
+        $training = Training::findOrFail($request->training_id);
 
-        if (!$order_id || !$amount) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Order ID dan amount wajib diisi'
-            ], 400);
-        }
+        // Buat transaksi di database
+        $transaction = Transaction::create([
+            'user_id'     => $user->id,
+            'training_id' => $training->id,
+            'amount'      => $training->price,
+            'status'      => 'pending',
+        ]);
 
         // Konfigurasi Midtrans
-        Config::$serverKey    = env('MIDTRANS_SERVER_KEY');
-        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false); // false = sandbox
-        Config::$isSanitized  = true;
-        Config::$is3ds        = true;
+        $this->midtransConfig();
 
-        // Parameter transaksi
+        // Siapkan parameter transaksi
+        $orderId = 'TRX-' . $transaction->id . '-' . time();
+        $grossAmount = (int) $training->price;
+
         $params = [
             'transaction_details' => [
-                'order_id'     => $order_id,
-                'gross_amount' => (int) $amount,
+                'order_id' => $orderId,
+                'gross_amount' => $grossAmount,
             ],
             'customer_details' => [
-                'first_name' => $user->name ?? 'User',
-                'email'      => $user->email ?? 'user@example.com',
+                'first_name' => $user->name,
+                'email'      => $user->email,
+                'phone'      => $user->phone ?? '',
             ],
         ];
 
         try {
-            // Generate Snap token
             $snapToken = Snap::getSnapToken($params);
 
+            // Simpan order_id dan snap_token
+            $transaction->update([
+                'order_id'   => $orderId,
+                'snap_token' => $snapToken,
+            ]);
+
             return response()->json([
-                'status'    => 'success',
-                'snapToken' => $snapToken,
-                'order_id'  => $order_id,
+                'status'      => 'success',
+                'transaction' => $transaction,
+                'snap_token'  => $snapToken,
+                'order_id'    => $orderId,
             ]);
         } catch (\Exception $e) {
+            // Hapus transaksi jika gagal generate token
+            $transaction->delete();
             return response()->json([
                 'status'  => 'error',
-                'message' => 'Gagal membuat transaksi: ' . $e->getMessage()
+                'message' => 'Gagal membuat token Midtrans: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Helper konfigurasi Midtrans
+     */
+    private function midtransConfig()
+    {
+        Config::$serverKey     = env('MIDTRANS_SERVER_KEY');
+        Config::$isProduction  = env('MIDTRANS_IS_PRODUCTION', false);
+        Config::$isSanitized   = true;
+        Config::$is3ds         = true;
     }
 }
