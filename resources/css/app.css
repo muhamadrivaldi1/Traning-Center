@@ -508,15 +508,13 @@ body.dark-theme .pembayaran-title {
 .sidebar {
     position: fixed;
     top: 0;
-    bottom: 0; /* TAMBAHAN PENTING 1: Paksa sidebar nempel sampai ujung bawah */
     left: -260px;
     width: 260px;
-    height: 100%; /* Ganti height: 100vh menjadi seperti di bawah ini */
-    height: 100dvh; /* TAMBAHAN PENTING 2: Dynamic Viewport Height menyesuaikan bar browser */
-    min-height: 100vh;
+    height: 100vh;
+    height: 100dvh;
     
     background: #010742 !important;
-    padding: 0 20px 20px;
+    padding: 20px;
     border-radius: 0;
     box-shadow: 8px 0 30px rgba(0,0,0,0.35);
     transition: left 0.3s ease;
@@ -524,7 +522,6 @@ body.dark-theme .pembayaran-title {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    pointer-events: auto;
 }
 
 .sidebar.active {
