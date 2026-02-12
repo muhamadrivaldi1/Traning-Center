@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -39,23 +39,32 @@ export default function Login() {
     }
   };
 
+  // Hapus background default bootstrap jika ada
+  useEffect(() => {
+    document.body.classList.remove("bg-light", "bg-dark");
+  }, []);
+
   return (
     <div className="d-flex align-items-center justify-content-center vh-100 login-bg">
-      <div className="card shadow-lg p-4 login-card">
-        <div className="text-center mb-2">
+      <div className="card shadow-lg p-4 login-card" style={{ width: "100%", maxWidth: "380px" }}>
+        {/* Logo */}
+        <div className="text-center mb-3">
           <img
             src="/images/TCF_Logo.png"
-            className="logo-unpam"
             alt="UNPAM"
+            className="logo-unpam"
+            style={{ maxWidth: "80px", width: "50%", height: "auto" }}
           />
         </div>
 
-        <h3 className="text-center mb-4 text-primary fw-bold">
+        <h3 className="text-center mb-4 text-primary fw-bold" style={{ fontSize: "1.4rem" }}>
           Training Center FILKOM
         </h3>
 
+        {/* Error Message */}
         {error && <div className="alert alert-danger">{error}</div>}
 
+        {/* Form Login */}
         <form onSubmit={handleLogin}>
           <input
             className="form-control mb-3"
@@ -80,11 +89,7 @@ export default function Login() {
             Belum punya akun?{" "}
             <span
               onClick={() => navigate("/register")}
-              style={{
-                color: "#0d6efd",
-                cursor: "pointer",
-                fontWeight: "600",
-              }}
+              style={{ color: "#0d6efd", cursor: "pointer", fontWeight: "600" }}
             >
               Klik di sini
             </span>

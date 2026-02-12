@@ -5,6 +5,13 @@
     font-family: "Inter", sans-serif;
 }
 
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -34,13 +41,11 @@ body.dark-theme {
     color: var(--text-color);
 }
 
-
 .theme-toggle-btn,
 .theme-toggle-btn svg {
     color: white !important;
     fill: white !important;
 }
-
 
 .dark-theme .main-content {
     background-color: var(--bg-color);
@@ -59,7 +64,6 @@ body.dark-theme {
 body.dark-theme .training-card h5 {
     color: white;
 }
-
 
 .dark-theme .navbar-custom .container {
     background: rgba(45, 45, 45, 0.9);
@@ -102,7 +106,6 @@ body.dark-theme .training-card h5 {
     color: #ffffff;
 }
 
-
 body.dark-theme .event-card {
     background-color: #1e1e2f;
     color: #f1f1f1;
@@ -111,7 +114,6 @@ body.dark-theme .event-card {
 body.dark-theme .event-card h5 {
     color: #ffffff;
 }
-
 
 .pembayaran-title {
     text-align: center;
@@ -506,9 +508,13 @@ body.dark-theme .pembayaran-title {
 .sidebar {
     position: fixed;
     top: 0;
+    bottom: 0; /* TAMBAHAN PENTING 1: Paksa sidebar nempel sampai ujung bawah */
     left: -260px;
     width: 260px;
-    height: 100vh;
+    height: 100%; /* Ganti height: 100vh menjadi seperti di bawah ini */
+    height: 100dvh; /* TAMBAHAN PENTING 2: Dynamic Viewport Height menyesuaikan bar browser */
+    min-height: 100vh;
+    
     background: #010742 !important;
     padding: 0 20px 20px;
     border-radius: 0;
@@ -623,7 +629,6 @@ body.dark-theme .page-title {
     background: transparent !important;
 }
 
-
 /* Training Cards Styles */
 .training-grid {
     display: grid;
@@ -638,6 +643,9 @@ body.dark-theme .page-title {
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .training-card:hover {
@@ -653,6 +661,9 @@ body.dark-theme .page-title {
 
 .training-content {
     padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .training-content h5 {
@@ -707,6 +718,10 @@ body.dark-theme .page-title {
     color: #888;
 }
 
+.training-desc {
+    margin-bottom: 12px;
+}
+
 .training-btn {
     width: 100%;
     padding: 10px;
@@ -717,6 +732,8 @@ body.dark-theme .page-title {
     cursor: pointer;
     font-weight: 500;
     transition: background 0.3s ease;
+    margin-top: auto;
+    text-align: center;
 }
 
 .training-btn:hover {
@@ -769,16 +786,23 @@ body.dark-theme .page-title {
     position: relative;
 }
 
+/* ================= USER DROPDOWN ================= */
 .user-dropdown {
     position: absolute;
     top: 50px;
     right: 0;
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     min-width: 200px;
-    z-index: 10000; /* ⬅️ PALING PENTING */
+    z-index: 10000;
     border: 1px solid #e0e0e0;
+    overflow: hidden;
+}
+
+.dark-theme .user-dropdown {
+    background: #1F2937;
+    color: #fff;
 }
 
 .profile-btn {
@@ -791,20 +815,22 @@ body.dark-theme .page-title {
     font-size: 14px;
     font-weight: 500;
     color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .payment-card {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
-  color: #333;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    color: #333;
 }
 
 body.dark-theme .payment-card {
-  background: #1e1e2f;
-  color: #eaeaea;
+    background: #1e1e2f;
+    color: #eaeaea;
 }
-
 
 .profile-btn:hover {
     background: rgba(0,0,0,0.05);
@@ -814,10 +840,27 @@ body.dark-theme .payment-card {
     background: rgba(255,255,255,0.1);
 }
 
-
 .user-info {
     padding: 16px;
     border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366F1, #A78BFA);
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
 }
 
 .user-name {
@@ -830,7 +873,8 @@ body.dark-theme .payment-card {
 .user-email {
     color: #666;
     margin: 0;
-    font-size: 14px;
+    font-size: 12px;
+    opacity: 0.8;
 }
 
 .logout-btn {
@@ -849,13 +893,6 @@ body.dark-theme .payment-card {
     background: #c82333;
 }
 
-/* Profile Button Hover Effect */
-.profile-btn:hover {
-    background-color: #f0f0f0;
-    color: #333;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
 /* Topbar Styles */
 .topbar {
     display: flex;
@@ -863,7 +900,6 @@ body.dark-theme .payment-card {
     align-items: center;
     padding: 10px 20px;
     background: rgba(19, 29, 120, 0.9);
-    /* backdrop-filter: blur(8px); */
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
@@ -897,13 +933,9 @@ body.dark-theme .payment-card {
     gap: 10px;
 }
 
-/* Theme Toggle Button Styles */
-
-
 .user-menu-btn:hover {
     background: rgba(255, 255, 255, 0.1) !important;
 }
-
 
 .page-wrapper {
     min-height: 100vh;
@@ -914,13 +946,6 @@ body.dark-theme .payment-card {
 body.dark-theme .page-wrapper {
     background: linear-gradient(135deg, #1a1a2e, #16213e);
 }
-
-.page-title {
-    text-align: center;
-    margin-bottom: 30px;
-    color: var(--primary-purple);
-}
-
 
 .certificate-card {
     background: #ffffff;
@@ -958,51 +983,118 @@ body.dark-theme .certificate-card {
 }
 
 .gallery-wrapper {
-  overflow: hidden;
-  width: 100%;
-  position: relative;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
 }
 
 .gallery-track {
-  display: flex;
-  width: max-content;
-  animation: scrollGallery 30s linear infinite;
-}
-
-.gallery-item {
-  min-width: 250px;
-  margin-right: 20px;
-  flex-shrink: 0;
-}
-
-.gallery-item img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 12px;
+    display: flex;
+    width: max-content;
+    animation: scrollGallery 30s linear infinite;
 }
 
 @keyframes scrollGallery {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
+/* ================= LOGIN STYLES (DIPERBAIKI) ================= */
+.login-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    background-image: url("/images/Login Bg.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow-y: auto;
+}
+
+.login-card {
+    color: white;
+    background-color: #010742;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    width: 100%;
+    max-width: 380px;
+    margin: auto;
+}
+
+.logo-unpam {
+    width: 80px;
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+
+/* Media query untuk layar kecil */
+@media (max-width: 576px) {
+    .login-bg {
+        padding: 10px;
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+    }
+
+    .login-card {
+        padding: 20px;
+    }
+
+    .logo-unpam {
+        width: 60px;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+}
+
+/* Tambahan untuk iOS Safari */
+@supports (-webkit-touch-callout: none) {
+    .login-bg {
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* Dark Theme Training Styles */
 .dark-theme .training-card {
     background-color: #1e1e2f;
     color: #f1f1f1;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-.dark-theme .training-card h5 {
+.dark-theme .training-card h5,
+.dark-theme .training-card h1,
+.dark-theme .training-card h3,
+.dark-theme .training-card h4 {
     color: #ffffff;
 }
 
 .dark-theme .training-content {
     color: #dddddd;
+}
+
+.dark-theme .training-card p,
+.dark-theme .training-card li {
+    color: #e0e0e0;
+}
+
+.dark-theme .training-card ul {
+    padding-left: 18px;
 }
 
 .dark-theme .training-dates small {
@@ -1024,68 +1116,47 @@ body.dark-theme .certificate-card {
 }
 
 .dark-theme .training-container {
-  color: #ffffff;
-}
-
-.dark-theme .training-card {
-  background-color: #1e1e2f;
-  color: #ffffff;
-}
-
-.dark-theme .training-card h1,
-.dark-theme .training-card h3,
-.dark-theme .training-card h4,
-.dark-theme .training-card h5 {
-  color: #ffffff;
-}
-
-.dark-theme .training-card p,
-.dark-theme .training-card li {
-  color: #e0e0e0;
-}
-
-.dark-theme .training-card ul {
-  padding-left: 18px;
+    color: #ffffff;
 }
 
 .dark-theme .btn-outline-secondary {
-  color: #ffffff;
-  border-color: #ffffff;
+    color: #ffffff;
+    border-color: #ffffff;
 }
 
 .dark-theme .btn-outline-secondary:hover {
-  background-color: #ffffff;
-  color: #000000;
+    background-color: #ffffff;
+    color: #000000;
 }
 
 .dark-theme a {
-  color: #ffffff;
+    color: #ffffff;
 }
 
 .dark-theme a:hover {
-  color: #d1d1ff;
+    color: #d1d1ff;
 }
 
 .dark-theme .grid-three h4 {
-  color: #000000;
+    color: #000000;
 }
 
 .dark-theme .grid-three p {
-  color: #000000;
+    color: #000000;
 }
 
 body.dark-theme {
-  background-color: #0f172a; /* dark navy */
-  color: #e5e7eb;
+    background-color: #0f172a;
+    color: #e5e7eb;
 }
 
 body.dark-theme .card {
-  background-color: #1e293b;
-  color: #e5e7eb;
+    background-color: #1e293b;
+    color: #e5e7eb;
 }
 
 body.dark-theme .card.bg-primary {
-  background-color: #0f172a !important;
+    background-color: #0f172a !important;
 }
 
 body.dark-theme h1,
@@ -1096,134 +1167,50 @@ body.dark-theme h5,
 body.dark-theme h6,
 body.dark-theme p,
 body.dark-theme label {
-  color: #e5e7eb;
+    color: #e5e7eb;
 }
 
 body.dark-theme .text-muted {
-  color: #9ca3af !important;
+    color: #9ca3af !important;
 }
 
 body.dark-theme .form-control,
 body.dark-theme .form-select,
 body.dark-theme textarea {
-  background-color: #020617;
-  color: #e5e7eb;
-  border: 1px solid #334155;
+    background-color: #020617;
+    color: #e5e7eb;
+    border: 1px solid #334155;
 }
 
 body.dark-theme .form-control::placeholder,
 body.dark-theme textarea::placeholder {
-  color: #94a3b8;
+    color: #94a3b8;
 }
 
 body.dark-theme .form-control:focus,
 body.dark-theme .form-select:focus {
-  background-color: #020617;
-  color: #e5e7eb;
-  border-color: #6366f1;
-  box-shadow: none;
+    background-color: #020617;
+    color: #e5e7eb;
+    border-color: #6366f1;
+    box-shadow: none;
 }
 
 body.dark-theme .btn-primary {
-  background-color: #6366f1;
-  border: none;
+    background-color: #6366f1;
+    border: none;
 }
 
 body.dark-theme .btn-link {
-  color: #c7d2fe;
-}
-
-body.dark-theme .user-dropdown {
-  background-color: #1e293b;
-  color: #e5e7eb;
+    color: #c7d2fe;
 }
 
 body.dark-theme .user-dropdown button {
-  color: #e5e7eb;
+    color: #e5e7eb;
 }
 
-.profile-btn {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* Fix khusus untuk iOS Safari agar full screen sempurna */
+@supports (-webkit-touch-callout: none) {
+    .sidebar {
+        height: -webkit-fill-available;
+    }
 }
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.training-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.training-content {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.training-desc {
-  margin-bottom: 12px;
-}
-
-.training-btn {
-  margin-top: auto;
-  width: 100%;
-  text-align: center;
-}
-
-/* ================= USER DROPDOWN ================= */
-
-.user-dropdown {
-  position: absolute;
-  right: 0;
-  top: 40px;
-  min-width: 200px;
-  background: #fff;
-  color: #111;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  z-index: 999;
-  overflow: hidden;
-}
-
-.dark-theme .user-dropdown {
-  background: #1F2937;
-  color: #fff;
-}
-
-.user-info {
-  padding: 16px;
-  text-align: center;
-}
-
-.user-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #6366F1, #A78BFA);
-  margin: 0 auto 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  font-weight: bold;
-  color: #fff;
-}
-
-.user-name {
-  margin: 0;
-  font-weight: 600;
-}
-
-.user-email {
-  margin: 0;
-  font-size: 12px;
-  opacity: 0.8;
-}
-

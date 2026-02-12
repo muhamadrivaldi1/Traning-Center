@@ -1,57 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "./components/Sidebar";
 import "../css/app.css";
 
 function HomePage() {
   const navigate = useNavigate();
-
-  // Sidebar DIMATIKAN
-  const isOpen = false;
+  const [isOpen, setIsOpen] = useState(false); // state untuk toggle menu mobile
 
   useEffect(() => {
     document.body.classList.remove("bg-light", "bg-dark");
   }, []);
 
   return (
-    <div>
+    <>
+      {/* Navbar */}
+      <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div className="container navbar-padding d-flex justify-content-between align-items-center">
 
-      <nav className={`navbar navbar-expand-lg navbar-dark navbar-custom ${isOpen ? "sidebar-open" : ""}`}>
-        <div className="container navbar-padding">
-          <div className="navbar-brand d-flex align-items-center gap-3">
-            {/* <span className="menu-icon" onClick={() => setIsOpen(!isOpen)}>&#9776;</span> */}
-
-            <img
-              src="/images/unpam (2).png"
-              className="navbar-logo"
-              alt="UNPAM"
-            />
-            <span className="fw-bold">Training Center UNPAM</span>
+          {/* Logo + Title */}
+          <div className="d-flex align-items-center gap-3">
+            <img src="/images/unpam (2).png" className="navbar-logo" alt="UNPAM" />
+            <span style={{ fontSize: '1.2rem', color: 'white', fontWeight: '700' }}>Training Center UNPAM</span>
           </div>
 
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
+          {/* Hamburger mobile di kanan */}
+          <span
+            className="menu-icon d-lg-none"
+            onClick={() => setIsOpen(!isOpen)}
+            style={{ cursor: "pointer", fontSize: "24px" }}
           >
-            <span className="navbar-toggler-icon"></span>
-          </button>
+            &#9776;
+          </span>
 
-          <div className="collapse navbar-collapse" id="navbarNav">
+          {/* Collapse Navbar */}
+          <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`}>
             <ul className="navbar-nav ms-auto gap-4">
-              <li className="nav-item">
-                <a className="nav-link" href="#home">Home</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#jadwal">Pelatihan</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#berita">Berita</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#galeri">Galeri</a>
-              </li>
+              <li className="nav-item"><a className="nav-link" href="#home">Home</a></li>
+              <li className="nav-item"><a className="nav-link" href="#jadwal">Pelatihan</a></li>
+              <li className="nav-item"><a className="nav-link" href="#berita">Berita</a></li>
+              <li className="nav-item"><a className="nav-link" href="#galeri">Galeri</a></li>
               <li className="nav-item">
                 <button className="btn btn-primary" onClick={() => navigate("/login")}>Masuk</button>
               </li>
@@ -60,7 +46,7 @@ function HomePage() {
         </div>
       </nav>
 
-      <div className={isOpen ? "sidebar-open" : ""}>
+      {/* Hero Section */}
       <section id="home" className="hero-section">
         <div className="hero-content">
           <h1 className="hero-title">
@@ -69,24 +55,12 @@ function HomePage() {
           <p className="hero-subtitle">
             Meningkatkan skill, membangun masa depan cerah bersama kami.
           </p>
-          {/* <button
-            className="hero-btn"
-            onClick={() => {
-              const jadwalSection = document.getElementById('jadwal');
-              if (jadwalSection) {
-                jadwalSection.scrollIntoView({
-                  behavior: 'smooth',
-                  block: 'start'
-                });
-              }
-            }}
-          >
-            Belajar Sekarang
-          </button> */}
         </div>
       </section>
 
       <div className="section-rectangle"></div>
+
+      {/* Pelatihan Section */}
       <section id="jadwal" className="schedule-section">
         <div className="schedule-header">
           <h2>Pelatihan</h2>
@@ -113,6 +87,8 @@ function HomePage() {
       </section>
 
       <div className="section-rectangle"></div>
+
+      {/* Berita Section */}
       <section id="berita" className="news-section">
         <div className="news-header">
           <h2>Berita & Informasi</h2>
@@ -129,10 +105,7 @@ function HomePage() {
             <div className="news-card" key={index}>
               <img src={`/images/${item[0]}`} alt={item[1]} />
               <h4>{item[1]}</h4>
-              <p>
-                Kegiatan resmi Training Center Fakultas Ilmu Komputer
-                untuk meningkatkan kompetensi mahasiswa.
-              </p>
+              <p>Kegiatan resmi Training Center Fakultas Ilmu Komputer untuk meningkatkan kompetensi mahasiswa.</p>
               <button>Detail</button>
             </div>
           ))}
@@ -141,101 +114,71 @@ function HomePage() {
 
       <div className="section-rectangle"></div>
 
-<section id="galeri" className="gallery-section">
-  <div className="news-header">
-    <h2>Galeri</h2>
-    <p>Update dokumentasi kegiatan Training Center FIKOM UNPAM</p>
-  </div>
-
-  <div className="gallery-wrapper">
-    <div className="gallery-track">
-      {[
-        "timage.jpg",
-        "timage.jpg",
-        "timage.jpg",
-        "timage.jpg",
-        "timage.jpg",
-        "timage.jpg",
-      ].map((img, index) => (
-        <div className="gallery-item" key={index}>
-          <img src={`/images/${img}`} alt="Galeri" />
+      {/* Galeri Section */}
+      <section id="galeri" className="gallery-section">
+        <div className="news-header">
+          <h2>Galeri</h2>
+          <p>Update dokumentasi kegiatan Training Center FIKOM UNPAM</p>
         </div>
-      ))}
 
-      {/* DUPLIKAT biar looping halus */}
-      {[
-        "timage.jpg",
-        "timage.jpg",
-        "timage.jpg",
-        "timage.jpg",
-        "timage.jpg",
-        "timage.jpg",
-      ].map((img, index) => (
-        <div className="gallery-item" key={`dup-${index}`}>
-          <img src={`/images/${img}`} alt="Galeri" />
+        <div className="gallery-wrapper">
+          <div className="gallery-track">
+            {["timage.jpg", "timage.jpg", "timage.jpg", "timage.jpg", "timage.jpg", "timage.jpg"].map((img, index) => (
+              <div className="gallery-item" key={index}><img src={`/images/${img}`} alt="Galeri" /></div>
+            ))}
+            {/* Duplikat untuk looping */}
+            {["timage.jpg", "timage.jpg", "timage.jpg", "timage.jpg", "timage.jpg", "timage.jpg"].map((img, index) => (
+              <div className="gallery-item" key={`dup-${index}`}><img src={`/images/${img}`} alt="Galeri" /></div>
+            ))}
+          </div>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
+      </section>
 
-
+      {/* Footer */}
       <footer className="footer">
         <div className="footer-top">
           <div className="footer-header">
-            <img
-              src="/images/unpam (2).png"
-              alt="Logo UNPAM"
-              className="footer-logo"
-            />
+            <img src="/images/unpam (2).png" alt="Logo UNPAM" className="footer-logo" />
             <h3>Training Center Fakultas - Universitas Pamulang</h3>
           </div>
 
           <div className="footer-content">
             <div className="footer-item">
               <h4>Kampus Pusat</h4>
-              <p>
-                Jl. Surya Kencana No.1, Pamulang Barat,
-                Tangerang Selatan, Banten 15417
-              </p>
+              <p>Jl. Surya Kencana No.1, Pamulang Barat, Tangerang Selatan, Banten 15417</p>
             </div>
-
             <div className="footer-item">
               <h4>Kampus Viktor</h4>
-              <p>
-                Jl. Raya Puspiptek, Buaran,
-                Tangerang Selatan, Banten 15310
-              </p>
+              <p>Jl. Raya Puspiptek, Buaran, Tangerang Selatan, Banten 15310</p>
             </div>
-
             <div className="footer-item">
               <h4>Kampus Witana Harja</h4>
-              <p>
-                Jl. Witana Harja No.18b,
-                Tangerang Selatan, Banten 15417
-              </p>
+              <p>Jl. Witana Harja No.18b, Tangerang Selatan, Banten 15417</p>
             </div>
-
             <div className="footer-item">
               <h4>Kampus Serang</h4>
-              <p>
-                Jl. Lintas Serang – Jakarta,
-                Kota Serang, Banten 42183
-              </p>
+              <p>Jl. Lintas Serang – Jakarta, Kota Serang, Banten 42183</p>
             </div>
 
-            <p className="footer-email">E-mail: humas@unpam.ac.id</p>
+            {/* Bagian email aktif */}
+            <div className="footer-item">
+              <h4>Email</h4>
+              <a
+                href="mailto:humas@unpam.ac.id"
+                className="footer-email-link"
+              >
+                humas@unpam.ac.id
+              </a>
+            </div>
+
           </div>
         </div>
 
         <div className="footer-bottom">
-          © Training Center Fakultas Ilmu Komputer – All Rights Reserved.
+          © Training Center Fakultas Ilmu Komputer – By Rivaldi & Jiwa, {new Date().getFullYear()}
         </div>
       </footer>
-
-      </div>
-
-    </div>
+    </>
   );
 }
 
