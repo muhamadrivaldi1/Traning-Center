@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import { FiSun, FiMoon, FiUser, FiChevronDown } from "react-icons/fi";
+import { FiSun, FiMoon, FiUser, FiClock, FiCheckCircle, FiAlertCircle } from "react-icons/fi";
 import "../../css/app.css";
-import api from "../api";
+import api from "../api"; // Pastikan file axios instance kamu sudah benar
 
 export default function Pembayaran() {
   const navigate = useNavigate();
@@ -14,34 +14,26 @@ export default function Pembayaran() {
   const [user, setUser] = useState(null);
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [snapReady, setSnapReady] = useState(false);
-  const [isPaying, setIsPaying] = useState(false); // 🔥 lock bayar
-  const [selectedMethod, setSelectedMethod] = useState("bca"); // default VA
+  const [isPaying, setIsPaying] = useState(false);
+  const [now, setNow] = useState(new Date());
 
-  // ===============================
-  // LOAD SNAP.JS
-  // ===============================
+  // Timer untuk update sisa waktu setiap detik
   useEffect(() => {
-    if (window.snap) {
-      setSnapReady(true);
-      return;
-    }
-    const script = document.createElement("script");
-    script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
-    script.setAttribute(
-      "data-client-key",
-      import.meta.env.VITE_MIDTRANS_CLIENT_KEY
-    );
-    script.async = true;
-    script.onload = () => setSnapReady(true);
-    script.onerror = () => console.error("Gagal load Snap.js");
-    document.body.appendChild(script);
-    return () => document.body.removeChild(script);
+    const interval = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(interval);
   }, []);
 
-  // ===============================
-  // LOAD USER
-  // ===============================
+  // Load Midtrans Snap Script
+  useEffect(() => {
+    const clientKey = import.meta.env.VITE_MIDTRANS_CLIENT_KEY;
+    if (window.snap) return;
+    const script = document.createElement("script");
+    script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
+    script.setAttribute("data-client-key", clientKey);
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
+
   useEffect(() => {
     const theme = localStorage.getItem("theme");
     if (theme === "dark") {
@@ -53,246 +45,208 @@ export default function Pembayaran() {
       navigate("/login");
       return;
     }
-    const parsedUser = JSON.parse(savedUser);
-    setUser(parsedUser);
-    fetchPayments(parsedUser);
+    setUser(JSON.parse(savedUser));
+    
+    // Jalankan cleanup data kadaluarsa sebelum ambil data terbaru
+    cleanupAndFetch();
   }, [navigate]);
 
-  // ===============================
-  // FETCH PAYMENTS
-  // ===============================
-  const fetchPayments = async (currentUser) => {
+  const cleanupAndFetch = async () => {
     setLoading(true);
     try {
-      const res = await api.get("/my-trainings", {
-        headers: { Authorization: `Bearer ${currentUser.token}` },
+      const token = localStorage.getItem("token");
+      // Memanggil endpoint cleanup di Laravel
+      await api.get("/my-trainings/cleanup", {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      const data = res.data.map((item) => ({
+      fetchPayments();
+    } catch (err) {
+      fetchPayments();
+    }
+  };
+
+  const fetchPayments = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await api.get("/my-trainings", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Sorting: Pending & Belum Expired di urutan teratas
+      const sortedData = res.data.sort((a, b) => {
+        const isAActive = a.payment_status === 'pending' && !checkIsExpired(a.created_at);
+        const isBActive = b.payment_status === 'pending' && !checkIsExpired(b.created_at);
+        if (isAActive && !isBActive) return -1;
+        if (!isAActive && isBActive) return 1;
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+
+      setPayments(sortedData.map(item => ({
         id: item.id,
         training: item.training?.name || "Pelatihan",
         price: item.training?.price || 0,
         status: item.payment_status?.toLowerCase() || "unpaid",
-        date: item.created_at,
-      }));
-      setPayments(data);
+        createdAt: item.created_at,
+      })));
     } catch (err) {
-      console.error("Fetch error:", err.response || err);
-      alert("Gagal memuat data pembayaran.");
+      if (err.response?.status === 401) {
+        localStorage.clear();
+        navigate("/login");
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  // ===============================
-  // HANDLE PAYMENT
-  // ===============================
+  const checkIsExpired = (createdAt) => {
+    const expiryTime = new Date(createdAt).getTime() + 5 * 60 * 1000;
+    return now.getTime() > expiryTime;
+  };
+
+  const getTimerInfo = (createdAt) => {
+    const startTime = new Date(createdAt).getTime();
+    const expiryTime = startTime + 5 * 60 * 1000; 
+    const diff = expiryTime - now.getTime();
+    if (diff <= 0) return { text: "KADALUARSA", isExpired: true };
+    const mins = Math.floor(diff / 60000);
+    const secs = Math.floor((diff % 60000) / 1000);
+    return { text: `${mins}:${secs < 10 ? "0" : ""}${secs}`, isExpired: false };
+  };
+
   const handlePayment = async (registrationId) => {
-    if (!snapReady || !window.snap) {
-      alert("Snap belum siap. Refresh halaman.");
-      return;
-    }
-    if (isPaying) {
-      alert("Transaksi sedang diproses. Tunggu sebentar.");
-      return;
-    }
+    if (isPaying) return;
     setIsPaying(true);
-
     try {
-      // request snap token dari backend, termasuk method
-      const res = await api.get(
-        `/snap-token/${registrationId}?method=${selectedMethod}`,
-        {
-          headers: { Authorization: `Bearer ${user.token}` },
-        }
-      );
-      const token = res.data?.snap_token;
-      if (!token) {
-        alert("Token pembayaran tidak tersedia.");
-        setIsPaying(false);
-        return;
-      }
-
-      window.snap.pay(token, {
-        onSuccess: (result) => {
-          console.log("SUCCESS:", result);
-          alert("Pembayaran berhasil!");
-          fetchPayments(user);
-          setIsPaying(false);
-        },
-        onPending: (result) => {
-          console.log("PENDING:", result);
-          alert(
-            selectedMethod.startsWith("va")
-              ? `Pembayaran pending, silakan bayar Virtual Account ${result.va_numbers?.[0]?.va_number || ""}`
-              : "Pembayaran pending, silakan scan QRIS."
-          );
-          fetchPayments(user);
-          setIsPaying(false);
-        },
-        onError: (result) => {
-          console.log("ERROR:", result);
-          alert("Pembayaran gagal.");
-          setIsPaying(false);
-        },
-        onClose: () => {
-          console.log("Popup ditutup");
-          setIsPaying(false);
-        },
+      const token = localStorage.getItem("token");
+      // Penyesuaian URL: Menambahkan /payments sesuai api.php kamu
+      const res = await api.get(`/payments/snap-token/${registrationId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      window.snap.pay(res.data.snap_token, {
+        onSuccess: () => { fetchPayments(); setIsPaying(false); },
+        onPending: () => { fetchPayments(); setIsPaying(false); },
+        onClose: () => setIsPaying(false),
       });
     } catch (err) {
-      console.error("Midtrans error:", err.response || err);
-      alert(
-        err.response?.data?.message ||
-          "Terjadi kesalahan saat memproses pembayaran."
-      );
+      alert(err.response?.data?.message || "Gagal memproses pembayaran.");
       setIsPaying(false);
     }
   };
 
-  // ===============================
-  // STATUS COLOR
-  // ===============================
-  const statusColor = (status) => {
-    if (status === "success") return "#22c55e";
-    if (status === "pending") return "#f59e0b";
-    if (status === "unpaid") return "#ef4444";
-    return "#6b7280";
+  const formatTanggal = (dateString) => {
+    const options = { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return new Date(dateString).toLocaleDateString('id-ID', options);
   };
 
-  if (!user) return <p>Loading...</p>;
+  if (!user) return <div className="p-5 text-center">Memeriksa sesi...</div>;
 
   return (
     <>
       <Sidebar isOpen={isOpen} />
       <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
-        {/* TOPBAR */}
         <div className="topbar">
           <button className="sidebar-toggle" onClick={() => setIsOpen(!isOpen)}>
-            <span />
-            <span />
-            <span />
+            <span /><span /><span />
           </button>
-
           <div className="topbar-right">
-            <button
-              className="theme-toggle-btn"
-              onClick={() => {
+            <button className="theme-toggle-btn" onClick={() => {
                 const next = !isDarkMode;
                 setIsDarkMode(next);
                 document.body.classList.toggle("dark-theme", next);
                 localStorage.setItem("theme", next ? "dark" : "light");
-              }}
-            >
+              }}>
               {isDarkMode ? <FiSun /> : <FiMoon />}
             </button>
-
             <div className="user-menu-container">
-              <button
-                className="user-menu-btn"
-                onClick={() => setShowUserMenu(!showUserMenu)}
-              >
+              <button className="user-menu-btn" onClick={() => setShowUserMenu(!showUserMenu)}>
                 <FiUser />
               </button>
-
               {showUserMenu && (
                 <div className="user-dropdown">
-                  <p className="fw-bold mb-0">{user?.name}</p>
-                  <p className="text-muted small">{user?.email}</p>
-                  <hr />
+                  <p className="fw-bold mb-0 p-2 text-center">{user?.name}</p>
+                  <hr className="my-1" />
                   <button onClick={() => navigate("/profil")}>Profil</button>
-                  <button
-                    onClick={() => {
-                      localStorage.removeItem("user");
-                      navigate("/login");
-                    }}
-                  >
-                    Logout
-                  </button>
+                  <button onClick={() => { localStorage.clear(); navigate("/login"); }}>Logout</button>
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        {/* CONTENT */}
-        <h2 className="page-title">Pembayaran</h2>
-        <hr />
+        <div className="container-fluid py-4">
+          <h2 className="page-title">Pembayaran</h2>
+          
+          <div className="alert alert-warning d-flex align-items-center shadow-sm border-0 mb-4" role="alert">
+            <FiAlertCircle className="me-2 fs-4" />
+            <div className="small">
+              <strong>Peringatan:</strong> Batas waktu pembayaran adalah <strong>5 menit</strong>. Riwayat transaksi yang tidak dibayar akan dihapus otomatis setelah 24 jam.
+            </div>
+          </div>
 
-        {loading && <p>Loading...</p>}
-
-        {!loading && payments.length === 0 && <p>Tidak ada data pembayaran.</p>}
-
-        {!loading && payments.length > 0 && (
-          <div className="table-responsive">
-            <table className="table table-bordered table-hover align-middle">
+          <div className="table-responsive shadow-sm card border-0 rounded-4 overflow-hidden">
+            <table className="table table-hover align-middle mb-0">
               <thead className="table-light">
                 <tr>
-                  <th>No</th>
+                  <th className="ps-4">No</th>
                   <th>Pelatihan</th>
-                  <th>Harga</th>
-                  <th>Status</th>
-                  <th>Tanggal</th>
-                  <th>Metode</th>
-                  <th>Aksi</th>
+                  <th className="text-center">Status</th>
+                  <th className="text-center">Sisa Waktu</th>
+                  <th className="text-center">Dipesan Pada</th>
+                  <th className="text-center pe-4">Aksi</th>
                 </tr>
               </thead>
               <tbody>
-                {payments.map((item, index) => (
-                  <tr key={item.id}>
-                    <td>{index + 1}</td>
-                    <td>{item.training}</td>
-                    <td>
-                      {item.price.toLocaleString("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                      })}
-                    </td>
-                    <td>
-                      <span
-                        style={{
-                          padding: "5px 12px",
-                          borderRadius: "20px",
-                          color: "white",
-                          backgroundColor: statusColor(item.status),
-                        }}
-                      >
-                        {item.status}
-                      </span>
-                    </td>
-                    <td>{new Date(item.date).toLocaleDateString("id-ID")}</td>
-                    <td>
-                      <select
-                        value={selectedMethod}
-                        onChange={(e) => setSelectedMethod(e.target.value)}
-                        className="form-select form-select-sm"
-                      >
-                        <option value="bca">BCA VA</option>
-                        <option value="bni">BNI VA</option>
-                        <option value="mandiri">Mandiri VA</option>
-                        <option value="bri">BRI VA</option>
-                        <option value="permata">Permata VA</option>
-                        <option value="qris">QRIS</option>
-                      </select>
-                    </td>
-                    <td>
-                      {item.status === "unpaid" || item.status === "pending" ? (
-                        <button
-                          className="btn btn-sm btn-warning text-white"
-                          onClick={() => handlePayment(item.id)}
-                          disabled={isPaying}
-                        >
-                          {isPaying ? "Sedang Bayar..." : "Bayar"}
-                        </button>
-                      ) : (
-                        <span className="text-success fw-bold">Lunas</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                {loading ? (
+                    <tr><td colSpan="6" className="text-center py-5 text-muted">Memuat data...</td></tr>
+                ) : payments.length === 0 ? (
+                    <tr><td colSpan="6" className="text-center py-5 text-muted">Belum ada transaksi</td></tr>
+                ) : (
+                    payments.map((item, index) => {
+                      const timer = getTimerInfo(item.createdAt);
+                      const isSuccess = item.status === "success" || item.status === "settlement";
+
+                      return (
+                          <tr key={item.id}>
+                            <td className="ps-4 text-muted">{index + 1}</td>
+                            <td>
+                                <div className="fw-bold text-dark">{item.training}</div>
+                                <div className="small text-primary fw-bold">Rp {item.price.toLocaleString('id-ID')}</div>
+                            </td>
+                            <td className="text-center">
+                                <span className={`badge rounded-pill px-3 py-2 ${isSuccess ? "bg-success" : (timer.isExpired ? "bg-danger" : "bg-warning")}`}>
+                                  {isSuccess ? "LUNAS" : (timer.isExpired ? "EXPIRED" : "PENDING")}
+                                </span>
+                            </td>
+                            <td className="text-center">
+                                {!isSuccess && !timer.isExpired ? (
+                                  <span className="text-primary fw-bold d-inline-flex align-items-center">
+                                      <FiClock className="me-1" /> {timer.text}
+                                  </span>
+                                ) : "-"}
+                            </td>
+                            <td className="text-center small text-muted">
+                                {formatTanggal(item.createdAt)}
+                            </td>
+                            <td className="text-center pe-4">
+                                {isSuccess ? (
+                                  <span className="text-success small fw-bold"><FiCheckCircle className="me-1"/>SELESAI</span>
+                                ) : timer.isExpired ? (
+                                  <span className="text-danger small fw-bold">BATAL</span>
+                                ) : (
+                                  <button className="btn btn-primary btn-sm rounded-pill px-3 fw-bold" onClick={() => handlePayment(item.id)} disabled={isPaying}>
+                                      {isPaying ? "..." : "Bayar Sekarang"}
+                                  </button>
+                                )}
+                            </td>
+                          </tr>
+                      );
+                    })
+                )}
               </tbody>
             </table>
           </div>
-        )}
+        </div>
       </div>
     </>
   );

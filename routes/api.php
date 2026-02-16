@@ -3,16 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TrainingController;
-use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
 | PUBLIC ROUTES
 |--------------------------------------------------------------------------
-|
-| Route yang bisa diakses tanpa login.
-|
 */
 
 Route::get('/', function () {
@@ -21,43 +17,39 @@ Route::get('/', function () {
     ]);
 });
 
-// ===== AUTH =====
+// ===== AUTHENTICATION =====
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
-// Contoh response: {"token": "xxxx", "user": {...}}
-
 Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
-// Contoh response: {"message": "Registrasi berhasil", "user": {...}}
 
 // ===== TRAINING (PUBLIC) =====
-Route::get('/training', [TrainingController::class, 'index'])->name('training.index');
-// Contoh response: [{"id":1,"title":"Training 1"}, {"id":2,"title":"Training 2"}]
+// Menggunakan '/trainings' agar sinkron dengan Dashboard.jsx kamu
+Route::get('/trainings', [TrainingController::class, 'index'])->name('trainings.index');
+Route::get('/trainings/{id}', [TrainingController::class, 'show'])->name('trainings.show');
 
-Route::get('/training/{id}', [TrainingController::class, 'show'])->name('training.show');
-// Contoh response: {"id":1,"title":"Training 1","description":"..."}
-
-// ===== TRANSACTION CREATE =====
-Route::post('/create-transaction', [TransactionController::class, 'create'])->name('transaction.create');
-// Contoh response: {"transaction_id":123, "status":"pending"}
+// ===== MIDTRANS CALLBACK (Wajib Public) =====
+Route::post('/midtrans-callback', [PaymentController::class, 'callback'])->name('payment.callback');
 
 /*
 |--------------------------------------------------------------------------
 | PROTECTED ROUTES (LOGIN REQUIRED)
 |--------------------------------------------------------------------------
-|
-| Route yang membutuhkan autentikasi menggunakan Sanctum.
-|
 */
 Route::middleware('auth:sanctum')->group(function () {
 
-    // ===== USER TRAININGS =====
-    Route::get('/my-trainings', [TrainingController::class, 'myTrainings'])->name('training.my');
-    // Contoh response: [{"id":1,"title":"Training 1","status":"registered"}]
+    // --- PAYMENT & CHECKOUT ---
+    // 1. Membuat transaksi baru dan mendapatkan Snap Token
+    Route::post('/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
 
-    // ===== REGISTER TRAINING =====
-    Route::post('/training/{id}/register', [TrainingController::class, 'register'])->name('training.register');
-    // Contoh response: {"message":"Berhasil mendaftar training", "training_id":1}
+    // 2. Mengambil kembali Snap Token untuk transaksi yang sudah ada
+    Route::get('/payments/snap-token/{id}', [PaymentController::class, 'getSnapToken'])->name('payment.snap');
 
-    // ===== MIDTRANS SNAP TOKEN =====
-    Route::get('/snap-token/{id}', [PaymentController::class, 'getSnapToken'])->name('payment.snap');
-    // Contoh response: {"token":"xxxxx"}
+    // --- USER TRAININGS ---
+    // 3. Mengambil daftar pelatihan yang diikuti oleh user login
+    Route::get('/my-trainings', [TrainingController::class, 'myTrainings'])->name('trainings.my');
+
+    // 4. Sinkronisasi status atau pembersihan transaksi kadaluarsa
+    Route::get('/my-trainings/cleanup', [PaymentController::class, 'cleanupExpired'])->name('trainings.cleanup');
+
+    // 5. Registrasi pelatihan secara manual (jika diperlukan)
+    Route::post('/trainings/{id}/register', [TrainingController::class, 'register'])->name('trainings.register');
 });

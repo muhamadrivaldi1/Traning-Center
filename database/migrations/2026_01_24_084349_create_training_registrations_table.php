@@ -16,7 +16,7 @@ return new class extends Migration {
                 ->cascadeOnDelete();
 
             $table->foreignId('training_id')
-                ->constrained('training')
+                ->constrained('trainings')
                 ->cascadeOnDelete();
 
             $table->integer('progress')->default(0);

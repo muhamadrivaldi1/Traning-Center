@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+// Tambahkan ini jika file ada di folder berbeda
+// use App\Models\TrainingRegistration; 
 
 class Training extends Model
 {
@@ -11,18 +13,20 @@ class Training extends Model
 
     protected $table = 'trainings';
 
+    // id dihapus dari fillable karena biasanya auto-increment
     protected $fillable = [
-        'id',
         'name',
         'description',
         'duration',
         'schedule',
         'price',
-        'image'
+        'image',
+        'benefits'
     ];
 
     public function registrations()
     {
+        // Pastikan model TrainingRegistration sudah dibuat!
         return $this->hasMany(TrainingRegistration::class);
     }
 }

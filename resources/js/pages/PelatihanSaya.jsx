@@ -9,72 +9,68 @@ export default function PelatihanSaya() {
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [trainings, setTrainings] = useState([]);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [user, setUser] = useState(null);
+  const [trainings, setTrainings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ===============================
-  // LOAD USER & THEME
-  // ===============================
   useEffect(() => {
-    const theme = localStorage.getItem("theme");
-    if (theme === "dark") {
+    // Sinkronisasi Tema
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
       setIsDarkMode(true);
       document.body.classList.add("dark-theme");
     }
 
+    // Proteksi Route & Data User
     const savedUser = localStorage.getItem("user");
     if (!savedUser) {
       navigate("/login");
       return;
     }
-
     setUser(JSON.parse(savedUser));
   }, [navigate]);
 
-  // ===============================
-  // LOAD MY TRAININGS
-  // ===============================
   useEffect(() => {
-    api
-      .get("/my-trainings")
-      .then((res) => {
-        const data = res.data.map((item) => {
-          const training = item.training;
+    const token = localStorage.getItem("token");
 
+    api
+      .get("/my-trainings", {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then((res) => {
+        // Filter: Hanya menampilkan pelatihan yang sudah LUNAS
+        const filteredData = res.data.filter((item) => 
+          item.payment_status === "success" || item.payment_status === "settlement"
+        );
+
+        const data = filteredData.map((item) => {
+          const t = item.training;
           return {
             id: item.id,
-            title: training?.name || "Pelatihan",
-            status: item.status,
-            progress: item.progress,
-            startDate: item.start_date,
-            endDate: item.end_date,
-            training: training,
-
-            image: training?.image
-              ? `http://127.0.0.1:8000/storage/${training.image}`
-              : "/images/default.jpg",
+            title: t?.name || "Pelatihan",
+            description: t?.description || "Deskripsi pelatihan.",
+            progress: item.progress || 0,
+            status: item.progress > 0 ? (item.progress === 100 ? "Selesai" : "Berjalan") : "Belum Mulai",
+            image: t?.image 
+              ? `http://127.0.0.1:8000/storage/${t.image}` 
+              : "/images/WEb Development.jpeg",
+            rawTraining: t 
           };
         });
-
         setTrainings(data);
       })
       .catch((err) => {
-        console.error("Gagal mengambil pelatihan:", err);
+        if (err.response?.status === 401) navigate("/login");
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [navigate]);
 
-  // ===============================
-  // HELPERS
-  // ===============================
   const toggleTheme = () => {
-    const mode = !isDarkMode;
-    setIsDarkMode(mode);
-
-    if (mode) {
+    const newTheme = !isDarkMode;
+    setIsDarkMode(newTheme);
+    if (newTheme) {
       document.body.classList.add("dark-theme");
       localStorage.setItem("theme", "dark");
     } else {
@@ -84,31 +80,19 @@ export default function PelatihanSaya() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/login");
+    localStorage.clear();
+    navigate("/");
   };
 
-  const getStatusColor = (status) => {
-    if (status === "Aktif") return "#28a745";
-    if (status === "Selesai") return "#007bff";
-    if (status === "Pending") return "#ffc107";
-    return "#6c757d";
-  };
-
-  // ===============================
-  // RENDER
-  // ===============================
   return (
     <>
       <Sidebar isOpen={isOpen} />
 
       <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
-        {/* TOPBAR */}
+        {/* TOPBAR SECTION - Identik dengan Dashboard */}
         <div className="topbar">
           <button className="sidebar-toggle" onClick={() => setIsOpen(!isOpen)}>
-            <span />
-            <span />
-            <span />
+            <span></span><span></span><span></span>
           </button>
 
           <div className="topbar-right">
@@ -117,22 +101,23 @@ export default function PelatihanSaya() {
             </button>
 
             <div className="user-menu-container">
-              <button
-                className="user-menu-btn"
-                onClick={() => setShowUserMenu(!showUserMenu)}
-              >
+              <button className="user-menu-btn" onClick={() => setShowUserMenu(!showUserMenu)}>
                 <FiUser />
               </button>
 
               {showUserMenu && (
                 <div className="user-dropdown">
-                  <p className="fw-bold mb-0">{user?.name}</p>
-                  <p className="text-muted small">{user?.email}</p>
+                  <div className="user-info">
+                    <p className="user-name">{user?.name || "User"}</p>
+                    <p className="user-email">{user?.email || "-"}</p>
+                  </div>
                   <hr />
-                  <button onClick={() => navigate("/profil")}>
+                  <button className="profile-btn" onClick={() => navigate("/profil")}>
                     Data Pribadi
                   </button>
-                  <button onClick={handleLogout}>Logout</button>
+                  <button className="logout-btn" onClick={handleLogout}>
+                    Logout
+                  </button>
                 </div>
               )}
             </div>
@@ -142,74 +127,63 @@ export default function PelatihanSaya() {
         <h2 className="page-title">Pelatihan Saya</h2>
         <hr />
 
-        {loading && <p>Loading...</p>}
-
-        {!loading && trainings.length === 0 && (
-          <div className="no-trainings">
-            <h3>Belum ada pelatihan</h3>
-            <button
-              className="register-btn"
-              onClick={() => navigate("/dashboard")}
-            >
-              Jelajahi Pelatihan
-            </button>
-          </div>
-        )}
-
-        <div className="training-grid">
-          {trainings.map((training) => (
-            <div className="training-card" key={training.id}>
-              <img
-                src={training.image}
-                alt={training.title}
-                onError={(e) => {
-                  e.target.src = "/images/default.jpg";
-                }}
-              />
-
-              <div className="training-content">
-                <h5>{training.title}</h5>
-
-                <span
-                  className="status-badge"
-                  style={{
-                    backgroundColor: getStatusColor(training.status),
-                  }}
+        {loading ? (
+          <div className="p-5 text-center">Memuat pelatihan Anda...</div>
+        ) : (
+          <div className={trainings.length === 0 ? "empty-state-container" : "training-grid"}>
+            {trainings.length === 0 ? (
+              <div className="text-center">
+                <h4 className="text-muted mb-3">Anda belum mengikuti pelatihan apapun</h4>
+                <button 
+                  className="training-btn" 
+                  style={{ width: "auto", padding: "10px 30px" }}
+                  onClick={() => navigate("/dashboard")}
                 >
-                  {training.status}
-                </span>
-
-                <div className="training-progress">
-                  <div className="progress-bar">
-                    <div
-                      className="progress-fill"
-                      style={{
-                        width: `${training.progress}%`,
-                      }}
-                    />
-                  </div>
-                  <span>{training.progress}%</span>
-                </div>
-
-                <small>
-                  {training.startDate} — {training.endDate}
-                </small>
-
-                <button
-                  className="training-btn"
-                  onClick={() =>
-                    navigate("/TrainingDetail", {
-                      state: { training: training.training },
-                    })
-                  }
-                >
-                  Lihat Detail
+                  Cari Pelatihan Sekarang
                 </button>
               </div>
-            </div>
-          ))}
-        </div>
+            ) : (
+              trainings.map((item) => (
+                <div className="training-card" key={item.id}>
+                  <img src={item.image} alt={item.title} />
+                  <div className="training-content">
+                    <h5>{item.title}</h5>
+                    <div className="mb-3">
+                      <div className="d-flex justify-content-between small mb-1">
+                        <span className="text-muted">Progress</span>
+                        <span className="fw-bold">{item.progress}%</span>
+                      </div>
+                      <div className="progress" style={{ height: "6px", backgroundColor: "#e9ecef" }}>
+                        <div 
+                          className="progress-bar bg-primary" 
+                          style={{ width: `${item.progress}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                    <p className="training-desc">{item.description}</p>
+                    <button
+                      className="training-btn"
+                      onClick={() => navigate(`/pembelajaran/${item.id}`, { state: { training: item.rawTraining } })}
+                    >
+                      {item.progress === 0 ? "Mulai Pelatihan" : "Lanjutkan Belajar"}
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
       </div>
+
+      <style jsx>{`
+        .empty-state-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 60vh;
+          width: 100%;
+        }
+      `}</style>
     </>
   );
 }

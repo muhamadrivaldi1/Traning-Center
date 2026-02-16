@@ -8,7 +8,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // ✅ wajib kalau backend pakai cookie (Sanctum)
+  withCredentials: true, 
 });
 
 // ===============================
@@ -16,9 +16,11 @@ const api = axios.create({
 // ===============================
 api.interceptors.request.use(
   (config) => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user?.token) {
-      config.headers.Authorization = `Bearer ${user.token}`;
+    // PERBAIKAN: Ambil token langsung dari key "token"
+    const token = localStorage.getItem("token");
+    
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -28,15 +30,20 @@ api.interceptors.request.use(
 );
 
 // ===============================
-// Interceptor response (opsional: handle 401 global)
+// Interceptor response (Handle 401 Global)
 // ===============================
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Jika server merespon 401, artinya token tidak valid/expired
     if (error.response && error.response.status === 401) {
-      // Jika token invalid atau expired, bisa auto redirect ke login
       localStorage.removeItem("user");
-      window.location.href = "/login";
+      localStorage.removeItem("token"); // Hapus juga tokennya
+      
+      // Cegah loop redirect jika sudah di halaman login
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
     }
     return Promise.reject(error);
   }

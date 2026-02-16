@@ -14,6 +14,7 @@ class TrainingRegistration extends Model
     protected $fillable = [
         'user_id',
         'training_id',
+        'order_id', // TAMBAHKAN INI
         'progress',
         'status',
         'start_date',
@@ -24,9 +25,6 @@ class TrainingRegistration extends Model
         'paid_at',
     ];
 
-    /**
-     * Cast kolom biar konsisten
-     */
     protected $casts = [
         'progress' => 'integer',
         'start_date' => 'date',
@@ -34,9 +32,6 @@ class TrainingRegistration extends Model
         'paid_at' => 'datetime',
     ];
 
-    /**
-     * Relasi ke training
-     */
     public function training()
     {
         return $this->belongsTo(Training::class, 'training_id');
