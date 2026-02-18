@@ -6,17 +6,17 @@ use Illuminate\Http\Request;
 use App\Models\Training;
 use App\Models\TrainingRegistration;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log; // <--- Tambahkan ini
+use Illuminate\Support\Facades\Log;
 
 class TrainingController extends Controller
 {
     /**
-     * Lihat semua pelatihan (untuk dropdown pendaftaran)
+     * Lihat semua pelatihan
      */
     public function index()
     {
         try {
-            $trainings = Training::all(); // Ambil semua pelatihan
+            $trainings = Training::all();
             return response()->json($trainings, 200);
         } catch (\Exception $e) {
             Log::error("Error fetching trainings: " . $e->getMessage());
@@ -27,7 +27,7 @@ class TrainingController extends Controller
     }
 
     /**
-     * Lihat daftar pelatihan yang dimiliki user
+     * Lihat pelatihan milik user
      */
     public function myTrainings()
     {
@@ -48,7 +48,7 @@ class TrainingController extends Controller
     }
 
     /**
-     * Lihat detail pelatihan
+     * Detail pelatihan
      */
     public function show($id)
     {
@@ -71,14 +71,37 @@ class TrainingController extends Controller
     }
 
     /**
-     * Daftar training baru
+     * Ambil materi berdasarkan training
+     */
+    public function getContents($id)
+    {
+        try {
+            $training = Training::with('contents')->find($id);
+
+            if (!$training) {
+                return response()->json([
+                    'message' => 'Training tidak ditemukan'
+                ], 404);
+            }
+
+            return response()->json($training->contents, 200);
+
+        } catch (\Exception $e) {
+            Log::error("Error fetching training contents: " . $e->getMessage());
+            return response()->json([
+                'message' => 'Gagal memuat materi'
+            ], 500);
+        }
+    }
+
+    /**
+     * Daftar training
      */
     public function register($id)
     {
         $user = Auth::user();
 
         try {
-            // Cek apakah sudah terdaftar
             $exists = TrainingRegistration::where('user_id', $user->id)
                 ->where('training_id', $id)
                 ->first();
@@ -101,6 +124,7 @@ class TrainingController extends Controller
                 'message' => 'Berhasil mendaftar training',
                 'registration' => $registration
             ], 201);
+
         } catch (\Exception $e) {
             Log::error("Error registering training: " . $e->getMessage());
             return response()->json([

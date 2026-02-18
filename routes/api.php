@@ -3,61 +3,65 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TrainingController;
-use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
-| PUBLIC ROUTES
+| API Routes - Training Center
 |--------------------------------------------------------------------------
-|
-| Route yang bisa diakses tanpa login.
-|
 */
+
+// =========================================================================
+// PUBLIC ROUTES (Bisa Diakses Tanpa Login)
+// =========================================================================
 
 Route::get('/', function () {
     return response()->json([
-        'message' => 'API Laravel siap!'
+        'message' => 'API Training Center Laravel Aktif',
+        'version' => '1.0'
     ]);
 });
 
-// ===== AUTH =====
-Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
-// Contoh response: {"token": "xxxx", "user": {...}}
+// AUTH
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 
-Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
-// Contoh response: {"message": "Registrasi berhasil", "user": {...}}
+// TRAINING (Untuk Katalog di Dashboard & Detail)
+Route::get('/trainings', [TrainingController::class, 'index']);
+Route::get('/trainings/{id}', [TrainingController::class, 'show']);
 
-// ===== TRAINING (PUBLIC) =====
-Route::get('/training', [TrainingController::class, 'index'])->name('training.index');
-// Contoh response: [{"id":1,"title":"Training 1"}, {"id":2,"title":"Training 2"}]
+// MIDTRANS CALLBACK (Wajib Public agar Midtrans bisa mengirim status)
+Route::post('/midtrans-callback', [PaymentController::class, 'callback']);
 
-Route::get('/training/{id}', [TrainingController::class, 'show'])->name('training.show');
-// Contoh response: {"id":1,"title":"Training 1","description":"..."}
 
-// ===== TRANSACTION CREATE =====
-Route::post('/create-transaction', [TransactionController::class, 'create'])->name('transaction.create');
-// Contoh response: {"transaction_id":123, "status":"pending"}
+// =========================================================================
+// PROTECTED ROUTES (Wajib Login / Menggunakan Bearer Token)
+// =========================================================================
 
-/*
-|--------------------------------------------------------------------------
-| PROTECTED ROUTES (LOGIN REQUIRED)
-|--------------------------------------------------------------------------
-|
-| Route yang membutuhkan autentikasi menggunakan Sanctum.
-|
-*/
 Route::middleware('auth:sanctum')->group(function () {
 
-    // ===== USER TRAININGS =====
-    Route::get('/my-trainings', [TrainingController::class, 'myTrainings'])->name('training.my');
-    // Contoh response: [{"id":1,"title":"Training 1","status":"registered"}]
+    // USER PROFILE
+    Route::get('/user', function () {
+        return auth()->user();
+    });
+    Route::post('/logout', [AuthController::class, 'logout']);
 
-    // ===== REGISTER TRAINING =====
-    Route::post('/training/{id}/register', [TrainingController::class, 'register'])->name('training.register');
-    // Contoh response: {"message":"Berhasil mendaftar training", "training_id":1}
+    // PEMBAYARAN & CHECKOUT
+    // Membuat transaksi awal (saat klik "Daftar Sekarang")
+    Route::post('/checkout', [PaymentController::class, 'checkout']);
 
-    // ===== MIDTRANS SNAP TOKEN =====
-    Route::get('/snap-token/{id}', [PaymentController::class, 'getSnapToken'])->name('payment.snap');
-    // Contoh response: {"token":"xxxxx"}
+    // Mengambil Snap Token Midtrans untuk pop-up pembayaran
+    Route::get('/snap-token/{id}', [PaymentController::class, 'getSnapToken']);
+
+    // PELATIHAN SAYA & PEMBELAJARAN
+    // 1. Daftar pelatihan yang diikuti user (untuk halaman Pelatihan Saya / Status Bayar)
+    Route::get('/my-trainings', [TrainingController::class, 'myTrainings']);
+    
+    // 2. Konten Materi (Digunakan di halaman Pembelajaran.jsx untuk ambil Video & Modul)
+    // URL: http://127.0.0.1:8000/api/trainings/{id}/contents
+    Route::get('/trainings/{id}/contents', [TrainingController::class, 'getContents']);
+
+    // CLEANUP
+    // Membersihkan transaksi yang sudah expired
+    Route::get('/my-trainings/cleanup', [PaymentController::class, 'cleanupExpired']);
 });

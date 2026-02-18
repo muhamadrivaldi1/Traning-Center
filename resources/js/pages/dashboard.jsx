@@ -14,37 +14,38 @@ export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // State untuk menyimpan data harga dari database
+  // State untuk menyimpan data teknis dari database Laravel
   const [dbTrainings, setDbTrainings] = useState([]);
 
   useEffect(() => {
+    // 1. Load Theme
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
       setIsDarkMode(true);
       document.body.classList.add("dark-theme");
     }
 
+    // 2. Load User Data
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
 
-    // Ambil data dari PHP untuk sinkronisasi harga
-    const fetchPrices = async () => {
+    // 3. Ambil Data dari PHP (Laravel) menggunakan 127.0.0.1
+    const fetchTrainingsFromDB = async () => {
       try {
-        // Mengambil data dari API Laravel (Route: trainings)
         const response = await axios.get("http://127.0.0.1:8000/api/trainings");
-
-        // Memastikan data adalah array (handle jika dibungkus objek 'data')
         const dataApi = Array.isArray(response.data) ? response.data : response.data.data;
-
-        console.log("Data Harga dari DB:", dataApi);
         setDbTrainings(dataApi || []);
       } catch (error) {
-        console.error("Gagal sinkron harga:", error);
+        console.error("Gagal terhubung ke API PHP:", error);
       }
     };
-    fetchPrices();
+    fetchTrainingsFromDB();
+
+    return () => {
+      document.body.classList.remove("dark-theme");
+    };
   }, []);
 
   const toggleTheme = () => {
@@ -61,10 +62,11 @@ export default function Dashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     navigate("/");
   };
 
-  // Data statis sesuai struktur kode kamu sebelumnya
+  // Data Visual (Statis)
   const events = [
     { id: 1, name: "Pelatihan Web Development", description: "Belajar HTML, CSS, JavaScript, React sampai siap kerja", image: "/images/WEb Development.jpeg" },
     { id: 2, name: "UI / UX Design", description: "Belajar desain antarmuka dan pengalaman pengguna", image: "/images/UI UX.jpeg" },
@@ -83,7 +85,7 @@ export default function Dashboard() {
       <Sidebar isOpen={isOpen} />
 
       <div className={`main-content ${isOpen ? "sidebar-open" : ""}`}>
-        {/* TOPBAR SECTION */}
+        {/* TOPBAR */}
         <div className="topbar">
           <button className="sidebar-toggle" onClick={() => setIsOpen(!isOpen)}>
             <span></span><span></span><span></span>
@@ -127,15 +129,12 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* TRAINING GRID SECTION */}
+        {/* GRID PELATIHAN */}
         <div className="training-grid">
           {filteredEvents.map((event) => {
-            // Mencocokkan ID dengan data database (dbItem.price)
-            const dbItem = dbTrainings.find(db => db.id == event.id);
+            // SINKRONISASI: Cari data teknis (harga) dari database berdasarkan ID
+            const dbItem = dbTrainings.find(db => String(db.id) === String(event.id));
             const priceValue = dbItem ? Number(dbItem.price) : 0;
-            const displayPrice = priceValue > 0
-              ? `Rp ${priceValue.toLocaleString("id-ID")}`
-              : "Rp 0";
 
             return (
               <div className="training-card" key={event.id}>
@@ -145,25 +144,23 @@ export default function Dashboard() {
                   <h5>{event.name}</h5>
                   <p className="training-desc" style={{ flexGrow: 1 }}>{event.description}</p>
 
-                  {/* Harga dan Tombol didekatkan di bagian bawah */}
                   <div className="training-footer" style={{ marginTop: '10px' }}>
                     <p className="fw-bold text-primary mb-2" style={{ fontSize: "1rem" }}>
-                      {displayPrice}
+                      {priceValue > 0 ? `Rp ${priceValue.toLocaleString("id-ID")}` : "Rp 0"}
                     </p>
 
                     <button
                       className="training-btn w-100"
                       onClick={() => {
-                        const dbItem = dbTrainings.find(db => String(db.id) === String(event.id));
-
+                        // Kirim semua data (Statis + Database) ke halaman Detail
                         navigate("/TrainingDetail", {
                           state: {
                             training: {
                               ...event,
-                              price: dbItem ? dbItem.price : 0,
-                              duration: dbItem ? dbItem.duration : "-",
-                              schedule: dbItem ? dbItem.schedule : "-",
-                              // Logika: Pecah string koma menjadi array, lalu bersihkan spasi
+                              price: dbItem?.price || 0,
+                              duration: dbItem?.duration || "-",
+                              schedule: dbItem?.schedule || "-",
+                              // Pecah string benefits menjadi array jika ada
                               benefits: dbItem?.benefits
                                 ? dbItem.benefits.split(",").map(item => item.trim())
                                 : []

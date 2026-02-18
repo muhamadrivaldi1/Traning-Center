@@ -16,7 +16,9 @@ export default function TrainingDetail() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isEnrolled, setIsEnrolled] = useState(false); // <--- State baru untuk cek status
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  // State tambahan untuk menyimpan ID pendaftaran dari database
+  const [registrationId, setRegistrationId] = useState(null);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -29,30 +31,34 @@ export default function TrainingDetail() {
     if (savedUser) {
       const parsedUser = JSON.parse(savedUser);
       setUser(parsedUser);
-      checkEnrollmentStatus(); // <--- Panggil fungsi cek status saat load
+      if (training) checkEnrollmentStatus(); 
     }
 
     return () => {
       document.body.classList.remove("dark-theme");
     };
-  }, []);
+  }, [training]);
 
-  // Fungsi untuk cek apakah pelatihan ini sudah dibayar/lunas
   const checkEnrollmentStatus = async () => {
     if (!training) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`http://localhost:8000/api/my-trainings`, {
+      if (!token) return;
+
+      const response = await axios.get(`http://127.0.0.1:8000/api/my-trainings`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      // Cari apakah ID pelatihan ini ada di daftar "success" atau "settlement"
-      const alreadyOwned = response.data.some(item =>
-        item.training_id === training.id &&
+      // Mencari data pendaftaran yang lunas (success/settlement) untuk training ini
+      const enrollment = response.data.find(item =>
+        String(item.training_id) === String(training.id) &&
         (item.payment_status === "success" || item.payment_status === "settlement")
       );
 
-      setIsEnrolled(alreadyOwned);
+      if (enrollment) {
+        setIsEnrolled(true);
+        setRegistrationId(enrollment.id); // Menyimpan ID pendaftaran (misal: 43)
+      }
     } catch (error) {
       console.error("Gagal cek status:", error);
     }
@@ -79,9 +85,9 @@ export default function TrainingDetail() {
   };
 
   const handlePayment = async () => {
-    // Jika sudah LUNAS, arahkan ke Pembelajaran.jsx
-    if (isEnrolled) {
-      navigate(`/pembelajaran/${training.id}`, {
+    // Jika sudah lunas, arahkan ke pembelajaran menggunakan registrationId (ID 43)
+    if (isEnrolled && registrationId) {
+      navigate(`/pembelajaran/${registrationId}`, {
         state: { training: training }
       });
       return;
@@ -89,7 +95,7 @@ export default function TrainingDetail() {
 
     if (!isLoggedIn) {
       alert("Silakan login terlebih dahulu untuk mendaftar.");
-      navigate("/login", { state: { redirectTo: "/training-detail", training } });
+      navigate("/login", { state: { redirectTo: "/TrainingDetail", training } });
       return;
     }
 
@@ -97,8 +103,8 @@ export default function TrainingDetail() {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.post(
-        `http://localhost:8000/api/checkout`,
+      await axios.post(
+        `http://127.0.0.1:8000/api/checkout`,
         { training_id: training.id },
         {
           headers: {
@@ -111,7 +117,6 @@ export default function TrainingDetail() {
       alert("Berhasil membuat pesanan!");
       navigate("/pembayaran");
     } catch (error) {
-      console.error("Detail Error:", error.response?.data);
       const message = error.response?.data?.message || "Gagal memproses pendaftaran.";
       alert(message);
     } finally {
@@ -174,7 +179,6 @@ export default function TrainingDetail() {
               <section>
                 <h6 className="fw-bold mb-4 text-uppercase small text-primary">Benefit Peserta:</h6>
                 <div className="row g-3">
-                  {/* Cek jika data benefits tersedia dan merupakan array */}
                   {training.benefits && training.benefits.length > 0 ? (
                     training.benefits.map((item, i) => (
                       <div className="col-sm-6" key={i}>
@@ -185,7 +189,6 @@ export default function TrainingDetail() {
                       </div>
                     ))
                   ) : (
-                    // Tampilan jika data benefit di database kosong
                     <div className="col-12">
                       <p className="text-muted small italic">Informasi benefit belum tersedia.</p>
                     </div>
@@ -204,7 +207,6 @@ export default function TrainingDetail() {
                     <div className="d-flex align-items-center gap-2 text-muted small">
                       <FiClock className="text-primary" /> <span>Durasi</span>
                     </div>
-                    {/* Mengambil data dari PHP yang sudah dikirim lewat state */}
                     <span className="fw-bold small">{training.duration || "-"}</span>
                   </div>
 
@@ -212,7 +214,6 @@ export default function TrainingDetail() {
                     <div className="d-flex align-items-center gap-2 text-muted small">
                       <FiCalendar className="text-primary" /> <span>Jadwal</span>
                     </div>
-                    {/* Mengambil data dari PHP yang sudah dikirim lewat state */}
                     <span className="fw-bold small">{training.schedule || "-"}</span>
                   </div>
 
