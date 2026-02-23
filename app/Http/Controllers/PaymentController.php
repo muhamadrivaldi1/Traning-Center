@@ -15,10 +15,10 @@ class PaymentController extends Controller
 {
     private function midtransConfig()
     {
-        Config::$serverKey = config('services.midtrans.server_key');
-        Config::$isProduction = config('services.midtrans.is_production', false);
-        Config::$isSanitized = true;
-        Config::$is3ds = true;
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
+        Config::$isSanitized = env('MIDTRANS_IS_SANITIZED', true);
+        Config::$is3ds = env('MIDTRANS_IS_3DS', true);
     }
 
     public function checkout(Request $request)
