@@ -1,7 +1,7 @@
 import React from "react";
 import { Users, BookOpen, CreditCard, BarChart3 } from "lucide-react";
 
-export default function AdminDashboard() {
+export default function AdminDashboard() {s
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-6">
 

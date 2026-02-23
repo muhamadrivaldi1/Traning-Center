@@ -11,10 +11,12 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::rename('training', 'trainings');
-    }
+   public function up()
+{
+    Schema::table('training_registrations', function (Blueprint $table) {
+        $table->string('order_id')->nullable()->after('training_id');
+    });
+}
 
     /**
      * Reverse the migrations.
@@ -23,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::rename('trainings', 'training');
+        Schema::table('training_registrations', function (Blueprint $table) {
+            //
+        });
     }
 };
