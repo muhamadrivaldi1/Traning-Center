@@ -51,7 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/checkout', [PaymentController::class, 'checkout']);
 
     // Mengambil Snap Token Midtrans untuk pop-up pembayaran
-    Route::get('/snap-token/{id}', [PaymentController::class, 'getSnapToken']);
+    Route::get('/payments/snap-token/{id}', [PaymentController::class, 'getSnapToken']);
 
     // PELATIHAN SAYA & PEMBELAJARAN
     // 1. Daftar pelatihan yang diikuti user (untuk halaman Pelatihan Saya / Status Bayar)
