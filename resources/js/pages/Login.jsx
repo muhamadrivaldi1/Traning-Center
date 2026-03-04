@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api"; // Pastikan file api.js kamu sudah benar base URL-nya
+import api from "../api"; 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../app.css";
 
@@ -26,23 +26,24 @@ export default function Login() {
         password,
       });
 
-      // ============================================================
-      // PERBAIKAN DI SINI:
-      // Simpan token secara terpisah agar mudah dipanggil di Header API
-      // ============================================================
+      // Simpan data ke localStorage
       localStorage.setItem("token", res.data.token); 
-      
-      // Simpan data user (tanpa token di dalamnya agar rapi)
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      // 2. Arahkan ke dashboard setelah sukses
-      navigate("/dashboard");
+      // 2. Arahkan sesuai role (LOGIKA ADMIN DI SINI)
+      const user = res.data.user; 
+
+      if (user.role === 'admin') {
+        navigate("/admin/dashboard"); 
+      } else {
+        navigate("/dashboard"); 
+      }
+
     } catch (err) {
       setError(err.response?.data?.message || "Email atau password salah");
     }
   };
 
-  // Bersihkan class background jika ada
   useEffect(() => {
     document.body.classList.remove("bg-light", "bg-dark");
   }, []);
@@ -51,7 +52,6 @@ export default function Login() {
     <div className="d-flex align-items-center justify-content-center vh-100 login-bg">
       <div className="card shadow-lg p-4 login-card" style={{ width: "100%", maxWidth: "380px" }}>
         
-        {/* Logo Training Center */}
         <div className="text-center mb-3">
           <img
             src="/images/TCF_Logo.png"
@@ -65,10 +65,8 @@ export default function Login() {
           Training Center FILKOM
         </h3>
 
-        {/* Pesan Error jika login gagal */}
         {error && <div className="alert alert-danger p-2 text-center" style={{ fontSize: "14px" }}>{error}</div>}
 
-        {/* Form Login */}
         <form onSubmit={handleLogin}>
           <div className="mb-3">
             <label className="form-label small fw-bold">Email Address</label>

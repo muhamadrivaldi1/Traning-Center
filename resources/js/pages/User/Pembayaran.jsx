@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 import { FiSun, FiMoon, FiUser, FiClock, FiCheckCircle, FiAlertCircle } from "react-icons/fi";
-import "../../css/app.css";
-import api from "../api"; // Pastikan file axios instance kamu sudah benar
+import "../../../css/app.css";
+import api from "../../api"; // Pastikan file axios instance kamu sudah benar
 
 export default function Pembayaran() {
   const navigate = useNavigate();

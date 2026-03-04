@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 import QRCode from "qrcode";
 import { FiSun, FiMoon, FiUser, FiDownload, FiEye } from "react-icons/fi";
 import { FaCertificate } from "react-icons/fa";
-import "../../css/app.css";
+import "../../../css/app.css";
 
 export default function Sertifikat() {
   const navigate = useNavigate();

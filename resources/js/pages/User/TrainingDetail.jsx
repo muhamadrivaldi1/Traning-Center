@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 import axios from "axios";
 import { FiSun, FiMoon, FiUser, FiClock, FiCalendar, FiTag, FiCheckCircle, FiStar, FiAward } from "react-icons/fi";
 import { FaArrowLeft, FaExclamationTriangle } from "react-icons/fa";
-import "../../styles/TrainingDetail.css";
+import "../../../styles/TrainingDetail.css";
 
 export default function TrainingDetail() {
   const location = useLocation();

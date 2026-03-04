@@ -9,21 +9,40 @@ import {
   Route,
 } from "react-router-dom";
 
-// Import Halaman Utama
+
+// halaman utama
 import HomePage from "./HomePage";
-import Dashboard from "./pages/Dashboard";
-import Pembayaran from "./pages/Pembayaran";
-import Sertifikat from "./pages/Sertifikat"; 
-import Profil from "./pages/Profil";
-import Register from "./pages/Register";
-import TrainingDetail from "./pages/TrainingDetail";
-import PelatihanSaya from "./pages/PelatihanSaya";
-import PendaftaranPelatihan from "./pages/PendaftaranPelatihan";
+import PelatihanPage from './PelatihanPage';
+import PelatihanDetail from './PelatihanDetail';
+import BeritaPage from './BeritaPage';
+import BeritaDetail from './BeritaDetail';
+import GaleriPage from './GaleriPage';
+import GaleriDetail from './GaleriDetail';
 import Login from "./pages/Login"; 
 
-// Import Halaman Baru yang ditambahkan
-import Pembelajaran from "./pages/Pembelajaran"; 
-import AdminDashboard from "./pages/AdminDashboard"; 
+// halaman user
+import Dashboard from "./pages/User/Dashboard";
+import Pembayaran from "./pages/User/Pembayaran";
+import Sertifikat from "./pages/User/Sertifikat"; 
+import Profil from "./pages/User/Profil";
+import Register from "./pages/User/Register";
+import TrainingDetail from "./pages/User/TrainingDetail";
+import PelatihanSaya from "./pages/User/PelatihanSaya";
+import PendaftaranPelatihan from "./pages/User/PendaftaranPelatihan";
+import Pembelajaran from "./pages/User/Pembelajaran"; 
+
+//halaman admin
+import AdminDashboard from "./pages/Admin/AdminDashboard"; 
+import AdminPages from "./pages/Admin/AdminPages";
+import AdminNews from "./pages/Admin/AdminNews";
+import AdminGallery from "./pages/Admin/AdminGallery";
+import AdminAllTrainings from "./pages/Admin/AdminAllTrainings";
+import AdminTrainingCategories from "./pages/Admin/AdminTrainingCategories"; 
+import AdminTrainingParticipants from "./pages/Admin/AdminTrainingParticipants";
+import AdminCertificateTemplate from "./pages/Admin/AdminCertificateTemplate";
+import AdminUsers from "./pages/Admin/AdminUsers";
+import AdminRolePermission from "./pages/Admin/AdminRolePermission";
+import AdminSettings from "./pages/Admin/AdminSettings";
 
 function App() {
   return (
@@ -32,7 +51,13 @@ function App() {
         {/* Route Publik */}
         <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/Login" element={<Login />} />
+        <Route path="/pelatihan" element={<PelatihanPage />} />
+        <Route path="/pelatihan/:id" element={<PelatihanDetail />} />
+        <Route path="/berita" element={<BeritaPage />} />
+        <Route path="/berita/:id" element={<BeritaDetail />} />
+        <Route path="/galeri" element={<GaleriPage />} />
+        <Route path="/galeri/:id" element={<GaleriDetail />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
         {/* Route User Dashboard */}
@@ -47,8 +72,18 @@ function App() {
         {/* Route Pembelajaran dengan ID Pendaftaran */}
         <Route path="/pembelajaran/:id" element={<Pembelajaran />} />
 
-        {/* Route Admin Dashboard */}
-        <Route path="/admindashboard" element={<AdminDashboard />} />
+        {/* Route Admin */}
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/konten/pages" element={<AdminPages />} />
+        <Route path="/admin/konten/berita" element={<AdminNews />} />
+        <Route path="/admin/konten/galeri" element={<AdminGallery />} />
+        <Route path="/admin/pelatihan/semua" element={<AdminAllTrainings />} />
+        <Route path="/admin/pelatihan/kategori" element={<AdminTrainingCategories />} />
+        <Route path="/admin/pelatihan/peserta" element={<AdminTrainingParticipants />} />
+        <Route path="/admin/sertifikat" element={<AdminCertificateTemplate />} />
+        <Route path="/admin/pengguna/admin" element={<AdminUsers />} />
+        <Route path="/admin/pengguna/role-permission" element={<AdminRolePermission />} />
+        <Route path="/admin/pengaturan" element={<AdminSettings />} />
       </Routes>
     </Router>
   );

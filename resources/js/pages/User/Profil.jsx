@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 import { FiUser, FiSun, FiMoon, FiStar, FiEdit, FiX, FiBookOpen, FiAward } from "react-icons/fi";
 
 export default function Profil() {
