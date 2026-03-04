@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 import { 
   FiPlayCircle, FiArrowLeft, FiBookOpen, 
   FiVideo, FiFileText, FiHelpCircle, FiChevronDown, FiMenu, FiCalendar, FiExternalLink 
 } from "react-icons/fi";
-import "../../css/app.css";
+import "../../../css/app.css";
 
 export default function Pembelajaran() {
   const navigate = useNavigate();

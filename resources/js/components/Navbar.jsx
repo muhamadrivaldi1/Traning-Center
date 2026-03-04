@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { FiUser, FiSun, FiMoon } from "react-icons/fi";
 import Sidebar from "./Sidebar";
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+export default function Navbar({ onToggle }) {
+
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const btnRef = useRef(null);
@@ -96,7 +96,8 @@ export default function Navbar() {
 
             <span
               className="menu-icon"
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={onToggle} 
+              style={{ cursor: "pointer", color: "white", fontSize: "24px" }}
             >
               &#9776;
             </span>
@@ -129,7 +130,7 @@ export default function Navbar() {
 
       {dropdown}
 
-      <Sidebar isOpen={isOpen} />
+      {/* <Sidebar isOpen={isOpen} />*/}
     </>
   );
 }

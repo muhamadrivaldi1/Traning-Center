@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 import { FiSun, FiMoon, FiUser } from "react-icons/fi";
 import axios from "axios";
-import "../../css/app.css";
+import "../../../css/app.css";
 
 export default function Dashboard() {
   const navigate = useNavigate();

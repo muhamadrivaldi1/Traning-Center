@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -5,7 +7,8 @@
     font-family: "Inter", sans-serif;
 }
 
-html, body {
+html,
+body {
     width: 100%;
     height: 100%;
     margin: 0;
@@ -16,11 +19,21 @@ html {
     scroll-behavior: smooth;
 }
 
+
 body {
     margin: 0;
     overscroll-behavior-x: none;
     touch-action: pan-y pinch-zoom;
     background: transparent;
+}
+
+.bg-public {
+    background-image: url('/images/background.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-color: transparent;
 }
 
 :root {
@@ -77,9 +90,7 @@ body.dark-theme .training-card h5 {
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* =========================
-   TOPBAR BUTTON FIX
-========================= */
+/*topbar button*/
 .theme-toggle-btn,
 .user-menu-btn {
     background: transparent !important;
@@ -118,11 +129,11 @@ body.dark-theme .event-card h5 {
 .pembayaran-title {
     text-align: center;
     margin-bottom: 30px;
-    color: var(--primary-purple); 
+    color: var(--primary-purple);
 }
 
 body.dark-theme .pembayaran-title {
-    color: #ffffff; 
+    color: #ffffff;
 }
 
 .navbar-custom {
@@ -143,7 +154,7 @@ body.dark-theme .pembayaran-title {
     background: rgba(19, 29, 120, 0.75);
     border-radius: 16px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-    max-width: 1550px;     
+    max-width: 1550px;
     padding: 14px 32px;
 }
 
@@ -163,9 +174,10 @@ body.dark-theme .pembayaran-title {
 
 .hero-section {
     min-height: 100vh;
-    background-image: linear-gradient(rgba(19, 29, 120, 0.75), rgba(19, 29, 120, 0.75)), url("/images/background-hp.jpg");
+    background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(30, 58, 138, 0.9)), url("/images/background-hp.jpg");
     background-size: cover;
     background-position: center;
+    background-attachment: fixed;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -177,38 +189,100 @@ body.dark-theme .pembayaran-title {
 .hero-content {
     max-width: 900px;
     padding: 0 20px;
+    animation: slideUpFade 1s ease-out forwards;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    color: #bfdbfe;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .hero-title {
-    font-size: 3rem;
-    font-weight: 800;
-    color: white;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1.2;
     margin-bottom: 20px;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .hero-subtitle {
-    font-size: 1.2rem;
-    color: #e0e0e0;
-    margin-bottom: 30px;
+    font-size: clamp(16px, 2vw, 20px);
+    color: #e2e8f0;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto 40px;
 }
 
-.hero-btn {
-    background-color: var(--primary-purple);
+.hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Tombol CTA Hero */
+.btn-hero-primary {
+    background: #3b82f6;
     color: white;
-    padding: 14px 36px;
-    font-size: 1.1rem;
-    border-radius: 10px;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
     border: none;
     cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
 }
 
-.hero-btn:hover {
-    background-color: #0f165f;
+.btn-hero-primary:hover {
+    background: #2563eb;
+    transform: translateY(-3px);
+}
+
+.btn-hero-outline {
+    background: transparent;
+    color: white;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    border: 2px solid white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-hero-outline:hover {
+    background: white;
+    color: #1e3a8a;
+    transform: translateY(-3px);
+}
+
+/* Keyframe Animasi */
+@keyframes slideUpFade {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .schedule-section {
     padding: 80px 60px;
-    background: var(--primary-purple);
 }
 
 .schedule-header {
@@ -221,12 +295,12 @@ body.dark-theme .pembayaran-title {
 .schedule-header h2 {
     font-size: 28px;
     font-weight: 800;
-    color: white;
+    color: var(--primary-purple);
     margin-bottom: 10px;
 }
 
 .schedule-header p {
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--primary-purple);
 }
 
 .schedule-tabs {
@@ -257,13 +331,13 @@ body.dark-theme .pembayaran-title {
     background: white;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .schedule-card:hover {
     transform: scale(1.05);
-    box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
 }
 
 .schedule-card img {
@@ -295,9 +369,42 @@ body.dark-theme .pembayaran-title {
     cursor: pointer;
 }
 
+.carousel-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1300px;
+    margin: auto;
+}
+
+.chevron-btn {
+    background: var(--primary-purple);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.chevron-btn:hover:not(:disabled) {
+    transform: scale(1.1);
+}
+
+.chevron-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}
+
 .news-section {
     padding: 80px 60px;
-    background: var(--primary-purple);
 }
 
 .news-header {
@@ -310,12 +417,12 @@ body.dark-theme .pembayaran-title {
 .news-header h2 {
     font-size: 28px;
     font-weight: 800;
-    color: white;
+    color: var(--primary-purple);
     margin-bottom: 10px;
 }
 
 .news-header p {
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--primary-purple);
 }
 
 .news-grid {
@@ -330,14 +437,14 @@ body.dark-theme .pembayaran-title {
     background: white;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     text-align: center;
 }
 
 .news-card:hover {
     transform: scale(1.05);
-    box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
 }
 
 .news-card img {
@@ -380,14 +487,15 @@ body.dark-theme .pembayaran-title {
 }
 
 @media (max-width: 768px) {
-    .schedule-grid, .news-grid {
+
+    .schedule-grid,
+    .news-grid {
         grid-template-columns: 1fr;
     }
 }
 
 .gallery-section {
     padding: 80px 60px;
-    background: var(--primary-purple);
 }
 
 .gallery-scroll {
@@ -404,7 +512,7 @@ body.dark-theme .pembayaran-title {
 }
 
 .gallery-scroll::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.4);
+    background: rgba(255, 255, 255, 0.4);
     border-radius: 10px;
 }
 
@@ -512,11 +620,11 @@ body.dark-theme .pembayaran-title {
     width: 260px;
     height: 100vh;
     height: 100dvh;
-    
+
     background: #010742 !important;
     padding: 20px;
     border-radius: 0;
-    box-shadow: 8px 0 30px rgba(0,0,0,0.35);
+    box-shadow: 8px 0 30px rgba(0, 0, 0, 0.35);
     transition: left 0.3s ease;
     z-index: 9999;
     display: flex;
@@ -577,13 +685,6 @@ body.dark-theme .pembayaran-title {
     color: white;
     transform: translateX(2px);
 }
- 
-.section-rectangle {
-    width: 100%;
-    height: 25px;
-    background: linear-gradient(to right, #131D78, #2f3dbf, #131D78);
-    margin: 0;
-}
 
 .sidebar-open {
     margin-left: 260px;
@@ -638,7 +739,7 @@ body.dark-theme .page-title {
     background: white;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -647,7 +748,7 @@ body.dark-theme .page-title {
 
 .training-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
 .training-card img {
@@ -783,7 +884,7 @@ body.dark-theme .page-title {
     position: relative;
 }
 
-/* ================= USER DROPDOWN ================= */
+/* USER DROPDOWN */
 .user-dropdown {
     position: absolute;
     top: 50px;
@@ -830,11 +931,11 @@ body.dark-theme .payment-card {
 }
 
 .profile-btn:hover {
-    background: rgba(0,0,0,0.05);
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .dark-theme .profile-btn:hover {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .user-info {
@@ -948,7 +1049,7 @@ body.dark-theme .page-wrapper {
     background: #ffffff;
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 body.dark-theme .certificate-card {
@@ -995,6 +1096,7 @@ body.dark-theme .certificate-card {
     0% {
         transform: translateX(0);
     }
+
     100% {
         transform: translateX(-50%);
     }
@@ -1025,7 +1127,7 @@ body.dark-theme .certificate-card {
     background-color: #010742;
     border-radius: 16px;
     padding: 24px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     width: 100%;
     max-width: 380px;
     margin: auto;
@@ -1203,6 +1305,573 @@ body.dark-theme .btn-link {
 
 body.dark-theme .user-dropdown button {
     color: #e5e7eb;
+}
+
+/* -- Halaman Pelatihan -- */
+.hero-training {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    padding: 100px 20px 60px;
+    text-align: center;
+    color: white;
+}
+
+.filter-bar {
+    background: white;
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    max-width: 900px;
+    margin: -30px auto 40px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.filter-input {
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    outline: none;
+    font-size: 14px;
+    color: #1e293b;
+}
+
+.filter-input:focus {
+    border-color: #3b82f6;
+}
+
+.training-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    transition: 0.3s;
+    border: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.training-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+    border-color: #bfdbfe;
+}
+
+.card-img-wrapper {
+    position: relative;
+    height: 200px;
+}
+
+.card-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.badge-umum {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-internal {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.card-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.price-tag {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.price-gratis {
+    color: #10b981;
+}
+
+.price-berbayar {
+    color: #0f172a;
+}
+
+.btn-detail {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: #eff6ff;
+    color: #3b82f6;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-detail:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+/* -- Halaman Detail Pelatihan -- */
+.banner-detail {
+    width: 100%;
+    height: 400px;
+    position: relative;
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.3) 100%);
+    display: flex;
+    align-items: flex-end;
+    padding: 60px 0;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: -40px auto 80px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.main-content-box {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 32px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 12px;
+}
+
+.list-item {
+    display: flex;
+    align-items: start;
+    gap: 12px;
+    margin-bottom: 12px;
+    color: #475569;
+    line-height: 1.6;
+}
+
+.sidebar-sticky {
+    position: sticky;
+    top: 100px;
+    background: white;
+    padding: 32px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.sidebar-info-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    color: #475569;
+    font-size: 14px;
+}
+
+.btn-daftar {
+    width: 100%;
+    padding: 16px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    margin-top: 24px;
+}
+
+.btn-daftar:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+}
+
+/* STYLE UNTUK HALAMAN BERITA & DETAIL */
+.news-header-bg { 
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); 
+    padding: 100px 20px 40px; 
+    text-align: center; 
+    color: white; 
+}
+
+.filter-tags { 
+    display: flex; 
+    justify-content: center; 
+    gap: 12px; 
+    flex-wrap: wrap; 
+    padding: 30px 20px; 
+}
+
+.tag-btn { 
+    padding: 8px 20px; 
+    border-radius: 30px; 
+    font-size: 14px; 
+    font-weight: 600; 
+    cursor: pointer; 
+    transition: 0.2s; 
+    border: 1px solid #e2e8f0; 
+    background: white; 
+    color: #64748b; 
+}
+
+.tag-btn:hover { 
+    border-color: #3b82f6; 
+    color: #3b82f6; 
+}
+
+.tag-btn.active { 
+    background: #3b82f6; 
+    color: white; 
+    border-color: #3b82f6; 
+}
+
+.featured-card { 
+    background: white; 
+    border-radius: 20px; 
+    overflow: hidden; 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 0; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06); 
+    margin-bottom: 60px; 
+    cursor: pointer; 
+    transition: 0.3s; 
+    border: 1px solid #f1f5f9; 
+}
+
+.featured-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
+}
+
+.featured-img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    min-height: 350px; 
+}
+
+.featured-body { 
+    padding: 40px; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+}
+
+/* -- Grid News -- */
+.news-card { 
+    background: white; 
+    border-radius: 16px; 
+    overflow: hidden; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04); 
+    transition: 0.3s; 
+    border: 1px solid #f1f5f9; 
+    cursor: pointer; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.news-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08); 
+    border-color: #bfdbfe; 
+}
+
+.news-img { 
+    width: 100%; 
+    height: 200px; 
+    object-fit: cover; 
+}
+
+.news-body { 
+    padding: 24px; 
+    display: flex; 
+    flex-direction: column; 
+    flex: 1; 
+}
+
+.meta-text { 
+    font-size: 12px; 
+    color: #64748b; 
+    display: flex; 
+    align-items: center; 
+    gap: 6px; 
+}
+
+.category-badge { 
+    background: #eff6ff; 
+    color: #3b82f6; 
+    padding: 4px 10px; 
+    border-radius: 6px; 
+    font-size: 11px; 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    display: inline-block; 
+    margin-bottom: 12px; 
+}
+
+/* STYLE UNTUK HALAMAN GALERI & DETAIL*/
+.gallery-header { 
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); 
+    padding: 100px 20px 60px; 
+    text-align: center; 
+    color: white; 
+}
+
+.search-bar-container { 
+    background: white; 
+    padding: 12px 16px; 
+    border-radius: 12px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+    max-width: 600px; 
+    margin: -25px auto 40px; 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+}
+
+.search-input { 
+    border: none; 
+    outline: none; 
+    width: 100%; 
+    font-size: 15px; 
+    color: #1e293b; 
+}
+
+.album-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 32px; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 0 20px 80px; 
+}
+
+.album-card { 
+    background: white; 
+    border-radius: 16px; 
+    overflow: hidden; 
+    border: 1px solid #f1f5f9; 
+    cursor: pointer; 
+    transition: 0.3s; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.album-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08); 
+    border-color: #bfdbfe; 
+}
+
+.album-cover { 
+    width: 100%; 
+    height: 220px; 
+    object-fit: cover; 
+    border-bottom: 1px solid #f1f5f9; 
+}
+
+.album-body { 
+    padding: 24px; 
+    display: flex; 
+    flex-direction: column; 
+    flex: 1; 
+}
+
+.album-title { 
+    font-size: 18px; 
+    font-weight: 800; 
+    color: #0f172a; 
+    margin: 0 0 12px 0; 
+    line-height: 1.4; 
+}
+
+.album-meta { 
+    display: flex; 
+    align-items: center; 
+    gap: 16px; 
+    color: #64748b; 
+    font-size: 13px; 
+    font-weight: 500; 
+}
+
+/* -- Galeri Detail -- */
+.album-header-box { 
+    background: white; 
+    border-bottom: 1px solid #e2e8f0; 
+    padding: 120px 20px 40px; 
+    margin-bottom: 40px; 
+}
+
+.photo-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 16px; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 0 20px 80px; 
+}
+
+.photo-card { 
+    position: relative; 
+    aspect-ratio: 1 / 1; 
+    border-radius: 12px; 
+    overflow: hidden; 
+    cursor: pointer; 
+    background: #e2e8f0; 
+}
+
+.photo-img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    transition: transform 0.4s ease; 
+}
+
+.photo-overlay { 
+    position: absolute; 
+    inset: 0; 
+    background: rgba(15, 23, 42, 0.4); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    opacity: 0; 
+    transition: opacity 0.3s ease; 
+    color: white; 
+}
+
+.photo-card:hover .photo-overlay { opacity: 1; }
+
+.photo-card:hover .photo-img { transform: scale(1.1); }
+
+/* -- Modal Lightbox -- */
+.lightbox-bg { 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(0, 0, 0, 0.95); 
+    z-index: 9999; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 40px; 
+    animation: fadeIn 0.2s ease; 
+}
+
+.lightbox-close { 
+    position: absolute; 
+    top: 24px; 
+    right: 24px; 
+    background: rgba(255,255,255,0.1); 
+    border: none; 
+    color: white; 
+    width: 48px; 
+    height: 48px; 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    transition: 0.2s; 
+    z-index: 10000; 
+}
+
+.lightbox-close:hover { 
+    background: rgba(255,255,255,0.2); 
+    transform: rotate(90deg); 
+}
+
+.lightbox-img { 
+    max-width: 100%; 
+    max-height: 90vh; 
+    object-fit: contain; 
+    border-radius: 8px; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5); 
+}
+
+@keyframes fadeIn { 
+    from { opacity: 0; } 
+    to { opacity: 1; } 
+}
+
+/* -- Responsive Page Berita -- */
+@media (max-width: 768px) {
+    .featured-card { grid-template-columns: 1fr; }
+    .featured-img { height: 250px; min-height: auto; }
+    .featured-body { padding: 24px; }
+}
+
+/* -- Responsive Page Pelatihan -- */
+@media (max-width: 992px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .banner-detail {
+        height: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .filter-bar {
+        margin: 20px 20px 40px;
+        flex-direction: column;
+    }
+
+    .filter-input {
+        width: 100%;
+    }
 }
 
 /* Fix khusus untuk iOS Safari agar full screen sempurna */

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 import { FiSun, FiMoon, FiUser } from "react-icons/fi";
-import api from "../api";
-import "../../css/app.css";
+import api from "../../api";
+import "../../../css/app.css";
 
 export default function PelatihanSaya() {
   const navigate = useNavigate();
